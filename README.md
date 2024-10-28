@@ -8,10 +8,11 @@
 - MSSV: 2254810025
 - Họ tên: Võ Như Hoàng Huy
 - MSSV: 2254810046
-**Nhóm 14:**   
-**Khoa Công nghệ thông tin:** 
+****
+**Nhóm 14**   
+**Khoa Công nghệ thông tin** 
 
-**Học viện Hàng không Việt Nam  :** 
+**Học viện Hàng không Việt Nam** 
 
 #FITVAA
 **https://fitvaa.edu.vn/**
