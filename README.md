@@ -1,5 +1,4 @@
-# Tên dự án 
- - Xây dựng và nghiên cứu trang bán hàng áo T-shirt
+# Xây dựng và nghiên cứu trang bán hàng áo T-shirt
 **Thông tin sinh viên:** 
 - Họ tên: Phan Hữu Hào
 - MSSV: 2254810021
@@ -9,12 +8,10 @@
 - MSSV: 2254810025
 - Họ tên: Võ Như Hoàng Huy
 - MSSV: 2254810046
+**Nhóm 14:**   
+**Khoa Công nghệ thông tin:** 
 
-**Tên nhóm:** 
-- Nhóm 14
-**Khoa:** 
-- Khoa Công nghệ thông tin
-**Học viện:** 
-- Học viện Hàng không Việt Nam  
+**Học viện Hàng không Việt Nam  :** 
 
 #FITVAA
+**https://fitvaa.edu.vn/**
