@@ -1,5 +1,12 @@
 # Xây dựng và nghiên cứu trang bán hàng áo T-shirt
-**Thông tin sinh viên:** 
+**Học viện Hàng không Việt Nam** 
+**Khoa Công nghệ thông tin** 
+**Môn học: Xây dựng ứng dụng Thương mại điện tử**
+**Mã lớp học phần: 010100096701**
+**GVHD: ThS. Huỳnh Thanh Sơn**
+****
+**Nhóm 14**  
+**Thành viên:** 
 - Họ tên: Phan Hữu Hào
 - MSSV: 2254810021
 - Họ tên: Trần Ngọc Duy
@@ -8,11 +15,7 @@
 - MSSV: 2254810025
 - Họ tên: Võ Như Hoàng Huy
 - MSSV: 2254810046
-****
-**Nhóm 14**   
-**Khoa Công nghệ thông tin** 
 
-**Học viện Hàng không Việt Nam** 
-
-#FITVAA
+#FITVAA:
 **https://fitvaa.edu.vn/**
+****
