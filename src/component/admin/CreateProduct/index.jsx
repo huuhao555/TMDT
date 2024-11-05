@@ -8,17 +8,13 @@ const CreateProduct = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
-    productsTypeName: "",
     quantityInStock: "",
     prices: "",
-    inches: "",
-    screenResolution: "",
-    company: "",
-    cpu: "",
-    ram: "",
-    memory: "",
-    gpu: "",
-    weight: ""
+    color: "",
+    size: "",
+    brand: "",
+    gender: "",
+    category: ""
   });
 
   const [imageFile, setImageFile] = useState(null);
@@ -72,17 +68,13 @@ const CreateProduct = () => {
       // Reset form
       setFormData({
         name: "",
-        productsTypeName: "",
         quantityInStock: "",
         prices: "",
-        inches: "",
-        screenResolution: "",
-        company: "",
-        cpu: "",
-        ram: "",
-        memory: "",
-        gpu: "",
-        weight: ""
+        color: "",
+        size: "",
+        brand: "",
+        gender: "",
+        category: ""
       });
       setImageFile(null);
       setBannerFile(null);
@@ -106,15 +98,6 @@ const CreateProduct = () => {
           />
         </div>
         <div>
-          <label>Loại sản phẩm:</label>
-          <input
-            type="text"
-            name="productsTypeName"
-            value={formData.productsTypeName}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
           <label>Số lượng trong kho:</label>
           <input
             type="number"
@@ -135,20 +118,29 @@ const CreateProduct = () => {
           />
         </div>
         <div>
-          <label>Kích thước (Inches):</label>
+          <label>Màu sắc:</label>
           <input
             type="text"
-            name="inches"
-            value={formData.inches}
+            name="color"
+            value={formData.color}
             onChange={handleChange}
           />
         </div>
         <div>
-          <label>Độ phân giải màn hình:</label>
+          <label>Kích thước:</label>
+          <input
+            type="number"
+            name="size"
+            value={formData.size}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Thương hiệu:</label>
           <input
             type="text"
-            name="screenResolution"
-            value={formData.screenResolution}
+            name="brand"
+            value={formData.brand}
             onChange={handleChange}
           />
         </div>
@@ -175,57 +167,21 @@ const CreateProduct = () => {
           )}
         </div>
         <div>
-          <label>Công ty:</label>
-          <input
-            type="text"
-            name="company"
-            value={formData.company}
-            onChange={handleChange}
-          />
+          <label>Giới tính:</label>
+          <select name="gender" value={formData.gender} onChange={handleChange}>
+            <option value="">Chọn giới tính</option>
+            <option value="nam">Nam</option>
+            <option value="nữ">Nữ</option>
+          </select>
         </div>
         <div>
-          <label>CPU:</label>
+          <label>Loại sản phẩm (Category):</label>
           <input
             type="text"
-            name="cpu"
-            value={formData.cpu}
+            name="category"
+            value={formData.category}
             onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>RAM:</label>
-          <input
-            type="text"
-            name="ram"
-            value={formData.ram}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Bộ nhớ:</label>
-          <input
-            type="text"
-            name="memory"
-            value={formData.memory}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>GPU:</label>
-          <input
-            type="text"
-            name="gpu"
-            value={formData.gpu}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Cân nặng:</label>
-          <input
-            type="text"
-            name="weight"
-            value={formData.weight}
-            onChange={handleChange}
+            required
           />
         </div>
         <button type="submit">Thêm sản phẩm</button>

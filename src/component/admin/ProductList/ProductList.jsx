@@ -11,7 +11,7 @@ const ProductList = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/product/getAllProduct"
+          "http://localhost:5006/api/product/getAllProduct"
         );
         if (!response.ok) throw new Error(response.statusText);
         const data = await response.json();
@@ -60,7 +60,9 @@ const ProductList = () => {
           <button
             key={number + 1}
             onClick={() => handlePageChange(number + 1)}
-            className={`page-number ${currentPage === number + 1 ? "active" : ""}`}
+            className={`page-number ${
+              currentPage === number + 1 ? "active" : ""
+            }`}
           >
             {number + 1}
           </button>

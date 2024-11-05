@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { IMAGES } from "../../../assets/image";
-import { ROUTERS } from "../../../utils/router";
 import { UserContext } from "../../../middleware/UserContext";
 import { NotificationContext } from "../../../middleware/NotificationContext";
 import "./style.scss";
@@ -10,8 +8,6 @@ const ProductManagement = () => {
   const { addNotification } = useContext(NotificationContext);
   const { user } = useContext(UserContext);
   const [products, setProducts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -55,80 +51,43 @@ const ProductManagement = () => {
     }
   };
 
-  const currentProducts = products.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-  const totalPages = Math.ceil(products.length / itemsPerPage);
-
   return (
-    <div>
-      <div className="product-table-container">
-        <table className="product-table">
-          <thead>
-            <tr>
-              <th>STT</th>
-              <th>Sản phẩm</th>
-              <th>Nhãn hàng</th>
-              <th>Số lượng</th>
-              <th>Giá</th>
-              <th>Hành động</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentProducts.map((product, index) => (
-              <tr key={product._id}>
-                <td>{index + 1}</td>
-                <td>
-                  <div className="product-info">
-                    <img
-                      src={product.imageUrl || IMAGES.defaultImage}
-                      alt={product.name}
-                      style={{ width: "100px" }}
-                    />
-                    <div>
-                      <h4>{product.name}</h4>
-                    </div>
-                  </div>
-                </td>
-                <td>{product.company}</td>
-                <td>{product.quantityInStock}</td>
-                <td>{product.prices.toLocaleString("vi-VN")}</td>
-
-                <td>
-                  <button className="view-btn">👁️</button>
-                  <Link
-                    to={`${ROUTERS.ADMIN.UPDATE_PRODUCT}/${product._id}`}
-                    className="edit-btn"
-                    state={{ product, id: product._id }}
-                  >
-                    ✏️
-                  </Link>
-                  {user?.dataUser?.isAdmin && (
-                    <button
-                      onClick={() => handleDeleteProduct(product._id)}
-                      className="delete-btn"
-                    >
-                      🗑️
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="pagination-product-manager">
-        {[...Array(totalPages).keys()].map((n) => (
-          <button
-            key={n + 1}
-            onClick={() => setCurrentPage(n + 1)}
-            className={`page-number ${currentPage === n + 1 ? "active" : ""}`}
-          >
-            {n + 1}
-          </button>
-        ))}
-      </div>
+    <div className="product-container">
+      {products.map((product) => (
+        <div key={product._id} className="product-card">
+          <img
+            src={product.imageUrl}
+            alt={product.name}
+            className="product-image"
+          />
+          <h5 className="product-title">{product.name}</h5>
+          <p className="product-price">
+            {product.prices.toLocaleString("vi-VN")}đ
+          </p>
+          <p className="product-remaining">
+            {product.quantityInStock > 0
+              ? `${product.quantityInStock} products available`
+              : "Sold Out"}
+          </p>
+          <div className="action-buttons">
+            <Link
+              to={`${ROUTERS.ADMIN.UPDATE_PRODUCT}/${product._id}`}
+              className="edit-btn"
+              state={{ product, id: product._id }}
+            >
+              ✏️
+            </Link>
+            {user?.dataUser?.isAdmin && (
+              <button
+                onClick={() => handleDeleteProduct(product._id)}
+                className="delete-btn"
+              >
+                🗑️
+              </button>
+            )}
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
