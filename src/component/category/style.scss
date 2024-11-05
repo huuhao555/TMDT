@@ -1,0 +1,56 @@
+@use "sass:map";
+@import "../../styles/pages/theme.scss";
+
+.category-container {
+  padding: 2rem;
+  text-align: center;
+
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+
+  .categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+
+  .category-card {
+    width: 120px;
+    padding: 1rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .category-icon {
+      width: 50px; // Đặt kích thước cố định cho hình ảnh
+      height: 50px; // Đảm bảo hình ảnh vuông
+      margin-bottom: 0.5rem;
+      border-radius: 50%; // Giúp hình ảnh tròn hơn, nếu cần
+      object-fit: cover; // Đảm bảo hình ảnh không bị méo khi điều chỉnh kích thước
+    }
+
+    .category-name {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 0.25rem;
+    }
+
+    .category-items {
+      font-size: 0.9rem;
+      color: #666;
+    }
+  }
+}
