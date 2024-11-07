@@ -1,7 +1,7 @@
 import { memo } from "react";
 import "./style.scss";
-import Courses from "../../component/products/products";
-import CategoryComponent from "../../component/category/category";
+import Courses from "../../../component/user/products/products";
+import CategoryComponent from "../../../component/user/category/category";
 const HomePage = () => {
   return (
     <div className="container">

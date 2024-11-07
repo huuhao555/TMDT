@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./style.scss";
 import { Link } from "react-router-dom";
-import { ROUTERS } from "../../../utils/router";
+
 import RevenueStatistics from "../RevenueStatistics";
+import { ROUTERS } from "../../../router/path";
 
 const Dashboard = () => {
   const CardUser = () => {
@@ -12,7 +13,7 @@ const Dashboard = () => {
       const fetchCount = async () => {
         try {
           const response = await fetch(
-            "http://localhost:3001/api/user/getAllUser"
+            "http://localhost:5006/api/user/getAllUser"
           );
           if (!response.ok) throw new Error(response.statusText);
 
@@ -45,7 +46,7 @@ const Dashboard = () => {
     useEffect(() => {
       const fetchCount = async () => {
         try {
-          const response = await fetch("http://localhost:3001/api/order/count");
+          const response = await fetch("http://localhost:5006/api/order/count");
           if (!response.ok) throw new Error(response.statusText);
 
           const data = await response.json();
@@ -78,12 +79,14 @@ const Dashboard = () => {
       const fetchCount = async () => {
         try {
           const response = await fetch(
-            "http://localhost:3001/api/product/getAllProduct"
+            "http://localhost:5006/api/product/getAllProduct"
           );
           if (!response.ok) throw new Error(response.statusText);
 
           const data = await response.json();
-          setCount(data.total);
+          console.log(data);
+
+          setCount(data.data.length);
         } catch (error) {
           console.error("Failed to fetch count for products:", error);
         }
@@ -112,7 +115,7 @@ const Dashboard = () => {
       const fetchCount = async () => {
         try {
           const response = await fetch(
-            "http://localhost:3001/api/review/count"
+            "http://localhost:5006/api/review/count"
           );
           if (!response.ok) throw new Error(response.statusText);
 

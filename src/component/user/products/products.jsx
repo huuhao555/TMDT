@@ -1,6 +1,6 @@
 import { memo, useEffect, useState, useContext } from "react";
 import "./style.scss";
-import { UserContext } from "../../middleware/UserContext";
+import { UserContext } from "../../../middleware/UserContext";
 
 const ProductComponent = () => {
   const [products, setProducts] = useState([]);

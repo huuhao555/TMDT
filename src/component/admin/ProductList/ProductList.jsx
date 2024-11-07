@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IMAGES } from "../../../assets/image";
+
 import "./style.scss";
 
 const ProductList = () => {

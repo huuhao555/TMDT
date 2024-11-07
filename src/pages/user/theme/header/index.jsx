@@ -1,8 +1,8 @@
 import { memo, useContext } from "react";
 import "./style.scss";
 import { useNavigate } from "react-router-dom";
-import { ROUTERS } from "../../../router/path";
-import { UserContext } from "../../../middleware/UserContext";
+import { ROUTERS } from "../../../../router/path";
+import { UserContext } from "../../../../middleware/UserContext";
 
 const Header = () => {
   const { user, logout } = useContext(UserContext);
@@ -58,9 +58,9 @@ const Header = () => {
                   <li className="nav-item">
                     <button
                       className="nav-link"
-                      onClick={() => handleNavigate("/contact")}
+                      onClick={() => handleNavigate("/admin")}
                     >
-                      Liên hệ
+                      Liên hệ Admin
                     </button>
                   </li>
                   {user && (

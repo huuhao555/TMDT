@@ -1,0 +1,10 @@
+@use "sass:map";
+@import "../../../../styles/pages/theme.scss";
+
+.container-layout {
+  overflow: hidden;
+  .row {
+    display: flex;
+    align-items: stretch;
+  }
+}

@@ -6,7 +6,7 @@ import "./style.scss";
 
 import { ROUTERS } from "../../../router/path";
 
-const ProductManagement = () => {
+const ProductTypeManagement = () => {
   const { addNotification } = useContext(NotificationContext);
   const { user } = useContext(UserContext);
   const [products, setProducts] = useState([]);
@@ -17,7 +17,7 @@ const ProductManagement = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5006/api/product/getAllProduct"
+          "http://localhost:5006/api/category/getAll"
         );
         if (!response.ok) throw new Error(response.statusText);
         const data = await response.json();
@@ -35,7 +35,7 @@ const ProductManagement = () => {
     if (window.confirm("Bạn có chắc chắn muốn xoá sản phẩm này?")) {
       try {
         const response = await fetch(
-          `http://localhost:5006/api/product/delete-product/${id}`,
+          `http://localhost:5006/api/category/delete/${id}`,
           {
             method: "DELETE",
             headers: { "Content-Type": "application/json" }
@@ -77,45 +77,48 @@ const ProductManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {currentProducts.map((product, index) => (
-              <tr key={product._id}>
-                <td>{index + 1}</td>
-                <td>
-                  <div className="product-info">
-                    <img
-                      src={product.imageUrl}
-                      alt={product.name}
-                      style={{ width: "100px" }}
-                    />
-                    <div>
-                      <h4>{product.name}</h4>
+            {currentProducts.map((product, index) => {
+              console.log(product);
+              return (
+                <tr key={product._id}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <div className="product-info">
+                      <img
+                        src={product.icon}
+                        alt={product.name}
+                        style={{ width: "100px" }}
+                      />
+                      <div>
+                        <h4>{product.name}</h4>
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td>{product.brand}</td>
-                <td>{product.quantityInStock}</td>
-                <td>{product.prices.toLocaleString("vi-VN")}</td>
+                  </td>
+                  <td>{product.brand}</td>
+                  <td>{product.quantityInStock}</td>
+                  <td>{product.prices}</td>
 
-                <td>
-                  <button className="view-btn">👁️</button>
-                  <Link
-                    to={`${ROUTERS.ADMIN.UPDATE_PRODUCT}/${product._id}`}
-                    className="edit-btn"
-                    state={{ product, id: product._id }}
-                  >
-                    ✏️
-                  </Link>
-                  {!user?.dataUser?.isAdmin && (
-                    <button
-                      onClick={() => handleDeleteProduct(product._id)}
-                      className="delete-btn"
+                  <td>
+                    <button className="view-btn">👁️</button>
+                    <Link
+                      to={`${ROUTERS.ADMIN.UPDATE_PRODUCT}/${product._id}`}
+                      className="edit-btn"
+                      state={{ product, id: product._id }}
                     >
-                      🗑️
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
+                      ✏️
+                    </Link>
+                    {!user?.dataUser?.isAdmin && (
+                      <button
+                        onClick={() => handleDeleteProduct(product._id)}
+                        className="delete-btn"
+                      >
+                        🗑️
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -134,4 +137,4 @@ const ProductManagement = () => {
   );
 };
 
-export default ProductManagement;
+export default ProductTypeManagement;

@@ -1,6 +1,7 @@
 @use "sass:map";
-@import "../../../styles/pages/theme.scss";
-.register-container {
+@import "../../../../styles/pages/theme.scss";
+
+.login-container {
   max-width: 400px;
   margin: auto;
   padding: 2rem;

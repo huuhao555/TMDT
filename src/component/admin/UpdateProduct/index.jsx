@@ -48,7 +48,7 @@ const UpdateProduct = () => {
       if (imageFile) data.append("image", imageFile);
       if (bannerFile) data.append("banner", bannerFile);
 
-      const response = await fetch("http://localhost:3001/api/product/create", {
+      const response = await fetch("http://localhost:5006/api/product/create", {
         method: "POST",
         body: data,
         headers: {}
