@@ -29,7 +29,9 @@ function Sidebar() {
                 <Link to={ROUTERS.ADMIN.CREATE_PRODUCT}>Thêm sản phẩm</Link>
               </li>
               <li>
-                <Link to={ROUTERS.ADMIN.s}>Thêm loại sản phẩm</Link>
+                <Link to={ROUTERS.ADMIN.CREATE_CATEGORY}>
+                  Thêm loại sản phẩm
+                </Link>
               </li>
             </ul>
           )}

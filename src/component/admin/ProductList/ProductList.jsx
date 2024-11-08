@@ -11,7 +11,7 @@ const ProductList = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5006/api/product/getAllProduct"
+          "http://localhost:8001/api/product/getAllProduct"
         );
         if (!response.ok) throw new Error(response.statusText);
         const data = await response.json();

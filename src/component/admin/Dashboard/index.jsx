@@ -13,7 +13,7 @@ const Dashboard = () => {
       const fetchCount = async () => {
         try {
           const response = await fetch(
-            "http://localhost:5006/api/user/getAllUser"
+            "http://localhost:8001/api/user/getAllUser"
           );
           if (!response.ok) throw new Error(response.statusText);
 
@@ -46,7 +46,7 @@ const Dashboard = () => {
     useEffect(() => {
       const fetchCount = async () => {
         try {
-          const response = await fetch("http://localhost:5006/api/order/count");
+          const response = await fetch("http://localhost:8001/api/order/count");
           if (!response.ok) throw new Error(response.statusText);
 
           const data = await response.json();
@@ -79,7 +79,7 @@ const Dashboard = () => {
       const fetchCount = async () => {
         try {
           const response = await fetch(
-            "http://localhost:5006/api/product/getAllProduct"
+            "http://localhost:8001/api/product/getAllProduct"
           );
           if (!response.ok) throw new Error(response.statusText);
 
@@ -115,7 +115,7 @@ const Dashboard = () => {
       const fetchCount = async () => {
         try {
           const response = await fetch(
-            "http://localhost:5006/api/review/count"
+            "http://localhost:8001/api/review/count"
           );
           if (!response.ok) throw new Error(response.statusText);
 

@@ -1,20 +1,19 @@
+// Variables
 $form-padding: 20px;
 $form-bg-color: #f9f9f9;
 $form-border-radius: 8px;
 $form-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 $input-height: 40px;
-$select-height: 45px;
-$select-font-size: 16px;
 $button-bg-color: #007bff;
 $button-color: white;
 $button-hover-bg-color: #0056b3;
 
-.create-product-admin {
+.simple-create-product {
   background-color: $form-bg-color;
   border-radius: $form-border-radius;
   box-shadow: $form-box-shadow;
   padding: $form-padding;
-  max-width: 600px;
+  max-width: 400px;
   margin: auto;
 
   h1 {
@@ -34,36 +33,21 @@ $button-hover-bg-color: #0056b3;
         margin-bottom: 5px;
         font-weight: bold;
         color: #555;
+        display: block;
       }
 
       input[type="text"],
-      input[type="number"],
-      input[type="file"],
-      select {
+      input[type="file"] {
         height: $input-height;
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 4px;
         font-size: 16px;
         transition: border 0.3s;
-        width: 100%;
 
         &:focus {
           border-color: $button-bg-color;
           outline: none;
-        }
-      }
-
-      select {
-        height: $select-height;
-        font-size: $select-font-size;
-        background-color: #fff;
-        color: #333;
-        appearance: none;
-        padding-right: 10px;
-
-        &:hover {
-          border-color: #bbb;
         }
       }
 

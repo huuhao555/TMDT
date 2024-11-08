@@ -1,58 +1,116 @@
 @use "sass:map";
 @import "../../../../styles/pages/theme.scss";
 
+.login-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .login-container {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 40px;
+  width: 100%;
   max-width: 400px;
-  margin: auto;
-  padding: 2rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  text-align: center;
+
+  .login-logo {
+    width: 150px;
+    margin-bottom: 20px;
+  }
 
   h2 {
-    text-align: center;
-    margin-bottom: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .error-message {
+    color: #d9534f;
+    margin-bottom: 15px;
   }
 
   .form-group {
-    margin-bottom: 1rem;
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: #333;
-    }
+    margin-bottom: 20px;
 
     input {
       width: 100%;
-      padding: 0.5rem;
+      padding: 10px;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: border-color 0.3s, box-shadow 0.3s;
 
       &:focus {
-        border-color: #0056b3;
+        border-color: #4b79a1;
+        box-shadow: 0 0 8px rgba(75, 121, 161, 0.3);
         outline: none;
       }
     }
   }
-
-  .error-message {
-    color: red;
-    margin-bottom: 1rem;
+  .password-group {
+    position: relative;
+    .toggle-password {
+      svg {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #555;
+      }
+    }
   }
-
   .btn {
-    width: 100%;
-    padding: 0.5rem;
-    background-color: #0056b3;
+    background-color: #4b79a1;
     color: white;
+    padding: 12px;
+    width: 100%;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
 
     &:hover {
-      background-color: #004494;
+      background-color: #3a6186;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  .social-login {
+    margin-top: 15px;
+    p {
+      margin-bottom: 8px;
+    }
+    .social-icon {
+      font-size: 24px;
+      margin: 0 10px;
+      cursor: pointer;
+    }
+    .facebook {
+      color: #3b5998;
+    }
+    .google {
+      color: #db4437;
+    }
+  }
+
+  .extra-links {
+    display: block;
+    margin-top: 20px;
+
+    a {
+      color: #4b79a1;
+      text-decoration: none;
+      font-weight: bold;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 }

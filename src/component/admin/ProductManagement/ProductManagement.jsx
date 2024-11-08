@@ -17,7 +17,7 @@ const ProductManagement = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5006/api/product/getAllProduct"
+          "http://localhost:8001/api/product/getAllProduct"
         );
         if (!response.ok) throw new Error(response.statusText);
         const data = await response.json();
@@ -35,7 +35,7 @@ const ProductManagement = () => {
     if (window.confirm("Bạn có chắc chắn muốn xoá sản phẩm này?")) {
       try {
         const response = await fetch(
-          `http://localhost:5006/api/product/delete-product/${id}`,
+          `http://localhost:8001/api/product/delete-product/${id}`,
           {
             method: "DELETE",
             headers: { "Content-Type": "application/json" }

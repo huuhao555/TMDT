@@ -10,7 +10,7 @@ const StaffManagement = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5006/api/user/getAllUser"
+          "http://localhost:8001/api/user/getAllUser"
         );
 
         if (!response.ok) {
@@ -40,7 +40,7 @@ const StaffManagement = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5006/api/user/delete-user/${id}`,
+        `http://localhost:8001/api/user/delete-user/${id}`,
         {
           method: "DELETE",
           headers: {

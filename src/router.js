@@ -15,6 +15,8 @@ import PurchaseHistory from "./component/admin/PurchaseHistory/PurchaseHistory";
 import UpdateUser from "./pages/admin/auth/UpdateUser";
 import UpdateProduct from "./component/admin/UpdateProduct";
 import ProductTypeManagement from "./component/admin/ProductTypeManager";
+import CartPage from "./pages/user/CartPage";
+import CreateCategory from "./component/admin/CreateCategory";
 const RouterCustom = () => {
   return (
     <Routes>
@@ -22,6 +24,7 @@ const RouterCustom = () => {
         <Route path={ROUTERS.USER.HOME} element={<HomePage />} />
         <Route path={ROUTERS.LOGIN} element={<Login />} />
         <Route path={ROUTERS.SIGNUP} element={<Signup />} />
+        <Route path={ROUTERS.USER.CART} element={<CartPage />} />
       </Route>
       <Route element={<AdminLayout />}>
         <Route path={ROUTERS.ADMIN.DASHBOARD} element={<Dashboard />} />
@@ -37,6 +40,10 @@ const RouterCustom = () => {
         <Route
           path={ROUTERS.ADMIN.CREATE_PRODUCT}
           element={<CreateProduct />}
+        />
+        <Route
+          path={ROUTERS.ADMIN.CREATE_CATEGORY}
+          element={<CreateCategory />}
         />
         <Route
           path={ROUTERS.ADMIN.REVENUE_STATS}

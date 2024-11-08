@@ -1,9 +1,28 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./style.scss";
 import { useNavigate } from "react-router-dom";
 import { NotificationContext } from "../../../middleware/NotificationContext";
 
 const CreateProduct = () => {
+  const [category, setCategory] = useState([]);
+  useEffect(() => {
+    const renderCategory = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8001/api/category/getAll"
+        );
+        if (!response.ok) {
+          console.log("Error fetching categories");
+          return;
+        }
+        const dataCategory = await response.json();
+        setCategory(Array.isArray(dataCategory.data) ? dataCategory.data : []);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    renderCategory();
+  }, []);
   const { addNotification } = useContext(NotificationContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -48,12 +67,11 @@ const CreateProduct = () => {
       if (imageFile) data.append("image", imageFile);
       if (bannerFile) data.append("banner", bannerFile);
 
-      const response = await fetch("http://localhost:5006/api/product/create", {
+      const response = await fetch("http://localhost:8001/api/product/create", {
         method: "POST",
-        body: data,
-        headers: {}
+        body: data
       });
-
+      console.log(...data);
       if (!response.ok) {
         alert(
           "Thêm sản phẩm không thành công! Vui lòng kiểm tra lại thông tin."
@@ -176,13 +194,18 @@ const CreateProduct = () => {
         </div>
         <div>
           <label>Loại sản phẩm (Category):</label>
-          <input
-            type="text"
+          <select
             name="category"
             value={formData.category}
             onChange={handleChange}
-            required
-          />
+          >
+            <option value="">Chọn loại sản phẩm</option>
+            {category.map((cat) => (
+              <option key={cat._id} value={cat._id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
         </div>
         <button type="submit">Thêm sản phẩm</button>
       </form>

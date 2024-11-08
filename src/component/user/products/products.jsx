@@ -9,12 +9,13 @@ const ProductComponent = () => {
   const renderProducts = async () => {
     try {
       const response = await fetch(
-        " http://localhost:5006/api/product/getAllProduct"
+        " http://localhost:8001/api/product/getAllProduct"
       );
       if (!response.ok) throw new Error(response.statusText);
 
       const dataProducts = await response.json();
       setProducts(dataProducts.data);
+      console.log(dataProducts.data);
     } catch (error) {
       console.error("Failed to fetch products:", error);
       setProducts([]);
@@ -34,7 +35,7 @@ const ProductComponent = () => {
     // }
     try {
       const response = await fetch(
-        `http://localhost:5001/api/product/purchase/${idCounrse}`,
+        `http://localhost:8001/api/product/purchase/${idCounrse}`,
         {
           method: "POST",
           headers: {
@@ -50,7 +51,39 @@ const ProductComponent = () => {
       console.error("Failed to fetch products:", error);
     }
   };
-  const handleBuyProduct = () => {};
+  const handleBuyProduct = async (product) => {
+    console.log(user);
+    if (!user) alert("Vui lòng đăng nhập");
+    try {
+      const response = await fetch(
+        "http://localhost:8001/api/cart/add-update",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            userId: user.dataUser.id,
+            productId: product._id,
+            quantity: 1,
+            prices: product.prices.toLocaleString("vi-VN")
+          })
+        }
+      );
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      console.log(response);
+      console.log(dataCart);
+      const dataCart = await response.json();
+      const updatedCount = dataCart.data.products.length;
+
+      // updateCartCount(updatedCount);
+      // alert("Thêm giỏ hàng thành công");
+    } catch (error) {
+      console.error("Failed to add product to cart:", error);
+    }
+  };
 
   return (
     <div className="product-container">
@@ -73,7 +106,7 @@ const ProductComponent = () => {
               </p>
               <button
                 onClick={() => {
-                  handleBuyProduct(product._id);
+                  handleBuyProduct(product);
                 }}
                 className="btn btn-primary"
                 disabled={product.quantityInStock === 0}

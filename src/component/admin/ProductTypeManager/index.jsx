@@ -17,7 +17,7 @@ const ProductTypeManagement = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5006/api/category/getAll"
+          "http://localhost:8001/api/category/getAll"
         );
         if (!response.ok) throw new Error(response.statusText);
         const data = await response.json();
@@ -35,7 +35,7 @@ const ProductTypeManagement = () => {
     if (window.confirm("Bạn có chắc chắn muốn xoá sản phẩm này?")) {
       try {
         const response = await fetch(
-          `http://localhost:5006/api/category/delete/${id}`,
+          `http://localhost:8001/api/category/delete/${id}`,
           {
             method: "DELETE",
             headers: { "Content-Type": "application/json" }

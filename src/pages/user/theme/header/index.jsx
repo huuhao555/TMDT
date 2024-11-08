@@ -33,17 +33,9 @@ const Header = () => {
                   <li className="nav-item">
                     <button
                       className="nav-link"
-                      onClick={() => handleNavigate("/")}
-                    >
-                      Trang chủ
-                    </button>
-                  </li>
-                  <li className="nav-item">
-                    <button
-                      className="nav-link"
                       onClick={() => handleNavigate("/courses")}
                     >
-                      Sản phẩm
+                      Áo nam
                     </button>
                   </li>
 
@@ -52,7 +44,31 @@ const Header = () => {
                       className="nav-link"
                       onClick={() => handleNavigate("/contact")}
                     >
-                      Danh mục sản phẩm
+                      Áo nữ
+                    </button>
+                  </li>
+                  <li className="nav-item">
+                    <button
+                      className="nav-link"
+                      onClick={() => handleNavigate("/")}
+                    >
+                      Gia đình
+                    </button>
+                  </li>
+                  <li className="nav-item">
+                    <button
+                      className="nav-link"
+                      onClick={() => handleNavigate("/")}
+                    >
+                      Cặp đôi
+                    </button>
+                  </li>
+                  <li className="nav-item">
+                    <button
+                      className="nav-link"
+                      onClick={() => handleNavigate(ROUTERS.USER.CART)}
+                    >
+                      Giỏ hàng
                     </button>
                   </li>
                   <li className="nav-item">
@@ -60,7 +76,7 @@ const Header = () => {
                       className="nav-link"
                       onClick={() => handleNavigate("/admin")}
                     >
-                      Liên hệ Admin
+                      Admin
                     </button>
                   </li>
                   {user && (

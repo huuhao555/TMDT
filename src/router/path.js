@@ -23,6 +23,7 @@ export const ROUTERS = {
   ADMIN: {
     DASHBOARD: "/admin",
     CREATE_PRODUCT: "/admin/them-san-pham",
+    CREATE_CATEGORY: "/admin/them-loai-san-pham",
     PRODUCT_LIST: "/admin/san-pham",
     MANAGE_STAFF: "/admin/quan-ly-nguoi-dung",
     MANAGE_PRODUCTS: "/admin/quan-ly-san-pham",
