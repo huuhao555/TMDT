@@ -7,7 +7,7 @@ import { FaFacebook, FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const navigator = useNavigate();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -20,22 +20,23 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8001/api/user/login", {
+      const response = await fetch("http://localhost:8001/api/user/sign-in", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ email, password })
       });
 
       if (!response.ok) {
         throw new Error("Login failed");
       }
       const data = await response.json();
-      const dataUser = data.user;
-      localStorage.setItem("user", JSON.stringify(dataUser));
-      updateUser(dataUser);
-      navigator(ROUTERS.HOMEPAGE);
+
+      localStorage.setItem("token", data.access_token);
+      localStorage.setItem("user", JSON.stringify(data));
+      updateUser(data);
+      navigator(ROUTERS.USER.HOME);
     } catch (err) {
       setError(err.message);
     }
@@ -47,7 +48,7 @@ const Login = () => {
         <div className="col-lg-9">
           <div style={{ width: "100%", height: "600px", overflow: "hidden" }}>
             <img
-              src="https://firebasestorage.googleapis.com/v0/b/dacn-714e1.appspot.com/o/TMDT%2Fc5e860064b0dd59b6210d5b9e8a924ac.jpg?alt=media&token=e9fd27e2-03bd-43fc-8f42-7d8d1218e622"
+              src="https://i.pinimg.com/474x/d5/2d/db/d52ddbbe671bfe2f270f488632fbb1de.jpg"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
               alt="Product"
             />
@@ -67,8 +68,8 @@ const Login = () => {
                 <input
                   placeholder="Email"
                   type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
@@ -99,7 +100,7 @@ const Login = () => {
             <div className="extra-links">
               <a href="/forgot-password">Forgot password?</a>
               <br />
-              <a href="/register">Don't have an account? Sign up</a>
+              <a href="/dang-ky">Don't have an account? Sign up</a>
             </div>
           </div>
         </div>

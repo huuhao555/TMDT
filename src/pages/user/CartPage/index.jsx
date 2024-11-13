@@ -1,47 +1,89 @@
 import "./style.scss";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import { UserContext } from "../../../middleware/UserContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTERS } from "../../../router/path";
 
 const CartPage = () => {
-  const { user, countCart, updateCartCount } = useContext(UserContext);
-  console.log(countCart);
+  const [cart, setCart] = useState(null);
+
+  const { user, updateCartCount } = useContext(UserContext);
+
+  const [selectedProducts, setSelectedProducts] = useState([]);
   const navigator = useNavigate();
   const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+  useEffect(
+    () => {
+      if (cart && cart.products) {
+        const allProductIds = cart.products.map((item) => item?.productId._id);
+        setSelectedProducts(allProductIds);
+      }
+      window.scrollTo(0, 0);
+    },
 
-  const [cart, setCart] = useState(null);
-  console.log(cart);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
+    [cart],
+    [pathname]
+  );
 
-  const getAllCart = async () => {
+  const getAllCart = useCallback(async () => {
     if (!user || !user.dataUser) return;
-
     const id = user.dataUser.id;
     try {
       const response = await fetch(
-        `http://localhost:3001/api/cart/get-cart/${id}`
+        `http://localhost:8001/api/cart/get-cart/${id}`
       );
       if (!response.ok) throw new Error(response.statusText);
       const dataCart = await response.json();
+      console.log(dataCart);
       setCart(dataCart);
     } catch (error) {
       console.error("Failed to fetch count for users:", error);
     }
-  };
+  }, [user]);
+
   useEffect(() => {
     getAllCart();
-  }, [user]);
+  }, [getAllCart]);
+  const paymentCart = async (selectedProducts, userID) => {
+    navigator(ROUTERS.USER.ORDER, {
+      state: {
+        selectedProducts
+      }
+    });
+    // try {
+    //   // Lặp qua từng sản phẩm trong danh sách được chọn và gọi API để xóa
+    //   for (const productId of selectedProducts) {
+    //     const response = await fetch(
+    //       `http://localhost:8001/api/cart/delete-product-cart/${userID}/product/${productId}`,
+    //       {
+    //         method: "DELETE",
+    //         headers: {
+    //           "Content-Type": "application/json"
+    //         }
+    //       }
+    //     );
+    //     if (!response.ok) {
+    //       throw new Error(
+    //         `Failed to delete product ${productId}: ${response.statusText}`
+    //       );
+    //     }
+    //   }
+    //   // Lấy giỏ hàng mới sau khi xóa
+    //   await getAllCart();
+    //   // Cập nhật số lượng sản phẩm trong giỏ hàng
+    //   updateCartCount(cart.products.length - selectedProducts.length);
+
+    //   // Điều hướng đến trang "ORDER" kèm danh sách sản phẩm đã chọn
+    // } catch (error) {
+    //   console.error("Failed to delete selected products from cart:", error);
+    // }
+  };
 
   const removeFromCart = async (productId, userID) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/cart/delete-product-cart/${userID}/product/${productId}`,
+        `http://localhost:8001/api/cart/delete-product-cart/${userID}/product/${productId}`,
         {
           method: "DELETE",
           headers: {
@@ -67,7 +109,7 @@ const CartPage = () => {
     }
     try {
       const response = await fetch(
-        `http://localhost:3001/api/cart/delete-cart/${userID}`,
+        `http://localhost:8001/api/cart/delete-cart/${userID}`,
         {
           method: "DELETE",
           headers: {
@@ -87,26 +129,15 @@ const CartPage = () => {
     }
   };
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const handleIncrease = async ({ id }) => {
+    if (!user) {
+      alert("Vui lòng đăng nhập");
+      return;
+    }
 
-  if (!user) {
-    return <p>Loading user data...</p>;
-  }
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = cart
-    ? cart.products.slice(indexOfFirstItem, indexOfLastItem)
-    : [];
-  const paymentCart = () => {
-    navigator(ROUTERS.USER.PAYMENT);
-  };
-  const handleIncrease = async ({ id, prices }) => {
-    console.log(id, prices);
-    if (!user) alert("Vui lòng đăng nhập");
     try {
       const response = await fetch(
-        "http://localhost:3001/api/cart/add-update",
+        "http://localhost:8001/api/cart/add-update",
         {
           method: "POST",
           headers: {
@@ -119,17 +150,16 @@ const CartPage = () => {
           })
         }
       );
+
       if (!response.ok) {
         throw new Error(response.statusText);
       }
+
       const dataCart = await response.json();
-      setCart(dataCart.data);
-
+      console.log(dataCart.data);
       const updatedCount = dataCart.data.products.length;
-      updateCartCount(updatedCount);
-      // window.location.reload();
-
-      // alert("Thêm giỏ hàng thành công");
+      // updateCartCount(updatedCount);
+      setCart(dataCart?.data);
     } catch (error) {
       console.error("Failed to add product to cart:", error);
     }
@@ -137,7 +167,7 @@ const CartPage = () => {
 
   const handleDecrease = async (id) => {
     try {
-      const response = await fetch("http://localhost:3001/api/cart/update", {
+      const response = await fetch("http://localhost:8001/api/cart/update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -154,20 +184,42 @@ const CartPage = () => {
       const dataCart = await response.json();
 
       const updatedCount = dataCart.data.products.length;
-      updateCartCount(updatedCount);
-      // window.location.reload();
+      // updateCartCount(updatedCount);
+      setCart(dataCart?.data);
     } catch (error) {
       console.error("Failed to add product to cart:", error);
     }
   };
+
+  if (!user) {
+    return <p>Loading user data...</p>;
+  }
+
+  const handleCheckboxChange = (productId) => {
+    setSelectedProducts((prev) =>
+      prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId]
+    );
+  };
+
+  const calculateTotal = () => {
+    if (!cart || !cart.products) return 0;
+    return cart.products
+      .filter((item) => selectedProducts.includes(item?.productId._id))
+      .reduce(
+        (total, item) => total + item?.productId.prices * item?.quantity,
+        0
+      );
+  };
   return (
     <div className="cart-page">
-      <h1>Shopping Cart</h1>
       {cart && cart.products.length > 0 ? (
         <div className="cart-container">
           <table className="cart-table">
             <thead>
               <tr>
+                <th>Chọn</th>
                 <th>STT</th>
                 <th>Sản phẩm</th>
                 <th>Giá</th>
@@ -177,26 +229,40 @@ const CartPage = () => {
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((item, key) => {
-                console.log(item);
+              {cart.products.map((item, key) => {
                 return (
-                  <tr key={item._id}>
+                  <tr key={item?._id}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedProducts.includes(item?.productId._id)}
+                        onChange={() =>
+                          handleCheckboxChange(item?.productId._id)
+                        }
+                      />
+                    </td>
                     <td>{key + 1}</td>
-                    <td>{item.productId.name}</td>
-                    <td>{item.productId.prices.toLocaleString("vi-VN")}VNĐ</td>
+                    <td>{`${item?.productId.name}`}</td>
+                    <td>
+                      {item?.productId.prices
+                        ? item?.productId.prices.toLocaleString("vi-VN")
+                        : "0"}{" "}
+                      VNĐ
+                    </td>
+
                     <td>
                       <div className="handle-quantity">
                         <span
-                          onClick={() => handleDecrease(item.productId._id)}
+                          onClick={() => handleDecrease(item?.productId._id)}
                           className="button-decrease"
                         >
                           –
                         </span>
-                        <div>{item.quantity}</div>
+                        <div>{item?.quantity}</div>
                         <span
                           onClick={() =>
                             handleIncrease({
-                              id: item.productId._id
+                              id: item?.productId._id
                             })
                           }
                           className="button-increase"
@@ -206,25 +272,49 @@ const CartPage = () => {
                       </div>
                     </td>
                     <td>
-                      {(item.productId.prices * item.quantity).toLocaleString(
-                        "vi-VN"
-                      )}
+                      {item?.productId.prices
+                        ? (
+                            item?.productId?.prices * item?.quantity
+                          ).toLocaleString("vi-VN")
+                        : "0"}{" "}
                       VNĐ
                     </td>
+
                     <td>
                       <button
                         className="remove-button"
                         onClick={() =>
-                          removeFromCart(item.productId._id, user.dataUser.id)
+                          removeFromCart(item?.productId._id, user.dataUser.id)
                         }
                       >
-                        <RiDeleteBin5Line /> Xoá
+                        <RiDeleteBin5Line />
                       </button>
                     </td>
                   </tr>
                 );
               })}
               <tr>
+                <td
+                  colSpan="1"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}
+                >
+                  <input
+                    style={{
+                      marginRight: "5px",
+                      cursor: "pointer"
+                    }}
+                    onClick={() => {
+                      setSelectedProducts([]);
+                    }}
+                    type="checkbox"
+                  />
+                  <span style={{ cursor: "pointer" }}>Bỏ chọn</span>
+                </td>
+
                 <td
                   colSpan="4"
                   style={{ textAlign: "right", fontWeight: "bold" }}
@@ -234,31 +324,16 @@ const CartPage = () => {
                 <td
                   colSpan="2"
                   style={{
+                    paddingLeft: "5%",
                     textAlign: "left",
-                    fontWeight: "bold",
-                    paddingLeft: "60px"
+                    fontWeight: "bold"
                   }}
                 >
-                  {cart.totalPrice}VNĐ
+                  {calculateTotal().toLocaleString("vi-VN")} VNĐ
                 </td>
               </tr>
             </tbody>
           </table>
-
-          {/* <div className="pagination">
-            {Array.from(
-              { length: Math.ceil(cart.products.length / itemsPerPage) },
-              (_, i) => (
-                <button
-                  key={i + 1}
-                  onClick={() => paginate(i + 1)}
-                  className={currentPage === i + 1 ? "active" : ""}
-                >
-                  {i + 1}
-                </button>
-              )
-            )}
-          </div> */}
 
           <button
             className="clear-cart"
@@ -266,7 +341,12 @@ const CartPage = () => {
           >
             Xoá giỏ hàng
           </button>
-          <button className="payment-cart" onClick={() => paymentCart()}>
+          <button
+            className="payment-cart"
+            onClick={() => {
+              paymentCart(selectedProducts, user.dataUser.id);
+            }}
+          >
             Thanh toán
           </button>
         </div>

@@ -1,6 +1,7 @@
 export const ROUTERS = {
-  LOGIN: "dang-nhap",
-  SIGNUP: "dang-ky",
+  LOGIN: "/dang-nhap",
+  SIGNUP: "/dang-ky",
+  VERIFY_OTP: "/xac-thuc-tai-khoan",
   USER: {
     HOME: "/",
     PROFILE: "/thong-tin-ca-nhan",
@@ -14,7 +15,7 @@ export const ROUTERS = {
     LOGIN: "/dang-nhap",
     SIGNUP: "/dang-ky",
     ORDERPAYMENT: "/thanh-toan",
-    ORDER: "/don-hang",
+    ORDER: "/tao-don-hang",
     PRODUCT_TYPE: "loai-san-pham",
     ORDERDETAIL: "/chi-tiet-don-hang",
     ORDERLIST: "/danh-sach-don-hang",
@@ -34,6 +35,13 @@ export const ROUTERS = {
     DETAILS_PRODUCT: "/admin/chi-tiet-san-pham",
     UPDATE_USER: "/admin/chinh-sua-tai-khoan",
     DELETE_USER: "/admin/xoa-tai-khoan",
-    MANAGE_PRODUCT_TYPES: "/admin/quan-ly-loai-san-pham"
+    MANAGE_PRODUCT_TYPES: "/admin/quan-ly-loai-san-pham",
+    MANAGER_ORDER: "/admin/quan-ly-don-hang"
+  },
+  USERPROFILE: {
+    ACCOUNT_INFO: "/thong-tin",
+    ORDER_MANAGERMENT: "/quan-ly-don-hang",
+    VIEW_PRODUCTS: "/lich-su-san-pham",
+    ADDRESS_BOOK: "/so-dia-chi"
   }
 };

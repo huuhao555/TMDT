@@ -116,6 +116,21 @@ const CreateProduct = () => {
           />
         </div>
         <div>
+          <label>Loại sản phẩm (Category):</label>
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+          >
+            <option value="">Chọn loại sản phẩm</option>
+            {category.map((cat) => (
+              <option key={cat._id} value={cat._id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
           <label>Số lượng trong kho:</label>
           <input
             type="number"
@@ -136,6 +151,14 @@ const CreateProduct = () => {
           />
         </div>
         <div>
+          <label>Giới tính:</label>
+          <select name="gender" value={formData.gender} onChange={handleChange}>
+            <option value="">Chọn giới tính</option>
+            <option value="nam">Nam</option>
+            <option value="nữ">Nữ</option>
+          </select>
+        </div>
+        <div>
           <label>Màu sắc:</label>
           <input
             type="text"
@@ -147,7 +170,7 @@ const CreateProduct = () => {
         <div>
           <label>Kích thước:</label>
           <input
-            type="number"
+            type="text"
             name="size"
             value={formData.size}
             onChange={handleChange}
@@ -184,29 +207,7 @@ const CreateProduct = () => {
             />
           )}
         </div>
-        <div>
-          <label>Giới tính:</label>
-          <select name="gender" value={formData.gender} onChange={handleChange}>
-            <option value="">Chọn giới tính</option>
-            <option value="nam">Nam</option>
-            <option value="nữ">Nữ</option>
-          </select>
-        </div>
-        <div>
-          <label>Loại sản phẩm (Category):</label>
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-          >
-            <option value="">Chọn loại sản phẩm</option>
-            {category.map((cat) => (
-              <option key={cat._id} value={cat._id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-        </div>
+
         <button type="submit">Thêm sản phẩm</button>
       </form>
     </div>

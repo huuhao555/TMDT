@@ -17,6 +17,13 @@ import UpdateProduct from "./component/admin/UpdateProduct";
 import ProductTypeManagement from "./component/admin/ProductTypeManager";
 import CartPage from "./pages/user/CartPage";
 import CreateCategory from "./component/admin/CreateCategory";
+import VerifyOtp from "./pages/user/auth/verifyOTP";
+import CreateOrderPage from "./pages/user/CreateOrder";
+import ProfilePageLayout from "./pages/user/theme/profileLayout";
+import AccountInfo from "./pages/user/profilePage/accountInfo";
+import OrderManagement from "./pages/user/profilePage/orderManagement";
+import OrderManagementAdmin from "./component/admin/OrderManagement";
+
 const RouterCustom = () => {
   return (
     <Routes>
@@ -24,7 +31,28 @@ const RouterCustom = () => {
         <Route path={ROUTERS.USER.HOME} element={<HomePage />} />
         <Route path={ROUTERS.LOGIN} element={<Login />} />
         <Route path={ROUTERS.SIGNUP} element={<Signup />} />
+        <Route path={ROUTERS.VERIFY_OTP} element={<VerifyOtp />} />
         <Route path={ROUTERS.USER.CART} element={<CartPage />} />
+        <Route path={ROUTERS.USER.ORDER} element={<CreateOrderPage />} />
+      </Route>
+      <Route element={<ProfilePageLayout />}>
+        <Route
+          path={ROUTERS.USERPROFILE.ACCOUNT_INFO}
+          element={<AccountInfo />}
+        />
+        <Route
+          path={ROUTERS.USERPROFILE.ORDER_MANAGERMENT}
+          element={<OrderManagement />}
+        />
+
+        {/* <Route
+          path={ROUTERS.USERPROFILE.VIEW_PRODUCTS}
+          element={<ViewedProducts />}
+        />
+        <Route
+          path={ROUTERS.USERPROFILE.ADDRESS_BOOK}
+          element={<AddressBook />}
+        /> */}
       </Route>
       <Route element={<AdminLayout />}>
         <Route path={ROUTERS.ADMIN.DASHBOARD} element={<Dashboard />} />
@@ -32,6 +60,10 @@ const RouterCustom = () => {
         <Route
           path={ROUTERS.ADMIN.MANAGE_STAFF}
           element={<StaffManagement />}
+        />
+        <Route
+          path={ROUTERS.ADMIN.MANAGER_ORDER}
+          element={<OrderManagementAdmin />}
         />
         <Route
           path={ROUTERS.ADMIN.MANAGE_PRODUCTS}

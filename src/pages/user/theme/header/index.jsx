@@ -13,10 +13,15 @@ const Header = () => {
   };
 
   const handleLogout = () => {
+    // localStorage.removeItem("token");
+    // localStorage.removeItem("user");
+    // updateUser(null);
     logout();
-    navigate("/");
+    navigate(ROUTERS.LOGIN);
   };
-
+  const handleProfile = () => {
+    navigate(ROUTERS.USERPROFILE.ACCOUNT_INFO);
+  };
   return (
     <div className="container">
       <div className="row">
@@ -71,21 +76,10 @@ const Header = () => {
                       Giỏ hàng
                     </button>
                   </li>
-                  <li className="nav-item">
-                    <button
-                      className="nav-link"
-                      onClick={() => handleNavigate("/admin")}
-                    >
-                      Admin
-                    </button>
-                  </li>
                   {user && (
                     <li className="nav-item">
-                      <button
-                        className="nav-link logout-button"
-                        onClick={handleLogout}
-                      >
-                        Đăng xuất
+                      <button className="nav-link" onClick={handleProfile}>
+                        Thông tin cá nhân
                       </button>
                     </li>
                   )}

@@ -1,0 +1,212 @@
+@use "sass:map";
+@import "../../../../styles/pages/_theme.scss";
+
+.order-status-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
+  .tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    .status-indicator {
+      display: flex;
+      gap: 15px;
+
+      div {
+        cursor: pointer;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        position: relative;
+
+        .status-text {
+          text-align: center;
+          color: #333;
+          transition: color 0.3s ease;
+
+          &.active-line::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #210af1;
+          }
+        }
+      }
+    }
+  }
+
+  .tab-content {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+.orders-list {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+
+  h1 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .order {
+    position: relative;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+
+    .btn-confirm {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      background-color: #0fa830 !important;
+      border: 1px solid #0fa830;
+      &:hover {
+        background-color: #0c7a24 !important;
+      }
+    }
+    .btn-cancel {
+      color: white;
+      border-radius: 5px;
+      padding: 10px;
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      background-color: #ec223a !important;
+      border: 1px solid #ec223a;
+      &:hover {
+        background-color: #d70018 !important;
+      }
+    }
+    h2 {
+      font-size: 20px;
+      color: #555;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 5px;
+    }
+
+    p {
+      font-size: 16px;
+      color: #666;
+      margin: 5px 0;
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    h3 {
+      font-size: 18px;
+      color: #444;
+      margin-top: 20px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 15px;
+      color: #333;
+
+      thead {
+        tr {
+          background-color: #f2f2f2;
+        }
+        th {
+          padding: 12px;
+          font-weight: 600;
+          color: #333;
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+          text-align: center;
+        }
+      }
+
+      tbody {
+        tr {
+          transition: background-color 0.3s;
+          &:hover {
+            background-color: #f8f8f8;
+          }
+        }
+        td {
+          padding: 10px;
+          border-bottom: 1px solid #eee;
+          vertical-align: middle;
+          text-align: center;
+
+          &:first-child {
+            text-align: center;
+            font-weight: 500;
+            color: #777;
+          }
+
+          &:nth-child(2) {
+            img {
+              width: 50px;
+              height: 50px;
+              border-radius: 4px;
+              object-fit: cover;
+              box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            }
+          }
+        }
+      }
+    }
+
+    .icon-down {
+      position: absolute;
+      top: 190px;
+      right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+      &:hover {
+        fill: map.get($theme-color, "main-color");
+      }
+    }
+  }
+
+  p {
+    font-size: 16px;
+    text-align: center;
+    color: #888;
+    margin-top: 20px;
+  }
+  .order-bottom {
+    p {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      span {
+        text-align: right;
+      }
+    }
+
+    .shipping-fee {
+      display: flex;
+      justify-content: flex-end;
+      gap: 5px;
+    }
+  }
+}

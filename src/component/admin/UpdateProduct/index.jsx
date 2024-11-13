@@ -1,24 +1,46 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./style.scss";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { NotificationContext } from "../../../middleware/NotificationContext";
 
 const UpdateProduct = () => {
   const { addNotification } = useContext(NotificationContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { product = {}, id = "" } = location.state || {};
+
   const [formData, setFormData] = useState({
-    name: "",
-    quantityInStock: "",
-    prices: "",
-    color: "",
-    size: "",
-    brand: "",
-    gender: "",
-    category: ""
+    name: product.name || "",
+    quantityInStock: product.quantityInStock || "",
+    prices: product.prices || "",
+    color: product.color || "",
+    size: product.size || "",
+    imageUrl: product.imageUrl || "",
+    bannerUrl: product.bannerUrl || "",
+    brand: product.brand || "",
+    gender: product.gender || "",
+    category: product.category ? product.category._id : ""
   });
 
   const [imageFile, setImageFile] = useState(null);
   const [bannerFile, setBannerFile] = useState(null);
+  const [category, setCategory] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8001/api/category/getAll"
+        );
+        if (!response.ok) throw new Error("Error fetching categories");
+        const dataCategory = await response.json();
+        setCategory(Array.isArray(dataCategory.data) ? dataCategory.data : []);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,60 +48,56 @@ const UpdateProduct = () => {
   };
 
   const handleImageChange = (e) => {
-    setImageFile(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setFormData({ ...formData, imageUrl: URL.createObjectURL(file) });
+    }
   };
 
   const handleBannerChange = (e) => {
-    setBannerFile(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      setBannerFile(file);
+      setFormData({ ...formData, bannerUrl: URL.createObjectURL(file) });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const data = new FormData();
+
       Object.keys(formData).forEach((key) => {
         if (formData[key]) {
           data.append(key, formData[key]);
         }
       });
 
-      // Thêm hình ảnh
       if (imageFile) data.append("image", imageFile);
       if (bannerFile) data.append("banner", bannerFile);
 
-      const response = await fetch("http://localhost:8001/api/product/create", {
-        method: "POST",
-        body: data,
-        headers: {}
-      });
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `http://localhost:8001/api/product/update/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            token: `Bearer ${token}`
+          },
+          body: data
+        }
+      );
 
-      if (!response.ok) {
-        alert(
-          "Thêm sản phẩm không thành công! Vui lòng kiểm tra lại thông tin."
-        );
-        return;
-      }
+      if (!response.ok) throw new Error("Failed to update product");
 
-      alert("Thêm sản phẩm thành công");
-      addNotification(`${formData.name} được thêm vào danh sách sản phẩm.`);
+      addNotification(`${formData.name} được cập nhật thành công.`);
       navigate("/admin/quan-ly-san-pham");
-
-      // Reset form
-      setFormData({
-        name: "",
-        quantityInStock: "",
-        prices: "",
-        color: "",
-        size: "",
-        brand: "",
-        gender: "",
-        category: ""
-      });
-      setImageFile(null);
-      setBannerFile(null);
     } catch (error) {
-      console.error(error);
+      console.error("Error updating product:", error);
+      alert(
+        "Cập nhật sản phẩm không thành công. Vui lòng kiểm tra lại thông tin."
+      );
     }
   };
 
@@ -96,6 +114,22 @@ const UpdateProduct = () => {
             onChange={handleChange}
             required
           />
+        </div>
+        <div>
+          <label>Loại sản phẩm (Category):</label>
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Chọn loại sản phẩm</option>
+            {category.map((cat) => (
+              <option key={cat._id} value={cat._id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label>Số lượng trong kho:</label>
@@ -118,6 +152,14 @@ const UpdateProduct = () => {
           />
         </div>
         <div>
+          <label>Giới tính:</label>
+          <select name="gender" value={formData.gender} onChange={handleChange}>
+            <option value="">Chọn giới tính</option>
+            <option value="nam">Nam</option>
+            <option value="nữ">Nữ</option>
+          </select>
+        </div>
+        <div>
           <label>Màu sắc:</label>
           <input
             type="text"
@@ -129,7 +171,7 @@ const UpdateProduct = () => {
         <div>
           <label>Kích thước:</label>
           <input
-            type="number"
+            type="text"
             name="size"
             value={formData.size}
             onChange={handleChange}
@@ -147,9 +189,9 @@ const UpdateProduct = () => {
         <div className="image">
           <label>Ảnh sản phẩm:</label>
           <input type="file" accept="image/*" onChange={handleImageChange} />
-          {imageFile && (
+          {formData.imageUrl && (
             <img
-              src={URL.createObjectURL(imageFile)}
+              src={formData.imageUrl}
               alt="Product Preview"
               style={{ maxWidth: "200px", marginTop: "10px" }}
             />
@@ -158,32 +200,15 @@ const UpdateProduct = () => {
         <div className="banner">
           <label>Banner sản phẩm:</label>
           <input type="file" accept="image/*" onChange={handleBannerChange} />
-          {bannerFile && (
+          {formData.bannerUrl && (
             <img
-              src={URL.createObjectURL(bannerFile)}
+              src={formData.bannerUrl}
               alt="Banner Preview"
               style={{ maxWidth: "200px", marginTop: "10px" }}
             />
           )}
         </div>
-        <div>
-          <label>Giới tính:</label>
-          <select name="gender" value={formData.gender} onChange={handleChange}>
-            <option value="">Chọn giới tính</option>
-            <option value="nam">Nam</option>
-            <option value="nữ">Nữ</option>
-          </select>
-        </div>
-        <div>
-          <label>Loại sản phẩm (Category):</label>
-          <input
-            type="text"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-          />
-        </div>
+
         <button type="submit">Sửa sản phẩm</button>
       </form>
     </div>

@@ -68,6 +68,9 @@ function Sidebar() {
           <Link to={ROUTERS.ADMIN.MANAGE_STAFF}>Quản lý nhân sự</Link>
         </li>
         <li>
+          <Link to={ROUTERS.ADMIN.MANAGER_ORDER}>Quản lý đơn hàng</Link>
+        </li>
+        <li>
           <Link to={ROUTERS.ADMIN.REVENUE_STATS}>Thống kê doanh thu</Link>
         </li>
         <li>

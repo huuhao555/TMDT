@@ -69,7 +69,7 @@ const ProductTypeManagement = () => {
           <thead>
             <tr>
               <th>STT</th>
-              <th>Sản phẩm</th>
+              <th>Loại sản phẩm</th>
               <th>Nhãn hàng</th>
               <th>Số lượng</th>
               <th>Giá</th>
@@ -85,7 +85,7 @@ const ProductTypeManagement = () => {
                   <td>
                     <div className="product-info">
                       <img
-                        src={product.icon}
+                        src={product.iconUrl}
                         alt={product.name}
                         style={{ width: "100px" }}
                       />

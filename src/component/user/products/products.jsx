@@ -1,10 +1,13 @@
 import { memo, useEffect, useState, useContext } from "react";
 import "./style.scss";
 import { UserContext } from "../../../middleware/UserContext";
-
+import Notification, {
+  NotificationContainer
+} from "../../../component/user/Notification";
 const ProductComponent = () => {
   const [products, setProducts] = useState([]);
   const { user } = useContext(UserContext);
+  const { notifications, addNotification } = NotificationContainer();
 
   const renderProducts = async () => {
     try {
@@ -15,7 +18,6 @@ const ProductComponent = () => {
 
       const dataProducts = await response.json();
       setProducts(dataProducts.data);
-      console.log(dataProducts.data);
     } catch (error) {
       console.error("Failed to fetch products:", error);
       setProducts([]);
@@ -24,7 +26,7 @@ const ProductComponent = () => {
   useEffect(() => {
     renderProducts();
   }, []);
-  const handleBuyproduct = async (idCounrse) => {
+  const handleproduct = async (idCounrse) => {
     if (!user) {
       alert("Vui lòng đăng nhập");
       return;
@@ -73,9 +75,9 @@ const ProductComponent = () => {
       if (!response.ok) {
         throw new Error(response.statusText);
       }
-      console.log(response);
-      console.log(dataCart);
       const dataCart = await response.json();
+      addNotification("Thêm giỏ hàng thành công!");
+
       const updatedCount = dataCart.data.products.length;
 
       // updateCartCount(updatedCount);
@@ -117,6 +119,17 @@ const ProductComponent = () => {
           </div>
         );
       })}
+      <div className="notifications-wrapper">
+        {notifications.map((notification) => (
+          <Notification
+            key={notification.id}
+            message={notification.message}
+            onClose={() => {
+              // Dọn dẹp thông báo
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 };
