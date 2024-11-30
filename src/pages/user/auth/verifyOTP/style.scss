@@ -1,74 +1,60 @@
 @use "sass:map";
 @import "../../../../styles/pages/theme.scss";
 
-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 .verify-container {
   background-color: #fff;
   padding: 40px;
   border-radius: 10px;
-
   text-align: center;
-}
 
-.verify-logo {
-  width: 150px;
-}
-
-h2 {
-  color: #3a6186;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
-.error-message {
-  color: #d9534f;
-  margin: 10px 0;
-}
-
-.form-group {
-  margin-bottom: 20px;
-  text-align: left;
-
-  label {
-    color: #3a6186;
-    font-weight: 600;
-    margin-bottom: 5px;
-    display: inline-block;
+  .verify-logo {
+    width: 150px;
   }
 
-  input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    transition: border 0.3s ease;
+  h2 {
+    color: #3a6186;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
 
-    &:focus {
-      border-color: #3a6186;
-      outline: none;
+  .error-message {
+    color: #d9534f;
+    margin: 10px 0;
+  }
+
+  .form-verify-group {
+    margin-bottom: 20px;
+    text-align: left;
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      transition: border 0.3s ease;
+
+      &:focus {
+        border-color: #3a6186;
+        outline: none;
+      }
     }
   }
-}
 
-.btn {
-  margin-top: 20px;
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #fff;
-  background-color: #3a6186;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s ease;
+  .btn {
+    margin-top: 20px;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #3a6186;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
 
-  &:hover {
-    background-color: #2d4e6c;
+    &:hover {
+      background-color: #2d4e6c;
+    }
   }
 }

@@ -1,93 +1,127 @@
 @use "sass:map";
 @import "../../../../styles/pages/theme.scss";
+
 .header-container {
   width: 100%;
   background-color: #f8f9fa;
-  padding: 1rem 0;
-}
 
-.header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
+  .header-row {
+    max-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
 
-  .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #333;
-    background: none;
-    border: none;
-    cursor: pointer;
-
-    &:hover {
-      color: #0056b3;
+    .logo {
+      padding: 1rem 0;
+      width: 60px;
+      height: auto;
+      &:hover {
+        cursor: pointer;
+      }
     }
-  }
 
-  .nav {
-    .nav-list {
-      display: flex;
-      gap: 1.5rem;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      justify-content: space-around;
+    .nav {
+      .nav-list {
+        display: flex;
+        justify-content: space-around;
 
-      .nav-item {
-        .logout-button {
-          border: none;
-          background-color: white;
-          &:hover {
+        gap: 1.5rem;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        .nav-item {
+          position: relative;
+
+          .nav-link {
+            color: #333;
+            font-size: 1rem;
+            text-decoration: none;
+            background: none;
+            border: none;
             cursor: pointer;
-          }
-        }
-        .nav-link {
-          color: #333;
-          font-size: 1rem;
-          text-decoration: none;
-          background: none;
-          border: none;
-          cursor: pointer;
 
-          &:hover {
-            color: #0056b3;
+            &:hover {
+              color: #0056b3;
+            }
+          }
+
+          &.dropdown {
+            &:hover .dropdown-menu {
+              display: block;
+            }
+
+            .dropdown-menu {
+              display: none;
+              position: absolute;
+              top: 100%;
+              left: 0;
+              z-index: 1000;
+              background-color: #fff;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+              border-radius: 4px;
+              padding: 0.5rem 0;
+              width: 200px;
+              border: 1px solid #ddd;
+
+              .dropdown-item {
+                padding: 0.5rem 1rem;
+                transition: background-color 0.3s ease;
+                list-style: none;
+
+                &:hover {
+                  background-color: #0056b3;
+                  color: #fff;
+                  transition: background-color ease 0.3s, color ease 0.3s;
+                }
+
+                .dropdown-link {
+                  color: #333;
+                  display: block;
+                  text-decoration: none;
+
+                  &:hover {
+                    color: #fff;
+                  }
+                }
+              }
+            }
           }
         }
       }
     }
-  }
+    .auth-buttons {
+      display: flex;
+      gap: 1rem;
 
-  .auth-buttons {
-    display: flex;
-    gap: 1rem;
+      .btn {
+        font-size: 0.9rem;
+        padding: 0.5rem 1.2rem;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
 
-    .btn {
-      font-size: 0.9rem;
-      padding: 0.5rem 1.2rem;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
+        &.btn-outline-primary {
+          color: #0056b3;
+          border: 1px solid #0056b3;
+          background: transparent;
 
-      &.btn-outline-primary {
-        color: #0056b3;
-        border: 1px solid #0056b3;
-        background: transparent;
+          &:hover {
+            background-color: #0056b3;
+            color: #fff;
+          }
+        }
 
-        &:hover {
+        &.btn-primary {
           background-color: #0056b3;
           color: #fff;
-        }
-      }
+          border: none;
 
-      &.btn-primary {
-        background-color: #0056b3;
-        color: #fff;
-        border: none;
-
-        &:hover {
-          background-color: #004494;
+          &:hover {
+            background-color: #004494;
+          }
         }
       }
     }

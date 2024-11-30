@@ -1,72 +1,66 @@
-import { memo, useContext } from "react";
+import { memo, useContext, useEffect, useState } from "react";
 import "./style.scss";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ROUTERS } from "../../../../router/path";
 import { UserContext } from "../../../../middleware/UserContext";
+import logo from "../../../../assets/images/Clean.svg";
 
 const Header = () => {
   const { user, logout } = useContext(UserContext);
-  const navigate = useNavigate();
+
+  const [categories, setCategories] = useState([]);
 
   const handleNavigate = (path) => {
     navigate(path);
   };
 
-  const handleLogout = () => {
-    // localStorage.removeItem("token");
-    // localStorage.removeItem("user");
-    // updateUser(null);
-    logout();
-    navigate(ROUTERS.LOGIN);
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch("http://localhost:8001/api/category/getAll");
+      const data = await response.json();
+      setCategories(data.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
-  const handleProfile = () => {
-    navigate(ROUTERS.USERPROFILE.ACCOUNT_INFO);
-  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+  const navigate = useNavigate();
   return (
     <div className="container">
       <div className="row">
         <header className="header-container">
           <div className="header-row">
             <div className="col-lg-3">
-              <button className="logo" onClick={() => handleNavigate("/")}>
-                T- Shirt N.14
-              </button>
+              <img
+                className="logo"
+                src={logo}
+                alt="Logo"
+                onClick={() => {
+                  navigate("/");
+                }}
+              />
             </div>
             <div className="col-lg-6">
               <nav className="nav">
                 <ul className="nav-list">
-                  <li className="nav-item">
-                    <button
-                      className="nav-link"
-                      onClick={() => handleNavigate("/courses")}
-                    >
-                      Áo nam
-                    </button>
-                  </li>
-
-                  <li className="nav-item">
-                    <button
-                      className="nav-link"
-                      onClick={() => handleNavigate("/contact")}
-                    >
-                      Áo nữ
-                    </button>
-                  </li>
-                  <li className="nav-item">
-                    <button
-                      className="nav-link"
-                      onClick={() => handleNavigate("/")}
-                    >
-                      Gia đình
-                    </button>
-                  </li>
-                  <li className="nav-item">
-                    <button
-                      className="nav-link"
-                      onClick={() => handleNavigate("/")}
-                    >
-                      Cặp đôi
-                    </button>
+                  <li className="nav-item dropdown">
+                    <span className="nav-link">Danh mục sản phẩm</span>
+                    <ul className="dropdown-menu">
+                      {categories.map((category) => (
+                        <li key={category._id} className="dropdown-item">
+                          <Link
+                            to={`${ROUTERS.USER.PRODUCTS_BYCATEGORY}/${category.name}`}
+                            state={{ id: category._id }}
+                            className="dropdown-link"
+                          >
+                            {category.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
                   </li>
                   <li className="nav-item">
                     <button
@@ -76,9 +70,22 @@ const Header = () => {
                       Giỏ hàng
                     </button>
                   </li>
+                  <li className="nav-item">
+                    <button
+                      className="nav-link"
+                      onClick={() => handleNavigate(ROUTERS.USER.ORDERLOOKUP)}
+                    >
+                      Tra cứu
+                    </button>
+                  </li>
                   {user && (
                     <li className="nav-item">
-                      <button className="nav-link" onClick={handleProfile}>
+                      <button
+                        className="nav-link"
+                        onClick={() =>
+                          handleNavigate(ROUTERS.USERPROFILE.ACCOUNT_INFO)
+                        }
+                      >
                         Thông tin cá nhân
                       </button>
                     </li>

@@ -1,0 +1,224 @@
+@use "sass:map";
+@import "../../../styles/pages/_theme.scss";
+
+.sidebar {
+  position: fixed;
+  width: 300px;
+  margin-right: 1rem;
+  background: #fff;
+  border: 1px solid lighten(map.get($theme-color, "main-color"), 30%);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  .sidebar-item {
+    margin-bottom: 20px;
+
+    &-search {
+      position: relative;
+
+      .top-sidebar-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+
+        .icon-close {
+          font-size: 20px;
+          cursor: pointer;
+          color: #666;
+
+          &:hover {
+            color: map.get($theme-color, "main-color");
+          }
+        }
+      }
+
+      input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        outline: none;
+        font-size: 14px;
+
+        &:focus {
+          border-color: map.get($theme-color, "main-color");
+        }
+      }
+
+      .suggestions {
+        margin-top: 10px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        max-height: 150px;
+        overflow-y: auto;
+
+        .suggestion-item {
+          padding: 8px 12px;
+          font-size: 14px;
+          cursor: pointer;
+
+          &:hover {
+            background: lighten(map.get($theme-color, "main-color"), 85%);
+          }
+        }
+      }
+    }
+
+    .price-range-wrap {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      div {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        p {
+          font-size: 14px;
+          margin: 0;
+        }
+
+        .optionPrice {
+          padding: 5px 10px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 14px;
+          outline: none;
+
+          &:focus {
+            border-color: map.get($theme-color, "main-color");
+          }
+        }
+
+        input {
+          width: 100px;
+          padding: 5px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          outline: none;
+          text-align: right;
+
+          &:focus {
+            border-color: map.get($theme-color, "main-color");
+          }
+        }
+      }
+
+      .icon-search {
+        position: absolute;
+        top: 30%;
+        right: -10px;
+        font-size: 24px;
+        cursor: pointer;
+        color: map.get($theme-color, "main-color");
+
+        &:hover {
+          color: darken(map.get($theme-color, "main-color"), 10%);
+        }
+      }
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      .tag {
+        padding: 8px 12px;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+        background: #fff;
+        color: #666;
+
+        &.active {
+          background: map.get($theme-color, "main-color");
+          color: #fff;
+        }
+
+        &:hover {
+          background: lighten(map.get($theme-color, "main-color"), 20%);
+        }
+      }
+    }
+  }
+}
+
+.col-lg-9 {
+  flex: 3;
+
+  .container-product {
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+
+      .card {
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        border: 1px solid lighten(map.get($theme-color, "main-color"), 20%);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        &:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .image {
+          width: 100%;
+          height: 200px;
+          object-fit: contain;
+        }
+
+        .info {
+          padding: 15px 15px 0 15px;
+          text-align: center;
+
+          .name {
+            font-size: 16px;
+            font-weight: 600;
+            color: map.get($theme-color, "main-color");
+            margin-bottom: 10px;
+          }
+
+          .price {
+            font-size: 14px;
+            color: #555;
+          }
+        }
+        .add-button {
+          width: 50%;
+          margin: 10px auto;
+          background-color: map.get($theme-color, "main-color");
+          color: #fff;
+          padding: 10px 15px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 14px;
+          transition: background-color 0.3s ease;
+
+          &:hover {
+            background-color: darken(map.get($theme-color, "main-color"), 10%);
+          }
+        }
+      }
+    }
+
+    .empty-message {
+      text-align: center;
+      font-size: 18px;
+      color: #999;
+    }
+  }
+}

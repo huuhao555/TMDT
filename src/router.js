@@ -23,7 +23,11 @@ import ProfilePageLayout from "./pages/user/theme/profileLayout";
 import AccountInfo from "./pages/user/profilePage/accountInfo";
 import OrderManagement from "./pages/user/profilePage/orderManagement";
 import OrderManagementAdmin from "./component/admin/OrderManagement";
-
+import PaymentPage from "./pages/user/paymentPage";
+import ProductByCategoryComponent from "./component/user/ProductByCategory";
+import ProductDetail from "./pages/user/ProductDetail";
+import UpdateCategory from "./component/admin/UpdateCategory";
+import OrderLookup from "./pages/user/orderLoockup";
 const RouterCustom = () => {
   return (
     <Routes>
@@ -33,7 +37,17 @@ const RouterCustom = () => {
         <Route path={ROUTERS.SIGNUP} element={<Signup />} />
         <Route path={ROUTERS.VERIFY_OTP} element={<VerifyOtp />} />
         <Route path={ROUTERS.USER.CART} element={<CartPage />} />
+        <Route path={ROUTERS.USER.PAYMENT} element={<PaymentPage />} />
         <Route path={ROUTERS.USER.ORDER} element={<CreateOrderPage />} />
+        <Route path={ROUTERS.USER.ORDERLOOKUP} element={<OrderLookup />} />
+        <Route
+          path={`${ROUTERS.USER.DETAILS}/:id`}
+          element={<ProductDetail />}
+        />
+        <Route
+          path={`${ROUTERS.USER.PRODUCTS_BYCATEGORY}/:id`}
+          element={<ProductByCategoryComponent />}
+        />
       </Route>
       <Route element={<ProfilePageLayout />}>
         <Route
@@ -97,6 +111,10 @@ const RouterCustom = () => {
         <Route
           path={`${ROUTERS.ADMIN.UPDATE_PRODUCT}/:id`}
           element={<UpdateProduct />}
+        />
+        <Route
+          path={`${ROUTERS.ADMIN.UPDATE_CATEGORY}/:id`}
+          element={<UpdateCategory />}
         />
       </Route>
     </Routes>

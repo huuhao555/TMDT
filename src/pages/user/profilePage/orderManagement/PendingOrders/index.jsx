@@ -82,7 +82,7 @@ const PendingOrders = () => {
         <div>
           {orders?.map((order) => {
             const grandTotal =
-              order.totalPrice + parseInt(order.VATorder) + order.shippingFee;
+              order.totalPrice + parseInt(order.VAT) + order.shippingFee;
             return (
               <div key={order._id} className="order">
                 <button

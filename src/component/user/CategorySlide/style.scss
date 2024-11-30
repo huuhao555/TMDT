@@ -8,8 +8,12 @@ $control-btn-size: 40px;
   margin: 20px 0;
 
   .category-title {
+    display: inline-block;
+    padding: 10px;
     font-size: 1.5rem;
-    margin-bottom: 10px;
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .productSlide-wrapper {
@@ -20,8 +24,16 @@ $control-btn-size: 40px;
 
     .productSlide-list {
       display: flex;
-      transition: transform 0.3s ease-in-out;
-      gap: $gap;
+      overflow-x: auto;
+      cursor: grab;
+      transition: opacity 0.3s ease;
+      &.active {
+        cursor: grabbing;
+      }
+      &.blurred {
+        opacity: 0.5;
+        pointer-events: none;
+      }
     }
 
     .productSlide-item {
@@ -41,6 +53,9 @@ $control-btn-size: 40px;
         height: 200px;
         object-fit: contain;
         border-bottom: 1px solid #e0e0e0;
+        &:hover {
+          cursor: pointer;
+        }
       }
 
       .item-productSlide-bottom {
@@ -63,6 +78,24 @@ $control-btn-size: 40px;
         .product-remaining {
           font-size: 14px;
           color: #888;
+        }
+        .add-to-cart-detail {
+          text-align: center;
+          width: fit-content;
+          padding: 10px 15px;
+          font-size: 16px;
+          font-weight: bold;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          background-color: map.get($theme-color, "primary");
+          color: #fff;
+
+          &:hover {
+            background-color: darken(map.get($theme-color, "primary"), 10%);
+            transform: translateY(-2px);
+          }
         }
       }
     }

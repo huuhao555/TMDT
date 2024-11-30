@@ -16,10 +16,11 @@
     flex-wrap: wrap;
     gap: 1.5rem;
     justify-content: center;
+    cursor: pointer;
   }
 
   .category-card {
-    width: 120px;
+    width: 150px;
     padding: 1rem;
     background-color: #fff;
     border: 1px solid #ddd;

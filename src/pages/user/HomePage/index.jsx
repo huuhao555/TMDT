@@ -18,8 +18,8 @@ const HomePage = () => {
 
         const dataProducts = await response.json();
         setProducts(dataProducts.data);
+        console.log(dataProducts);
 
-        // Lấy tất cả loại sản phẩm duy nhất
         const uniqueCategories = [
           ...new Set(dataProducts.data.map((product) => product.category._id))
         ].map((id) => ({
@@ -43,14 +43,16 @@ const HomePage = () => {
         <div className="col-lg-12">
           <CategoryComponent />
           <div className="home-page">
-            {categories.map((category) => (
-              <CategorySlider
-                key={category.id}
-                categoryId={category.id}
-                products={products}
-                categoryName={category.name}
-              />
-            ))}
+            {categories.map((category) => {
+              return (
+                <CategorySlider
+                  key={category.id}
+                  categoryId={category.id}
+                  products={products}
+                  categoryName={category.name}
+                />
+              );
+            })}
           </div>
         </div>
       </div>

@@ -90,7 +90,6 @@ const ShippingOrders = () => {
               >
                 Nhận hàng
               </button>
-
               <h2>Thông tin người nhận hàng</h2>
               <p>Tên người nhận: {order.name}</p>
               <p>Địa chỉ: {order.shippingAddress.address}</p>

@@ -19,7 +19,9 @@ export const ROUTERS = {
     PRODUCT_TYPE: "loai-san-pham",
     ORDERDETAIL: "/chi-tiet-don-hang",
     ORDERLIST: "/danh-sach-don-hang",
-    ORDERLOOKUP: "/tra-cuu-don-hang"
+    ORDERLOOKUP: "/tra-cuu-don-hang",
+    PAYMENT: "/ket-qua-thanh-toan",
+    PRODUCTS_BYCATEGORY: "/san-pham-theo-loai"
   },
   ADMIN: {
     DASHBOARD: "/admin",
@@ -31,6 +33,7 @@ export const ROUTERS = {
     REVENUE_STATS: "/admin/bao-cao-doanh-thu",
     PURCHASE_HISTORY: "/admin/lich-su-giao-dich",
     UPDATE_PRODUCT: "/admin/chinh-sua-san-pham",
+    UPDATE_CATEGORY: "/admin/chinh-sua-loai-san-pham",
     DELETE_PRODUCT: "/admin/xoa-san-pham",
     DETAILS_PRODUCT: "/admin/chi-tiet-san-pham",
     UPDATE_USER: "/admin/chinh-sua-tai-khoan",

@@ -66,7 +66,30 @@ const CreateOrderPage = (state) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setPaymentDetails({ ...paymentDetails, [name]: value });
+    if (name === "address") {
+      fetchSuggestions(value);
+    }
   };
+  const handleSelectSuggestion = (suggestion) => {
+    setPaymentDetails({ ...paymentDetails, address: suggestion.description });
+    setSuggestions([]);
+  };
+  const fetchSuggestions = async (query) => {
+    if (!query) {
+      setSuggestions([]);
+      return;
+    }
+    try {
+      const response = await fetch(
+        `https://rsapi.goong.io/Place/AutoComplete?api_key=YAAkQr05IwPk9mIFw3zTv9FE0LX4cJ1wryk77Bfb&input=${query}`
+      );
+      const data = await response.json();
+      setSuggestions(data.predictions || []);
+    } catch (error) {
+      console.error("Error fetching address suggestions:", error);
+    }
+  };
+  const [orderId, setOrderId] = useState();
 
   const handlePayment = async () => {
     if (window.confirm("Bạn có chắc chắn đặt hàng không?")) {
@@ -88,23 +111,58 @@ const CreateOrderPage = (state) => {
             productIds: selectedProducts
           })
         });
-        console.log(response);
+
         if (!response.ok) {
-          throw new Error(response.statusText, dataOrder._id);
+          throw new Error(response.statusText);
         }
         const data = await response.json();
-        console.log(data);
-
-        // navigator(ROUTERS.USERPROFILE.ORDER_MANAGERMENT);
+        setOrderId(data.data._id);
       } catch (error) {
         alert("Đặt hàng thất bại");
       }
     }
   };
 
+  useEffect(() => {
+    if (!orderId) return;
+
+    const createPayment = async () => {
+      try {
+        const returnUrl = "http://localhost:8000/ket-qua-thanh-toan";
+        const response = await fetch(
+          "http://localhost:8001/api/payments/create_payment",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              orderId,
+              returnUrl
+            })
+          }
+        );
+
+        if (!response.ok) throw new Error(response.statusText);
+        const data = await response.json();
+        console.log(data.paymentURL);
+        if (data?.paymentURL) {
+          window.location.href = data.paymentURL;
+        } else {
+          console.error("Không tìm thấy URL thanh toán.");
+        }
+      } catch (error) {
+        console.error("Failed to create payment:", error);
+      }
+    };
+
+    createPayment();
+  }, [orderId]);
+  const [suggestions, setSuggestions] = useState([]);
+
   return (
-    <div className="container">
-      <div className="row">
+    <div className="container-create-order">
+      <div className="row-create-order">
         <div className="payment-page">
           <div className="payment-form">
             <h2>Thông tin đặt hàng</h2>
@@ -138,17 +196,20 @@ const CreateOrderPage = (state) => {
               value={paymentDetails.address}
               onChange={handleInputChange}
             />
+            {suggestions.length > 0 && (
+              <ul className="address-suggestions">
+                {suggestions.map((suggestion) => (
+                  <li
+                    key={suggestion.place_id}
+                    onClick={() => handleSelectSuggestion(suggestion)}
+                  >
+                    {suggestion.description}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-          {/* <div className="payment-methods">
-            <h3>Hoặc thanh toán bằng</h3>
-            <div className="payment-icons">
-              <FaCcVisa size={36} />
-              <FaCcMastercard size={36} />
-              <FaPaypal size={36} />
-              <FaApplePay size={36} />
-              <FaGooglePay size={36} />
-            </div>
-          </div> */}
+
           <div className="order-summary">
             <h2>Thông tin đơn hàng</h2>
             {dataOrder &&

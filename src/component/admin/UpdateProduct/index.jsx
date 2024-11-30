@@ -66,16 +66,16 @@ const UpdateProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = new FormData();
+      const formToSubmit = new FormData();
 
       Object.keys(formData).forEach((key) => {
         if (formData[key]) {
-          data.append(key, formData[key]);
+          formToSubmit.append(key, formData[key]);
         }
       });
 
-      if (imageFile) data.append("image", imageFile);
-      if (bannerFile) data.append("banner", bannerFile);
+      if (imageFile) formToSubmit.append("image", imageFile);
+      if (bannerFile) formToSubmit.append("banner", bannerFile);
 
       const token = localStorage.getItem("token");
       const response = await fetch(
@@ -85,7 +85,7 @@ const UpdateProduct = () => {
           headers: {
             token: `Bearer ${token}`
           },
-          body: data
+          body: formToSubmit
         }
       );
 

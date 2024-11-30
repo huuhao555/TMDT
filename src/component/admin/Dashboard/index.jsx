@@ -46,11 +46,13 @@ const Dashboard = () => {
     useEffect(() => {
       const fetchCount = async () => {
         try {
-          const response = await fetch("http://localhost:8001/api/order/count");
+          const response = await fetch(
+            "http://localhost:8001/api/order/getAll"
+          );
           if (!response.ok) throw new Error(response.statusText);
 
           const data = await response.json();
-          setCount(data.total);
+          setCount(data.data.length);
         } catch (error) {
           console.error("Failed to fetch count for orders:", error);
         }
@@ -60,7 +62,7 @@ const Dashboard = () => {
     }, []);
 
     return (
-      <Link to={ROUTERS.ADMIN.REVENUE_STATS}>
+      <Link to={ROUTERS.ADMIN.MANAGER_ORDER}>
         <div className="card purple">
           <div className="card-content">
             <h3>Tổng đơn hàng</h3>

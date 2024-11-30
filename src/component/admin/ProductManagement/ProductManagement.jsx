@@ -31,14 +31,18 @@ const ProductManagement = () => {
   }, []);
 
   const handleDeleteProduct = async (id) => {
-    console.log(id);
+    const token = localStorage.getItem("token");
+
     if (window.confirm("Bạn có chắc chắn muốn xoá sản phẩm này?")) {
       try {
         const response = await fetch(
           `http://localhost:8001/api/product/delete-product/${id}`,
           {
             method: "DELETE",
-            headers: { "Content-Type": "application/json" }
+            headers: {
+              "Content-Type": "application/json",
+              token: `Bearer ${token}`
+            }
           }
         );
         if (!response.ok) throw new Error(await response.text());
@@ -79,7 +83,8 @@ const ProductManagement = () => {
           <tbody>
             {currentProducts.map((product, index) => (
               <tr key={product._id}>
-                <td>{index + 1}</td>
+                <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+
                 <td>
                   <div className="product-info">
                     <img
@@ -105,7 +110,7 @@ const ProductManagement = () => {
                   >
                     ✏️
                   </Link>
-                  {!user?.dataUser?.isAdmin && (
+                  {user?.dataUser?.isAdmin && (
                     <button
                       onClick={() => handleDeleteProduct(product._id)}
                       className="delete-btn"

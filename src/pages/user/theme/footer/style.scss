@@ -3,7 +3,7 @@
 
 .footer-container {
   background-color: #f8f9fa;
-  padding: 2rem 1rem;
+  padding: 20px;
   text-align: center;
 
   .row {
@@ -29,7 +29,15 @@
   .social-section {
     margin-bottom: 1rem;
   }
-
+  .about-section {
+    .logo {
+      width: 100px;
+      height: auto;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
   .social-section {
     .social-icons {
       display: flex;

@@ -51,33 +51,6 @@ const CartPage = () => {
         selectedProducts
       }
     });
-    // try {
-    //   // Lặp qua từng sản phẩm trong danh sách được chọn và gọi API để xóa
-    //   for (const productId of selectedProducts) {
-    //     const response = await fetch(
-    //       `http://localhost:8001/api/cart/delete-product-cart/${userID}/product/${productId}`,
-    //       {
-    //         method: "DELETE",
-    //         headers: {
-    //           "Content-Type": "application/json"
-    //         }
-    //       }
-    //     );
-    //     if (!response.ok) {
-    //       throw new Error(
-    //         `Failed to delete product ${productId}: ${response.statusText}`
-    //       );
-    //     }
-    //   }
-    //   // Lấy giỏ hàng mới sau khi xóa
-    //   await getAllCart();
-    //   // Cập nhật số lượng sản phẩm trong giỏ hàng
-    //   updateCartCount(cart.products.length - selectedProducts.length);
-
-    //   // Điều hướng đến trang "ORDER" kèm danh sách sản phẩm đã chọn
-    // } catch (error) {
-    //   console.error("Failed to delete selected products from cart:", error);
-    // }
   };
 
   const removeFromCart = async (productId, userID) => {
@@ -213,146 +186,159 @@ const CartPage = () => {
       );
   };
   return (
-    <div className="cart-page">
-      {cart && cart.products.length > 0 ? (
-        <div className="cart-container">
-          <table className="cart-table">
-            <thead>
-              <tr>
-                <th>Chọn</th>
-                <th>STT</th>
-                <th>Sản phẩm</th>
-                <th>Giá</th>
-                <th>Số lượng</th>
-                <th>Tổng tiền</th>
-                <th>Chức năng</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cart.products.map((item, key) => {
-                return (
-                  <tr key={item?._id}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={selectedProducts.includes(item?.productId._id)}
-                        onChange={() =>
-                          handleCheckboxChange(item?.productId._id)
-                        }
-                      />
-                    </td>
-                    <td>{key + 1}</td>
-                    <td>{`${item?.productId.name}`}</td>
-                    <td>
-                      {item?.productId.prices
-                        ? item?.productId.prices.toLocaleString("vi-VN")
-                        : "0"}{" "}
-                      VNĐ
-                    </td>
+    <div className="container">
+      <div className="row">
+        <div className="col-lg-12">
+          <div className="cart-page">
+            {cart && cart.products.length > 0 ? (
+              <div className="cart-container">
+                <table className="cart-table">
+                  <thead>
+                    <tr>
+                      <th>Chọn</th>
+                      <th>STT</th>
+                      <th>Sản phẩm</th>
+                      <th>Giá</th>
+                      <th>Số lượng</th>
+                      <th>Tổng tiền</th>
+                      <th>Chức năng</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cart.products.map((item, key) => {
+                      return (
+                        <tr key={item?._id}>
+                          <td>
+                            <input
+                              type="checkbox"
+                              checked={selectedProducts.includes(
+                                item?.productId._id
+                              )}
+                              onChange={() =>
+                                handleCheckboxChange(item?.productId._id)
+                              }
+                            />
+                          </td>
+                          <td>{key + 1}</td>
+                          <td>{`${item?.productId.name}`}</td>
+                          <td>
+                            {item?.productId.prices
+                              ? item?.productId.prices.toLocaleString("vi-VN")
+                              : "0"}{" "}
+                            VNĐ
+                          </td>
 
-                    <td>
-                      <div className="handle-quantity">
-                        <span
-                          onClick={() => handleDecrease(item?.productId._id)}
-                          className="button-decrease"
-                        >
-                          –
-                        </span>
-                        <div>{item?.quantity}</div>
-                        <span
-                          onClick={() =>
-                            handleIncrease({
-                              id: item?.productId._id
-                            })
-                          }
-                          className="button-increase"
-                        >
-                          +
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      {item?.productId.prices
-                        ? (
-                            item?.productId?.prices * item?.quantity
-                          ).toLocaleString("vi-VN")
-                        : "0"}{" "}
-                      VNĐ
-                    </td>
+                          <td>
+                            <div className="handle-quantity">
+                              <span
+                                onClick={() =>
+                                  handleDecrease(item?.productId._id)
+                                }
+                                className="button-decrease"
+                              >
+                                –
+                              </span>
+                              <div>{item?.quantity}</div>
+                              <span
+                                onClick={() =>
+                                  handleIncrease({
+                                    id: item?.productId._id
+                                  })
+                                }
+                                className="button-increase"
+                              >
+                                +
+                              </span>
+                            </div>
+                          </td>
+                          <td>
+                            {item?.productId.prices
+                              ? (
+                                  item?.productId?.prices * item?.quantity
+                                ).toLocaleString("vi-VN")
+                              : "0"}{" "}
+                            VNĐ
+                          </td>
 
-                    <td>
-                      <button
-                        className="remove-button"
-                        onClick={() =>
-                          removeFromCart(item?.productId._id, user.dataUser.id)
-                        }
+                          <td>
+                            <button
+                              className="remove-button"
+                              onClick={() =>
+                                removeFromCart(
+                                  item?.productId._id,
+                                  user.dataUser.id
+                                )
+                              }
+                            >
+                              <RiDeleteBin5Line />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                    <tr>
+                      <td
+                        colSpan="1"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center"
+                        }}
                       >
-                        <RiDeleteBin5Line />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-              <tr>
-                <td
-                  colSpan="1"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center"
+                        <input
+                          style={{
+                            marginRight: "5px",
+                            cursor: "pointer"
+                          }}
+                          onClick={() => {
+                            setSelectedProducts([]);
+                          }}
+                          type="checkbox"
+                        />
+                        <span style={{ cursor: "pointer" }}>Bỏ chọn</span>
+                      </td>
+
+                      <td
+                        colSpan="4"
+                        style={{ textAlign: "right", fontWeight: "bold" }}
+                      >
+                        Tổng tiền:
+                      </td>
+                      <td
+                        colSpan="2"
+                        style={{
+                          paddingLeft: "5%",
+                          textAlign: "left",
+                          fontWeight: "bold"
+                        }}
+                      >
+                        {calculateTotal().toLocaleString("vi-VN")} VNĐ
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <button
+                  className="clear-cart"
+                  onClick={() => clearCart(user.dataUser.id)}
+                >
+                  Xoá giỏ hàng
+                </button>
+                <button
+                  className="payment-cart"
+                  onClick={() => {
+                    paymentCart(selectedProducts, user.dataUser.id);
                   }}
                 >
-                  <input
-                    style={{
-                      marginRight: "5px",
-                      cursor: "pointer"
-                    }}
-                    onClick={() => {
-                      setSelectedProducts([]);
-                    }}
-                    type="checkbox"
-                  />
-                  <span style={{ cursor: "pointer" }}>Bỏ chọn</span>
-                </td>
-
-                <td
-                  colSpan="4"
-                  style={{ textAlign: "right", fontWeight: "bold" }}
-                >
-                  Tổng tiền:
-                </td>
-                <td
-                  colSpan="2"
-                  style={{
-                    paddingLeft: "5%",
-                    textAlign: "left",
-                    fontWeight: "bold"
-                  }}
-                >
-                  {calculateTotal().toLocaleString("vi-VN")} VNĐ
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <button
-            className="clear-cart"
-            onClick={() => clearCart(user.dataUser.id)}
-          >
-            Xoá giỏ hàng
-          </button>
-          <button
-            className="payment-cart"
-            onClick={() => {
-              paymentCart(selectedProducts, user.dataUser.id);
-            }}
-          >
-            Thanh toán
-          </button>
+                  Thanh toán
+                </button>
+              </div>
+            ) : (
+              <p>Không có sản phẩm trong giỏ hàng.</p>
+            )}
+          </div>
         </div>
-      ) : (
-        <p>Không có sản phẩm trong giỏ hàng.</p>
-      )}
+      </div>
     </div>
   );
 };

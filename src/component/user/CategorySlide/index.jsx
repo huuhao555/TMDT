@@ -1,102 +1,131 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useRef, useContext } from "react";
 import "./style.scss";
+import { Link, useNavigate } from "react-router-dom";
+import { ROUTERS } from "../../../router/path";
 import { UserContext } from "../../../middleware/UserContext";
 import Notification, {
   NotificationContainer
 } from "../../../component/user/Notification";
-const CategorySlider = ({ categoryId, products, categoryName }) => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const { notifications, addNotification } = NotificationContainer();
 
+const CategorySlider = ({ categoryId, products, categoryName }) => {
+  const { user } = useContext(UserContext) || {};
+  const { notifications, addNotification } = NotificationContainer();
+  const navigate = useNavigate();
   const filteredProducts = products.filter(
     (product) => product.category._id === categoryId
   );
-  const { user } = useContext(UserContext) || {};
 
-  const slideWidth = 300;
-  const slideGap = 10;
-  const slidesToShow = 4;
+  const productListRef = useRef();
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
 
-  const slideLeft = () => {
-    setCurrentSlide((prev) => Math.max(prev - 1, 0));
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setStartX(e.pageX - productListRef.current.offsetLeft);
+    setScrollLeft(productListRef.current.scrollLeft);
   };
 
-  const slideRight = () => {
-    const maxSlide = filteredProducts.length - slidesToShow;
-    setCurrentSlide((prev) => Math.min(prev + 1, maxSlide));
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - productListRef.current.offsetLeft;
+    const walk = x - startX;
+    productListRef.current.scrollLeft = scrollLeft - walk;
   };
 
-  useEffect(() => {
-    document.querySelector(
-      ".productSlide-list"
-    ).style.transform = `translateX(-${
-      currentSlide * (slideWidth + slideGap)
-    }px)`;
-  }, [currentSlide]);
-  const handleCategory = () => {
-    alert(123);
+  const handleMouseUp = () => setIsDragging(false);
+
+  const scrollTo = (direction) => {
+    const scrollAmount = 300; // Khoảng cách cuộn
+    productListRef.current.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth"
+    });
   };
 
   const handleBuyProduct = async (product) => {
-    console.log(user);
-    if (!user) alert("Vui lòng đăng nhập");
+    if (!user) {
+      alert("Vui lòng đăng nhập");
+      return;
+    }
     try {
       const response = await fetch(
         "http://localhost:8001/api/cart/add-update",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            userId: user.dataUser.id,
-            productId: product._id,
+            userId: user?.dataUser?.id,
+            productId: product?._id,
             quantity: 1,
-            prices: product.prices.toLocaleString("vi-VN")
+            prices: product?.prices?.toLocaleString("vi-VN")
           })
         }
       );
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
+
+      if (!response.ok) throw new Error(response.statusText);
+
       const dataCart = await response.json();
       addNotification("Thêm giỏ hàng thành công!");
-
-      const updatedCount = dataCart.data.products.length;
     } catch (error) {
       console.error("Failed to add product to cart:", error);
     }
   };
+
   return (
     <div className="category-slider">
-      <h3 className="category-title" onClick={handleCategory}>
+      <h3
+        className="category-title"
+        onClick={() => navigate(`${ROUTERS.USER.PRODUCTS_BYCATEGORY}/`)}
+      >
         {categoryName}
       </h3>
       <div className="productSlide-wrapper">
-        <button className="slider-control prev" onClick={slideLeft}>
-          &#10094;
+        <button
+          className="slider-control prev"
+          onClick={() => scrollTo("left")}
+        >
+          &lt;
         </button>
-        <div className="productSlide-list">
+        <div
+          className="productSlide-list"
+          ref={productListRef}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+        >
           {filteredProducts.map((product) => (
             <div key={product._id} className="productSlide-item">
-              <img
-                src={product.imageUrl}
-                alt={product.name}
-                className="add-to-img"
-              />
+              <Link
+                to={`${ROUTERS.USER.DETAILS}/${product._id}`}
+                state={product}
+              >
+                <img
+                  src={product.imageUrl}
+                  alt={product.name}
+                  className="add-to-img"
+                />
+              </Link>
               <div className="item-productSlide-bottom">
-                <h3 className="product-title">{product.name}</h3>
-                <p className="product-price">{product.prices}đ</p>
-                <p className="product-remaining">
-                  {product.quantityInStock > 0
-                    ? `${product.quantityInStock} còn lại`
-                    : "Hết hàng"}
-                </p>
+                <Link
+                  to={`${ROUTERS.USER.DETAILS}/${product._id}`}
+                  state={product}
+                >
+                  <h3 className="product-title">{product.name}</h3>
+                  <p className="product-price">
+                    {product.prices.toLocaleString("vi-VN")} VNĐ
+                  </p>
+                  <p className="product-remaining">
+                    {product.quantityInStock > 0
+                      ? `Số lượng còn ${product.quantityInStock}`
+                      : "Hết hàng"}
+                  </p>
+                </Link>
                 <button
-                  onClick={() => {
-                    handleBuyProduct(product);
-                  }}
-                  className="btn btn-primary"
+                  onClick={() => handleBuyProduct(product)}
+                  className="btn add-to-cart-detail"
                   disabled={product.quantityInStock === 0}
                 >
                   {product.quantityInStock > 0 ? "Buy product" : "Sold Out"}
@@ -105,19 +134,16 @@ const CategorySlider = ({ categoryId, products, categoryName }) => {
             </div>
           ))}
         </div>
-        <button className="slider-control next" onClick={slideRight}>
-          &#10095;
+        <button
+          className="slider-control next"
+          onClick={() => scrollTo("right")}
+        >
+          &gt;
         </button>
       </div>
       <div className="notifications-wrapper">
         {notifications.map((notification) => (
-          <Notification
-            key={notification.id}
-            message={notification.message}
-            onClose={() => {
-              // Dọn dẹp thông báo
-            }}
-          />
+          <Notification key={notification.id} message={notification.message} />
         ))}
       </div>
     </div>

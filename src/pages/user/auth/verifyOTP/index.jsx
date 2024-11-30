@@ -11,7 +11,7 @@ const VerifyOtp = () => {
   const location = useLocation();
 
   const { email } = location.state || {};
-  console.log(email);
+
   const handleRegister = async (e) => {
     e.preventDefault();
     try {

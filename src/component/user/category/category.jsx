@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./style.scss";
+import { Link } from "react-router-dom";
+import { ROUTERS } from "../../../router/path";
 
 const CategoryComponent = () => {
   const [categories, setCategories] = useState([]);
@@ -20,19 +22,29 @@ const CategoryComponent = () => {
   }, []);
 
   return (
-    <div className="category-container">
-      <div className="categories">
-        {categories.map((category, index) => (
-          <div key={index} className="category-card">
-            <img
-              src={category.iconUrl}
-              alt={`${category.name} icon`}
-              className="category-icon"
-            />
-            <h3 className="category-name">{category.name}</h3>
-            {/* <p className="category-items">{category.items} items</p> */}
+    <div className="container">
+      <div className="row">
+        <div className="col-lg-12">
+          <div className="category-container">
+            <div className="categories">
+              {categories.map((category, index) => (
+                <Link
+                  to={`${ROUTERS.USER.PRODUCTS_BYCATEGORY}/${category.name}`}
+                  state={{ id: category._id }}
+                >
+                  <div key={index} className="category-card">
+                    <img
+                      src={category.iconUrl}
+                      alt={`${category.name} icon`}
+                      className="category-icon"
+                    />
+                    <h3 className="category-name">{category.name}</h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
