@@ -86,7 +86,6 @@ const Dashboard = () => {
           if (!response.ok) throw new Error(response.statusText);
 
           const data = await response.json();
-          console.log(data);
 
           setCount(data.data.length);
         } catch (error) {

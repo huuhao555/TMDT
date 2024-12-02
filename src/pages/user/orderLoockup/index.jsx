@@ -5,9 +5,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 const OrderLookup = () => {
   const [orderInfo, setOrderInfo] = useState({
     buyerName: "",
-    address: {
-      address: ""
-    },
+    address: "",
     orderNumber: "",
     products: [],
     totalAmount: 0,
@@ -67,7 +65,7 @@ const OrderLookup = () => {
             <strong>Người mua:</strong> {orderInfo.buyerName}
           </p>
           <p>
-            <strong>Địa chỉ nhận hàng:</strong> {orderInfo.address.address}
+            <strong>Địa chỉ nhận hàng:</strong> {orderInfo.address}
           </p>
           <p>
             <strong>Mã đơn hàng:</strong> {orderInfo.orderNumber}
@@ -96,7 +94,6 @@ const OrderLookup = () => {
                 <tbody>
                   {searchTerm?.products.length > 0 ? (
                     searchTerm?.products.map((product, index) => {
-                      console.log(searchTerm);
                       return (
                         <tr key={index}>
                           <td>
@@ -113,14 +110,49 @@ const OrderLookup = () => {
                           <td>{product?.productId?.name}</td>
                           <td>{product?.quantity}</td>
                           <td>
-                            {product?.productId?.prices.toLocaleString("vi-VN")}
-                            VND
+                            {" "}
+                            {parseInt(product?.productId?.prices) ==
+                            product?.productId?.promotionPrice ? (
+                              <div className="grp-price">
+                                <p className="prices">
+                                  {`${parseInt(
+                                    product?.productId?.prices
+                                  ).toLocaleString("vi-VN")} ₫`}
+                                </p>
+                              </div>
+                            ) : (
+                              <div className="grp-price">
+                                <p className="price-old">
+                                  {`${parseInt(
+                                    product?.productId?.prices
+                                  ).toLocaleString("vi-VN")} ₫`}
+                                </p>
+                                <div className="grp-price-new">
+                                  <p className="price-new">
+                                    {`${parseInt(
+                                      product?.productId?.promotionPrice
+                                    ).toLocaleString("vi-VN")}
+                               ₫`}
+                                  </p>
+                                  <p className="discount">
+                                    {`-${product?.productId?.discount}%`}
+                                  </p>
+                                </div>
+                              </div>
+                            )}
                           </td>
-                          <td>
+                          <td
+                            style={{
+                              fontWeight: "bold",
+                              color: "#5a8fc2",
+                              fontSize: "16px"
+                            }}
+                          >
                             {(
-                              product?.quantity * product?.productId?.prices
+                              product?.quantity *
+                              product?.productId?.promotionPrice
                             ).toLocaleString("vi-VN")}
-                            VNĐ
+                            ₫
                           </td>
                         </tr>
                       );
@@ -135,30 +167,44 @@ const OrderLookup = () => {
             </div>
             <div className="order-bottom">
               <h3>Chi tiết thanh toán</h3>
-              <p>
+              <p
+                style={{
+                  paddingBottom: " 5px"
+                }}
+              >
                 Tổng tiền hàng:
-                <span>
-                  {searchTerm?.totalPrice?.toLocaleString("vi-VN")} VNĐ
+                <span
+                  style={{
+                    fontWeight: "bold",
+                    color: "#5a8fc2",
+                    fontSize: "16px"
+                  }}
+                >
+                  {searchTerm?.totalPrice?.toLocaleString("vi-VN")} ₫
                 </span>
               </p>
-              <p>
-                VAT:
-                <span>
-                  {parseInt(searchTerm?.VAT)?.toLocaleString("vi-VN")} VNĐ
-                </span>
-              </p>
-              <p>
+
+              <p
+                style={{
+                  paddingBottom: " 5px"
+                }}
+              >
                 Chi phí vận chuyển:
                 <span>
-                  {searchTerm?.shippingFee?.toLocaleString("vi-VN")} VNĐ
+                  {searchTerm?.shippingFee?.toLocaleString("vi-VN")} ₫
                 </span>
               </p>
 
               <p>
                 Tổng cộng:
-                <span style={{ marginLeft: "10px" }}>
-                  {parseInt(searchTerm?.orderTotal)?.toLocaleString("vi-VN")}
-                  VNĐ
+                <span
+                  style={{
+                    fontWeight: "bold",
+                    color: "#5a8fc2",
+                    fontSize: "18px"
+                  }}
+                >
+                  {parseInt(searchTerm?.orderTotal)?.toLocaleString("vi-VN")} ₫
                 </span>
               </p>
             </div>

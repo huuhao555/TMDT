@@ -35,7 +35,7 @@ const CartPage = () => {
       );
       if (!response.ok) throw new Error(response.statusText);
       const dataCart = await response.json();
-      console.log(dataCart);
+
       setCart(dataCart);
     } catch (error) {
       console.error("Failed to fetch count for users:", error);
@@ -129,7 +129,7 @@ const CartPage = () => {
       }
 
       const dataCart = await response.json();
-      console.log(dataCart.data);
+
       const updatedCount = dataCart.data.products.length;
       // updateCartCount(updatedCount);
       setCart(dataCart?.data);
@@ -181,7 +181,8 @@ const CartPage = () => {
     return cart.products
       .filter((item) => selectedProducts.includes(item?.productId._id))
       .reduce(
-        (total, item) => total + item?.productId.prices * item?.quantity,
+        (total, item) =>
+          total + item?.productId?.promotionPrice * item?.quantity,
         0
       );
   };
@@ -222,10 +223,36 @@ const CartPage = () => {
                           <td>{key + 1}</td>
                           <td>{`${item?.productId.name}`}</td>
                           <td>
-                            {item?.productId.prices
-                              ? item?.productId.prices.toLocaleString("vi-VN")
-                              : "0"}{" "}
-                            VNĐ
+                            {" "}
+                            {parseInt(item?.productId?.prices) ==
+                            item?.productId?.promotionPrice ? (
+                              <div className="grp-price">
+                                <p className="prices">
+                                  {`${parseInt(
+                                    item?.productId?.prices
+                                  ).toLocaleString("vi-VN")} ₫`}
+                                </p>
+                              </div>
+                            ) : (
+                              <div className="grp-price">
+                                <p className="price-old">
+                                  {`${parseInt(
+                                    item?.productId?.prices
+                                  ).toLocaleString("vi-VN")} ₫`}
+                                </p>
+                                <div className="grp-price-new">
+                                  <p className="price-new">
+                                    {`${parseInt(
+                                      item?.productId?.promotionPrice
+                                    ).toLocaleString("vi-VN")}
+                               ₫`}
+                                  </p>
+                                  <p className="discount">
+                                    {`-${item?.productId?.discount}%`}
+                                  </p>
+                                </div>
+                              </div>
+                            )}
                           </td>
 
                           <td>
@@ -251,13 +278,16 @@ const CartPage = () => {
                               </span>
                             </div>
                           </td>
-                          <td>
-                            {item?.productId.prices
-                              ? (
-                                  item?.productId?.prices * item?.quantity
-                                ).toLocaleString("vi-VN")
-                              : "0"}{" "}
-                            VNĐ
+                          <td
+                            style={{
+                              fontWeight: "bold",
+                              color: "#5a8fc2",
+                              fontSize: "16px"
+                            }}
+                          >
+                            {`${parseInt(
+                              item?.productId?.promotionPrice * item?.quantity
+                            ).toLocaleString("vi-VN")} ₫`}
                           </td>
 
                           <td>
@@ -307,12 +337,13 @@ const CartPage = () => {
                       <td
                         colSpan="2"
                         style={{
-                          paddingLeft: "5%",
                           textAlign: "left",
-                          fontWeight: "bold"
+                          fontWeight: "bold",
+                          color: "#5a8fc2",
+                          fontSize: "18px"
                         }}
                       >
-                        {calculateTotal().toLocaleString("vi-VN")} VNĐ
+                        {parseInt(calculateTotal()).toLocaleString("vi-VN")} ₫
                       </td>
                     </tr>
                   </tbody>

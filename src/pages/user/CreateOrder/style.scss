@@ -1,3 +1,6 @@
+@use "sass:map";
+@import "../../../styles/pages/_theme.scss";
+
 .container-create-order {
   display: flex;
   justify-content: center;
@@ -20,7 +23,7 @@
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 
     .payment-form {
-      flex: 1;
+      flex: 0 0 40%;
       padding-right: 20px;
       border-right: 1px solid #ddd;
 
@@ -61,7 +64,7 @@
     }
 
     .order-summary {
-      flex: 1;
+      flex: 0 0 60%;
       padding-left: 20px;
 
       h2 {
@@ -113,6 +116,40 @@
 
       &:hover {
         background-color: #218838;
+      }
+    }
+    .grp-price {
+      .prices {
+        color: map.get($theme-color, "main-color");
+        font-weight: bold;
+        font-size: 16px;
+      }
+      .price-old {
+        text-decoration: line-through;
+        color: #999;
+        margin-right: 5px;
+        font-size: 14px;
+      }
+      .grp-price-new {
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        gap: 10px;
+
+        .price-new {
+          color: map.get($theme-color, "main-color");
+          font-weight: bold;
+          font-size: 16px;
+        }
+        .discount {
+          padding: 0 4px;
+          width: fit-content;
+          font-size: 16px;
+          color: map.get($theme-color, "main-color");
+          border: 1px solid map.get($theme-color, "main-color");
+          background-color: rgba(131, 210, 255, 0.384);
+          border-radius: 10%;
+        }
       }
     }
   }

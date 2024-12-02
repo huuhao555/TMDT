@@ -31,7 +31,6 @@ const ProductTypeManagement = () => {
   }, []);
 
   const handleDeleteProduct = async (id) => {
-    console.log(id);
     if (window.confirm("Bạn có chắc chắn muốn xoá sản phẩm này?")) {
       try {
         const response = await fetch(

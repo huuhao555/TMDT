@@ -11,15 +11,16 @@ const UpdateProduct = () => {
 
   const [formData, setFormData] = useState({
     name: product.name || "",
-    quantityInStock: product.quantityInStock || "",
-    prices: product.prices || "",
+    quantityInStock: product.quantityInStock || 0,
+    prices: product.prices || 0,
     color: product.color || "",
     size: product.size || "",
+    discount: product.discount || "",
     imageUrl: product.imageUrl || "",
     bannerUrl: product.bannerUrl || "",
     brand: product.brand || "",
     gender: product.gender || "",
-    category: product.category ? product.category._id : ""
+    category: product.category ? product.category : 0
   });
 
   const [imageFile, setImageFile] = useState(null);
@@ -150,6 +151,30 @@ const UpdateProduct = () => {
             onChange={handleChange}
             required
           />
+        </div>
+        <div>
+          <label style={{ fontWeight: "bold", color: "#555" }}>
+            Giảm giá (%)
+          </label>
+          <div style={{ display: "flex" }}>
+            <input
+              style={{ width: "12%", marginRight: "20px" }}
+              type="number"
+              name="discount"
+              value={formData.discount}
+              onChange={handleChange}
+              min={0}
+            ></input>{" "}
+            <span
+              style={{
+                marginTop: "10px",
+                fontSize: "18px",
+                marginLeft: "-10px"
+              }}
+            >
+              %
+            </span>
+          </div>
         </div>
         <div>
           <label>Giới tính:</label>

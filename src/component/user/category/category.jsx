@@ -11,7 +11,6 @@ const CategoryComponent = () => {
       const response = await fetch("http://localhost:8001/api/category/getAll");
       const data = await response.json();
       setCategories(data.data);
-      console.log(data.data);
     } catch (error) {
       console.error(error);
     }

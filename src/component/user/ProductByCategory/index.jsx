@@ -12,9 +12,10 @@ const ProductByCategoryComponent = () => {
   const { notifications, addNotification } = NotificationContainer();
 
   const { user } = useContext(UserContext) || {};
-  console.log(user);
+
   const location = useLocation();
   const dataId = location.state || {};
+
   const [products, setProducts] = useState([]);
   const [productsAll, setProductsAll] = useState(products);
   const sorts = [
@@ -32,9 +33,11 @@ const ProductByCategoryComponent = () => {
         if (!response.ok) throw new Error(response.statusText);
 
         const dataProducts = await response.json();
+
         const filteredProducts = dataProducts.data.filter(
-          (product) => product.category._id === dataId.id
+          (product) => product.category === dataId.id
         );
+
         setProducts(filteredProducts);
         setProductsAll(filteredProducts);
       } catch (error) {
@@ -46,7 +49,6 @@ const ProductByCategoryComponent = () => {
   }, [dataId.id]);
 
   const handleAddToCart = async (product) => {
-    console.log(product);
     try {
       const response = await fetch(
         "http://localhost:8001/api/cart/add-update",
@@ -59,12 +61,12 @@ const ProductByCategoryComponent = () => {
             userId: user?.dataUser?.id,
             productId: product?._id,
             quantity: 1,
-            prices: product?.prices
+            prices: product?.promotionPrice
           })
         }
       );
       if (!response.ok) throw new Error("Failed to add product to cart");
-      console.log("Product added to cart successfully!");
+
       addNotification("Thêm giỏ hàng thành công!");
     } catch (error) {
       console.error(error);
@@ -125,7 +127,7 @@ const ProductByCategoryComponent = () => {
         }
         return true;
       });
-      console.log(dataNewSearchPrice);
+
       if (dataNewSearchPrice.length === 0) {
         // setNoResults(true);
         setDataChange([]);
@@ -185,9 +187,9 @@ const ProductByCategoryComponent = () => {
               </div>
               <input type="text" onChange={Search} />
               <div className="suggestions">
-                {suggestions.map((item) => (
+                {suggestions.map((item, key) => (
                   <Link style={{ width: "100%" }}>
-                    <div key={item.laptop_ID} className="suggestion-item">
+                    <div key={key} className="suggestion-item">
                       {item.name}
                     </div>
                   </Link>
@@ -289,9 +291,35 @@ const ProductByCategoryComponent = () => {
                       />
                       <div className="info">
                         <h3 className="name">{product?.name}</h3>
-                        <p className="price">
-                          {product?.prices.toLocaleString("vi-VN")} VNĐ
-                        </p>
+                        <div className="grp-price">
+                          {product?.prices ==
+                          parseInt(product?.promotionPrice) ? (
+                            <p className="price">
+                              {parseInt(
+                                parseInt(product?.promotionPrice)
+                              )?.toLocaleString("vi-VN")}
+                              ₫
+                            </p>
+                          ) : (
+                            <>
+                              <p className="price-old">
+                                {parseInt(product?.prices)?.toLocaleString(
+                                  "vi-VN"
+                                )}
+                                ₫
+                              </p>
+                              <div className="price-new">
+                                <p className="price-discount">
+                                  {parseInt(
+                                    parseInt(product?.promotionPrice)
+                                  )?.toLocaleString("vi-VN")}
+                                  ₫
+                                </p>
+                                <p className="discount">{`-${product?.discount}%`}</p>
+                              </div>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </Link>
                     <button

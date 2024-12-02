@@ -50,7 +50,7 @@ const CreateOrderPage = (state) => {
 
   const totalPrice = dataOrder
     ? dataOrder.products.reduce(
-        (acc, item) => acc + item.productId.prices * item.quantity,
+        (acc, item) => acc + item.productId.promotionPrice * item.quantity,
         0
       )
     : 0;
@@ -60,18 +60,21 @@ const CreateOrderPage = (state) => {
     cardName: user?.dataUser?.name || "",
     phone: user?.dataUser?.phone || "",
     email: user?.dataUser?.email || "",
-    address: ""
+    shippingAddress: ""
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setPaymentDetails({ ...paymentDetails, [name]: value });
-    if (name === "address") {
+    if (name === "shippingAddress") {
       fetchSuggestions(value);
     }
   };
   const handleSelectSuggestion = (suggestion) => {
-    setPaymentDetails({ ...paymentDetails, address: suggestion.description });
+    setPaymentDetails({
+      ...paymentDetails,
+      shippingAddress: suggestion.description
+    });
     setSuggestions([]);
   };
   const fetchSuggestions = async (query) => {
@@ -90,7 +93,7 @@ const CreateOrderPage = (state) => {
     }
   };
   const [orderId, setOrderId] = useState();
-
+  console.log(orderId);
   const handlePayment = async () => {
     if (window.confirm("Bạn có chắc chắn đặt hàng không?")) {
       try {
@@ -105,9 +108,7 @@ const CreateOrderPage = (state) => {
             email: paymentDetails.email,
             userId: user.dataUser.id,
             cartId: dataOrder._id,
-            shippingAddress: {
-              address: paymentDetails.address
-            },
+            shippingAddress: paymentDetails.shippingAddress,
             productIds: selectedProducts
           })
         });
@@ -116,7 +117,8 @@ const CreateOrderPage = (state) => {
           throw new Error(response.statusText);
         }
         const data = await response.json();
-        setOrderId(data.data._id);
+        console.log(data);
+        setOrderId(data.data.data._id);
       } catch (error) {
         alert("Đặt hàng thất bại");
       }
@@ -124,6 +126,7 @@ const CreateOrderPage = (state) => {
   };
 
   useEffect(() => {
+    console.log(orderId);
     if (!orderId) return;
 
     const createPayment = async () => {
@@ -145,7 +148,7 @@ const CreateOrderPage = (state) => {
 
         if (!response.ok) throw new Error(response.statusText);
         const data = await response.json();
-        console.log(data.paymentURL);
+
         if (data?.paymentURL) {
           window.location.href = data.paymentURL;
         } else {
@@ -191,9 +194,9 @@ const CreateOrderPage = (state) => {
             />
             <input
               type="text"
-              name="address"
+              name="shippingAddress"
               placeholder="Địa chỉ nhận hàng"
-              value={paymentDetails.address}
+              value={paymentDetails.shippingAddress}
               onChange={handleInputChange}
             />
             {suggestions.length > 0 && (
@@ -232,14 +235,50 @@ const CreateOrderPage = (state) => {
                         <td>{key + 1}</td>
                         <td>{item.productId.name}</td>
                         <td>
-                          {item.productId.prices.toLocaleString("vi-VN")} VNĐ
+                          {" "}
+                          {parseInt(item?.productId?.prices) ==
+                          item?.productId?.promotionPrice ? (
+                            <div className="grp-price">
+                              <p className="prices">
+                                {`${parseInt(
+                                  item?.productId?.prices
+                                ).toLocaleString("vi-VN")} ₫`}
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="grp-price">
+                              <p className="price-old">
+                                {`${parseInt(
+                                  item?.productId?.prices
+                                ).toLocaleString("vi-VN")} ₫`}
+                              </p>
+                              <div className="grp-price-new">
+                                <p className="price-new">
+                                  {`${parseInt(
+                                    item?.productId?.promotionPrice
+                                  ).toLocaleString("vi-VN")}
+                               ₫`}
+                                </p>
+                                <p className="discount">
+                                  {`-${item?.productId?.discount}%`}
+                                </p>
+                              </div>
+                            </div>
+                          )}
                         </td>
-                        <td>{item.quantity}</td>
-                        <td>
+                        <td>{item?.quantity}</td>
+                        <td
+                          style={{
+                            textAlign: "right",
+                            fontWeight: "bold",
+                            color: "#5a8fc2",
+                            fontSize: "16px"
+                          }}
+                        >
                           {(
-                            item.productId.prices * item.quantity
+                            item?.productId?.promotionPrice * item?.quantity
                           ).toLocaleString("vi-VN")}{" "}
-                          VNĐ
+                          ₫
                         </td>
                       </tr>
                     ))}
@@ -248,8 +287,16 @@ const CreateOrderPage = (state) => {
                       <td colSpan="3" style={{ textAlign: "right" }}>
                         Tổng tiền hàng:
                       </td>
-                      <td colSpan="2" style={{ textAlign: "right" }}>
-                        {totalPrice.toLocaleString("vi-VN")} VNĐ
+                      <td
+                        colSpan="2"
+                        style={{
+                          textAlign: "right",
+                          fontWeight: "bold",
+                          color: "#5a8fc2",
+                          fontSize: "16px"
+                        }}
+                      >
+                        {totalPrice.toLocaleString("vi-VN")} ₫
                       </td>
                     </tr>
 
@@ -258,7 +305,7 @@ const CreateOrderPage = (state) => {
                         Chi phí vận chuyển:
                       </td>
                       <td colSpan="2" style={{ textAlign: "right" }}>
-                        {shippingCost.toLocaleString("vi-VN")} VNĐ
+                        {shippingCost.toLocaleString("vi-VN")} ₫
                       </td>
                     </tr>
 
@@ -268,9 +315,14 @@ const CreateOrderPage = (state) => {
                       </td>
                       <td
                         colSpan="2"
-                        style={{ textAlign: "right", fontWeight: "bold" }}
+                        style={{
+                          textAlign: "right",
+                          fontWeight: "bold",
+                          color: "#5a8fc2",
+                          fontSize: "18px"
+                        }}
                       >
-                        {grandTotal.toLocaleString("vi-VN")} VNĐ
+                        {grandTotal.toLocaleString("vi-VN")} ₫
                       </td>
                     </tr>
                   </tbody>

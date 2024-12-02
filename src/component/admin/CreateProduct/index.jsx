@@ -29,6 +29,7 @@ const CreateProduct = () => {
     name: "",
     quantityInStock: "",
     prices: "",
+    discount: "",
     color: "",
     size: "",
     brand: "",
@@ -63,7 +64,6 @@ const CreateProduct = () => {
         }
       });
 
-      // Thêm hình ảnh
       if (imageFile) data.append("image", imageFile);
       if (bannerFile) data.append("banner", bannerFile);
 
@@ -71,7 +71,6 @@ const CreateProduct = () => {
         method: "POST",
         body: data
       });
-      console.log(...data);
       if (!response.ok) {
         alert(
           "Thêm sản phẩm không thành công! Vui lòng kiểm tra lại thông tin."
@@ -83,11 +82,11 @@ const CreateProduct = () => {
       addNotification(`${formData.name} được thêm vào danh sách sản phẩm.`);
       navigate("/admin/quan-ly-san-pham");
 
-      // Reset form
       setFormData({
         name: "",
         quantityInStock: "",
         prices: "",
+        discount: "",
         color: "",
         size: "",
         brand: "",
@@ -149,6 +148,30 @@ const CreateProduct = () => {
             onChange={handleChange}
             required
           />
+        </div>
+        <div>
+          <label style={{ fontWeight: "bold", color: "#555" }}>
+            Giảm giá (%)
+          </label>
+          <div style={{ display: "flex" }}>
+            <input
+              style={{ width: "12%", marginRight: "20px" }}
+              type="number"
+              name="discount"
+              value={formData.discount}
+              onChange={handleChange}
+              min={0}
+            ></input>{" "}
+            <span
+              style={{
+                marginTop: "10px",
+                fontSize: "18px",
+                marginLeft: "-10px"
+              }}
+            >
+              %
+            </span>
+          </div>
         </div>
         <div>
           <label>Giới tính:</label>

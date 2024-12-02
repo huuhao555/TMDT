@@ -11,8 +11,14 @@ import {
 const ShippingOrdersAdmin = () => {
   const [orders, setOrders] = useState([]);
   const { user } = useContext(UserContext) || {};
-  const [isTableVisible, setTableVisible] = useState(false);
+  const toggleOrderVisibility = (orderId) => {
+    setVisibleOrders((prev) => ({
+      ...prev,
+      [orderId]: !prev[orderId]
+    }));
+  };
 
+  const [visibleOrders, setVisibleOrders] = useState({});
   useEffect(() => {
     const fetchPendingOrders = async () => {
       const userId = user?.dataUser?.id;
@@ -37,7 +43,7 @@ const ShippingOrdersAdmin = () => {
 
     fetchPendingOrders();
   }, [user]);
-  console.log(orders);
+
   return (
     <div className="orders-list-admin">
       {orders.length > 0 ? (
@@ -46,7 +52,7 @@ const ShippingOrdersAdmin = () => {
             <div key={order.id} className="order-admin">
               <h2>Thông tin người nhận hàng</h2>
               <p>Tên người nhận: {order.name}</p>
-              <p>Địa chỉ: {order.shippingAddress.address}</p>
+              <p>Địa chỉ: {order.shippingAddress}</p>
               <p>Số điện thoại: {order.phone}</p>
               <p>Trạng thái: {order.status}</p>
               <p>Mã đơn hàng: {order._id} </p>
@@ -64,11 +70,9 @@ const ShippingOrdersAdmin = () => {
               </h3>
               <AiOutlineDownCircle
                 className="icon-down-admin"
-                onClick={() => {
-                  setTableVisible(!isTableVisible);
-                }}
+                onClick={() => toggleOrderVisibility(order._id)}
               />
-              {isTableVisible && (
+              {visibleOrders[order._id] && (
                 <table>
                   <thead>
                     <tr>
@@ -97,20 +101,92 @@ const ShippingOrdersAdmin = () => {
                         </td>
                         <td>{item?.productId?.name}</td>
                         <td>
-                          {item?.productId?.prices.toLocaleString("vi-VN")} VNĐ
+                          {" "}
+                          {parseInt(item?.productId?.prices) ==
+                          item?.productId?.promotionPrice ? (
+                            <div className="grp-price">
+                              <p className="prices">
+                                {`${parseInt(
+                                  item?.productId?.prices
+                                ).toLocaleString("vi-VN")} ₫`}
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="grp-price">
+                              <p className="price-old">
+                                {`${parseInt(
+                                  item?.productId?.prices
+                                ).toLocaleString("vi-VN")} ₫`}
+                              </p>
+                              <div className="grp-price-new">
+                                <p className="price-new">
+                                  {`${parseInt(
+                                    item?.productId?.promotionPrice
+                                  ).toLocaleString("vi-VN")}
+                               ₫`}
+                                </p>
+                                <p className="discount">
+                                  {`-${item?.productId?.discount}%`}
+                                </p>
+                              </div>
+                            </div>
+                          )}
                         </td>
                         <td>{item?.quantity}</td>
-                        <td>
+                        <td
+                          style={{
+                            fontWeight: "bold",
+                            color: "#5a8fc2",
+                            fontSize: "16px"
+                          }}
+                        >
                           {(
-                            item?.productId?.prices * item.quantity
+                            item?.productId?.promotionPrice * item?.quantity
                           ).toLocaleString("vi-VN")}
-                          VNĐ
+                          ₫
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               )}
+              <div className="order-bottom">
+                <h3>Chi tiết thanh toán</h3>
+                <p>
+                  Tổng tiền hàng:
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      color: "#5a8fc2",
+                      fontSize: "16px"
+                    }}
+                  >
+                    {order.totalPrice?.toLocaleString("vi-VN")} ₫
+                  </span>
+                </p>
+
+                <p>
+                  Chi phí vận chuyển:
+                  <span>{order.shippingFee?.toLocaleString("vi-VN")} ₫</span>
+                </p>
+
+                <div style={{ borderTop: "solid 2px #ccc" }}>
+                  <p>
+                    Thành tiền:
+                    <span
+                      style={{
+                        marginLeft: "10px",
+                        fontWeight: "bold",
+                        color: "#5a8fc2",
+                        fontSize: "18px",
+                        textAlign: "left"
+                      }}
+                    >
+                      {parseInt(order?.orderTotal).toLocaleString("vi-VN")} ₫
+                    </span>
+                  </p>
+                </div>
+              </div>
             </div>
           ))}
         </div>

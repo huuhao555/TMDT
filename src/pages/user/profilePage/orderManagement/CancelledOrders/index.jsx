@@ -11,7 +11,7 @@ import {
 const CancelledOrders = () => {
   const [orders, setOrders] = useState([]);
   const { user } = useContext(UserContext) || {};
-  const [isTableVisible, setTableVisible] = useState(false);
+  const [visibleOrders, setVisibleOrders] = useState({});
 
   useEffect(() => {
     const fetchPendingOrders = async () => {
@@ -39,22 +39,21 @@ const CancelledOrders = () => {
 
     fetchPendingOrders();
   }, [user]);
-  console.log(orders);
+  const toggleOrderVisibility = (orderId) => {
+    setVisibleOrders((prev) => ({
+      ...prev,
+      [orderId]: !prev[orderId]
+    }));
+  };
   return (
     <div className="orders-list">
       {orders.length > 0 ? (
         <div>
           {orders?.map((order, orderIndex) => (
             <div key={order.id} className="order">
-              <AiOutlineDownCircle
-                className="icon-down"
-                onClick={() => {
-                  setTableVisible(!isTableVisible);
-                }}
-              />
               <h2>Thông tin người nhận hàng</h2>
               <p>Tên người nhận: {order.name}</p>
-              <p>Địa chỉ: {order.shippingAddress.address}</p>
+              <p>Địa chỉ: {order?.shippingAddress}</p>
               <p>Số điện thoại: {order.phone}</p>
               <p>Trạng thái: {order.status}</p>
               <p>Mã đơn hàng: {order._id} </p>
@@ -63,15 +62,18 @@ const CancelledOrders = () => {
                 <span
                   style={{
                     fontSize: "16px",
-                    color: "#D70018",
+                    color: "#d70018",
                     fontStyle: "italic"
                   }}
                 >
                   {` (${order?.products?.length} sản phẩm)`}
                 </span>
               </h3>
-
-              {isTableVisible && (
+              <AiOutlineDownCircle
+                className="icon-down"
+                onClick={() => toggleOrderVisibility(order._id)}
+              />
+              {visibleOrders[order._id] && (
                 <table>
                   <thead>
                     <tr>
@@ -85,7 +87,6 @@ const CancelledOrders = () => {
                   </thead>
                   <tbody>
                     {order?.products?.map((item, itemIndex) => {
-                      console.log(order.orderTotal);
                       return (
                         <tr key={item?.productId?.id}>
                           <td>{itemIndex + 1}</td>
@@ -102,15 +103,49 @@ const CancelledOrders = () => {
                           </td>
                           <td>{item?.productId?.name}</td>
                           <td>
-                            {item?.productId?.prices.toLocaleString("vi-VN")}{" "}
-                            VNĐ
+                            {" "}
+                            {parseInt(item?.productId?.prices) ==
+                            item?.productId?.promotionPrice ? (
+                              <div className="grp-price">
+                                <p className="prices">
+                                  {`${parseInt(
+                                    item?.productId?.prices
+                                  ).toLocaleString("vi-VN")} ₫`}
+                                </p>
+                              </div>
+                            ) : (
+                              <div className="grp-price">
+                                <p className="price-old">
+                                  {`${parseInt(
+                                    item?.productId?.prices
+                                  ).toLocaleString("vi-VN")} ₫`}
+                                </p>
+                                <div className="grp-price-new">
+                                  <p className="price-new">
+                                    {`${parseInt(
+                                      item?.productId?.promotionPrice
+                                    ).toLocaleString("vi-VN")}
+                               ₫`}
+                                  </p>
+                                  <p className="discount">
+                                    {`-${item?.productId?.discount}%`}
+                                  </p>
+                                </div>
+                              </div>
+                            )}
                           </td>
                           <td>{item?.quantity}</td>
-                          <td>
+                          <td
+                            style={{
+                              fontWeight: "bold",
+                              color: "#5a8fc2",
+                              fontSize: "16px"
+                            }}
+                          >
                             {(
-                              item?.productId?.prices * item.quantity
+                              item?.productId?.promotionPrice * item?.quantity
                             ).toLocaleString("vi-VN")}
-                            VNĐ
+                            ₫
                           </td>
                         </tr>
                       );
@@ -122,20 +157,38 @@ const CancelledOrders = () => {
                 <h3>Chi tiết thanh toán</h3>
                 <p>
                   Tổng tiền hàng:
-                  <span>{order.totalPrice?.toLocaleString("vi-VN")} VNĐ</span>
-                </p>
-                <p>
-                  Chi phí vận chuyển:
-                  <span>{order.shippingFee?.toLocaleString("vi-VN")} VNĐ</span>
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      color: "#5a8fc2",
+                      fontSize: "16px"
+                    }}
+                  >
+                    {order.totalPrice?.toLocaleString("vi-VN")} ₫
+                  </span>
                 </p>
 
                 <p>
-                  Tổng cộng:
-                  <span style={{ marginLeft: "10px" }}>
-                    {order.orderTotal.toLocaleString("vi-VN")}
-                    VNĐ
-                  </span>
+                  Chi phí vận chuyển:
+                  <span>{order.shippingFee?.toLocaleString("vi-VN")} ₫</span>
                 </p>
+
+                <div style={{ borderTop: "solid 2px #ccc" }}>
+                  <p>
+                    Thành tiền:
+                    <span
+                      style={{
+                        marginLeft: "10px",
+                        fontWeight: "bold",
+                        color: "#5a8fc2",
+                        fontSize: "18px",
+                        textAlign: "left"
+                      }}
+                    >
+                      {parseInt(order?.orderTotal).toLocaleString("vi-VN")} ₫
+                    </span>
+                  </p>
+                </div>
               </div>
             </div>
           ))}

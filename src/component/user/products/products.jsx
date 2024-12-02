@@ -54,7 +54,6 @@ const ProductComponent = () => {
     }
   };
   const handleBuyProduct = async (product) => {
-    console.log(user);
     if (!user) alert("Vui lòng đăng nhập");
     try {
       const response = await fetch(
@@ -113,7 +112,7 @@ const ProductComponent = () => {
                 className="btn btn-primary"
                 disabled={product.quantityInStock === 0}
               >
-                {product.quantityInStock > 0 ? "Buy product" : "Sold Out"}
+                {product.quantityInStock > 0 ? "Thêm giỏ hàng" : "Sold Out"}
               </button>
             </div>
           </div>

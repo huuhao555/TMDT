@@ -26,7 +26,7 @@ const PendingOrders = () => {
         }
 
         const data = await response.json();
-        console.log(data);
+
         setOrders(data?.data.filter((order) => order.status === "Pending"));
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -81,8 +81,6 @@ const PendingOrders = () => {
       {orders.length > 0 ? (
         <div>
           {orders?.map((order) => {
-            const grandTotal =
-              order.totalPrice + parseInt(order.VAT) + order.shippingFee;
             return (
               <div key={order._id} className="order">
                 <button
@@ -95,18 +93,18 @@ const PendingOrders = () => {
                 </button>
 
                 <h2>Thông tin người nhận hàng</h2>
-                <p>Tên người nhận: {order.name}</p>
-                <p>Địa chỉ: {order.shippingAddress?.address}</p>
-                <p>Số điện thoại: {order.phone}</p>
-                <p>Trạng thái: {order.status}</p>
-                <p>Mã đơn hàng: {order._id} </p>
+                <p>Tên người nhận: {order?.name}</p>
+                <p>Địa chỉ: {order?.shippingAddress}</p>
+                <p>Số điện thoại: {order?.phone}</p>
+                <p>Trạng thái: {order?.status}</p>
+                <p>Mã đơn hàng: {order?._id} </p>
 
                 <h3 className="text-order">
                   Chi tiết đơn hàng
                   <span
                     style={{
                       fontSize: "16px",
-                      color: "#D70018",
+                      color: "#d70018",
                       fontStyle: "italic"
                     }}
                   >
@@ -153,15 +151,49 @@ const PendingOrders = () => {
                             </td>
                             <td>{item?.productId?.name}</td>
                             <td>
-                              {item?.productId?.prices?.toLocaleString("vi-VN")}{" "}
-                              VNĐ
+                              {" "}
+                              {parseInt(item?.productId?.prices) ==
+                              item?.productId?.promotionPrice ? (
+                                <div className="grp-price">
+                                  <p className="prices">
+                                    {`${parseInt(
+                                      item?.productId?.prices
+                                    ).toLocaleString("vi-VN")} ₫`}
+                                  </p>
+                                </div>
+                              ) : (
+                                <div className="grp-price">
+                                  <p className="price-old">
+                                    {`${parseInt(
+                                      item?.productId?.prices
+                                    ).toLocaleString("vi-VN")} ₫`}
+                                  </p>
+                                  <div className="grp-price-new">
+                                    <p className="price-new">
+                                      {`${parseInt(
+                                        item?.productId?.promotionPrice
+                                      ).toLocaleString("vi-VN")}
+                               ₫`}
+                                    </p>
+                                    <p className="discount">
+                                      {`-${item?.productId?.discount}%`}
+                                    </p>
+                                  </div>
+                                </div>
+                              )}
                             </td>
                             <td>{item?.quantity}</td>
-                            <td>
+                            <td
+                              style={{
+                                fontWeight: "bold",
+                                color: "#5a8fc2",
+                                fontSize: "16px"
+                              }}
+                            >
                               {(
-                                item?.productId?.prices * item.quantity
+                                item?.productId?.promotionPrice * item?.quantity
                               ).toLocaleString("vi-VN")}{" "}
-                              VNĐ
+                              ₫
                             </td>
                           </tr>
                         );
@@ -173,22 +205,37 @@ const PendingOrders = () => {
                   <h3>Chi tiết thanh toán</h3>
                   <p>
                     Tổng tiền hàng:
-                    <span>{order.totalPrice?.toLocaleString("vi-VN")} VNĐ</span>
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        color: "#5a8fc2",
+                        fontSize: "16px"
+                      }}
+                    >
+                      {order.totalPrice?.toLocaleString("vi-VN")} ₫
+                    </span>
                   </p>
 
                   <p>
                     Chi phí vận chuyển:
-                    <span>
-                      {order.shippingFee?.toLocaleString("vi-VN")} VNĐ
-                    </span>
+                    <span>{order.shippingFee?.toLocaleString("vi-VN")} ₫</span>
                   </p>
-
-                  <p>
-                    Tổng cộng:
-                    <span style={{ marginLeft: "10px" }}>
-                      {grandTotal.toLocaleString("vi-VN")} VNĐ
-                    </span>
-                  </p>
+                  <div style={{ borderTop: "solid 2px #ccc" }}>
+                    <p>
+                      Thành tiền:
+                      <span
+                        style={{
+                          marginLeft: "10px",
+                          fontWeight: "bold",
+                          color: "#5a8fc2",
+                          fontSize: "18px",
+                          textAlign: "left"
+                        }}
+                      >
+                        {parseInt(order?.orderTotal).toLocaleString("vi-VN")} ₫
+                      </span>
+                    </p>
+                  </div>
                 </div>
               </div>
             );

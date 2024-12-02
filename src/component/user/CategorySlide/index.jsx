@@ -12,7 +12,7 @@ const CategorySlider = ({ categoryId, products, categoryName }) => {
   const { notifications, addNotification } = NotificationContainer();
   const navigate = useNavigate();
   const filteredProducts = products.filter(
-    (product) => product.category._id === categoryId
+    (product) => product.category === categoryId
   );
 
   const productListRef = useRef();
@@ -72,13 +72,14 @@ const CategorySlider = ({ categoryId, products, categoryName }) => {
       console.error("Failed to add product to cart:", error);
     }
   };
-
+  const handleTitle = () => {
+    navigate(`${ROUTERS.USER.PRODUCTS_BYCATEGORY}/${categoryName}`, {
+      state: { id: categoryId }
+    });
+  };
   return (
     <div className="category-slider">
-      <h3
-        className="category-title"
-        onClick={() => navigate(`${ROUTERS.USER.PRODUCTS_BYCATEGORY}/`)}
-      >
+      <h3 className="category-title" onClick={handleTitle}>
         {categoryName}
       </h3>
       <div className="productSlide-wrapper">
@@ -114,9 +115,33 @@ const CategorySlider = ({ categoryId, products, categoryName }) => {
                   state={product}
                 >
                   <h3 className="product-title">{product.name}</h3>
-                  <p className="product-price">
-                    {product.prices.toLocaleString("vi-VN")} VNĐ
-                  </p>
+
+                  <div className="grp-price">
+                    {product?.prices == parseInt(product?.promotionPrice) ? (
+                      <p className="price">
+                        {parseInt(
+                          parseInt(product?.promotionPrice)
+                        )?.toLocaleString("vi-VN")}
+                        ₫
+                      </p>
+                    ) : (
+                      <>
+                        <p className="price-old">
+                          {parseInt(product?.prices)?.toLocaleString("vi-VN")}₫
+                        </p>
+                        <div className="price-new">
+                          <p className="price-discount">
+                            {parseInt(
+                              parseInt(product?.promotionPrice)
+                            )?.toLocaleString("vi-VN")}
+                            ₫
+                          </p>
+                          <p className="discount">{`-${product?.discount}%`}</p>
+                        </div>
+                      </>
+                    )}
+                  </div>
+
                   <p className="product-remaining">
                     {product.quantityInStock > 0
                       ? `Số lượng còn ${product.quantityInStock}`
@@ -128,7 +153,7 @@ const CategorySlider = ({ categoryId, products, categoryName }) => {
                   className="btn add-to-cart-detail"
                   disabled={product.quantityInStock === 0}
                 >
-                  {product.quantityInStock > 0 ? "Buy product" : "Sold Out"}
+                  {product.quantityInStock > 0 ? "Thêm giỏ hàng" : "Sold Out"}
                 </button>
               </div>
             </div>

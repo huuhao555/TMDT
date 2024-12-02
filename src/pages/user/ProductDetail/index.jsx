@@ -1,14 +1,16 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./style.scss";
 import { ROUTERS } from "../../../router/path";
+import { UserContext } from "../../../middleware/UserContext";
 
 const ProductDetail = () => {
   const location = useLocation();
   const product = location.state || {};
-  const dataId = product?.category?._id;
+  const dataId = product?.category;
   const [products, setProducts] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { user } = useContext(UserContext) || {};
 
   const fetchProducts = async () => {
     try {
@@ -19,14 +21,41 @@ const ProductDetail = () => {
 
       const dataProducts = await response.json();
       const filteredProducts = dataProducts.data.filter(
-        (product) => product.category._id === dataId
+        (product) => product.category === dataId
       );
       setProducts(filteredProducts);
     } catch (error) {
       console.error("Failed to fetch products:", error);
     }
   };
+  const handleBuyProduct = async (product) => {
+    if (!user) {
+      alert("Vui lòng đăng nhập");
+      return;
+    }
+    try {
+      const response = await fetch(
+        "http://localhost:8001/api/cart/add-update",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: user?.dataUser?.id,
+            productId: product?._id,
+            quantity: 1,
+            prices: product?.prices?.toLocaleString("vi-VN")
+          })
+        }
+      );
 
+      if (!response.ok) throw new Error(response.statusText);
+
+      await response.json();
+      // addNotification("Thêm giỏ hàng thành công!");
+    } catch (error) {
+      console.error("Failed to add product to cart:", error);
+    }
+  };
   useEffect(() => {
     fetchProducts();
   }, [dataId]);
@@ -68,10 +97,38 @@ const ProductDetail = () => {
               <div className="product-detail__header">
                 <div className="product-detail__info">
                   <h2 className="product-detail__title">{product.name}</h2>
-                  <p className="product-detail__price">
-                    {product.prices?.toLocaleString("vi-VN")} VNĐ
-                  </p>
-                  <button className="product-detail__add-to-cart">
+                  <div className="product-detail__price">
+                    <div className="grp-price">
+                      {product?.prices == parseInt(product?.promotionPrice) ? (
+                        <p className="price">
+                          {parseInt(
+                            parseInt(product?.promotionPrice)
+                          )?.toLocaleString("vi-VN")}
+                          ₫
+                        </p>
+                      ) : (
+                        <>
+                          <p className="price-old">
+                            {parseInt(product?.prices)?.toLocaleString("vi-VN")}
+                            ₫
+                          </p>
+                          <div className="price-new">
+                            <p className="price-discount">
+                              {parseInt(
+                                parseInt(product?.promotionPrice)
+                              )?.toLocaleString("vi-VN")}
+                              ₫
+                            </p>
+                            <p className="discount">{`-${product?.discount}%`}</p>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleBuyProduct(product)}
+                    className="product-detail__add-to-cart"
+                  >
                     Thêm vào giỏ hàng
                   </button>
                 </div>
@@ -90,6 +147,7 @@ const ProductDetail = () => {
             <button className="slider-control prev" onClick={handlePrev}>
               {"<"}
             </button>
+            <h2>Sản phẩm liên quan:</h2>
             <div
               className="productSlide-list"
               style={{ transform: `translateX(-${currentIndex * 310}px)` }}
@@ -112,7 +170,7 @@ const ProductDetail = () => {
                   >
                     <div className="item-productSlide-bottom">
                       <h3>{product.name}</h3>
-                      <p>{product.prices.toLocaleString("vi-VN")} VNĐ</p>
+                      <p>{product.prices.toLocaleString("vi-VN")} ₫</p>
                     </div>
                   </Link>
                 </div>
