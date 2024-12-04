@@ -24,10 +24,8 @@ const CreateOrderPage = (state) => {
   const [cart, setCart] = useState(null);
   const userId = user?.dataUser?.id;
 
-  const [discountPercentage, setDiscountPercentage] = useState(0)
-  const [discount, setDiscount] = useState(0)
-
-
+  const [discountPercentage, setDiscountPercentage] = useState(0);
+  const [discount, setDiscount] = useState(0);
 
   const handleVoucherCheck = async () => {
     try {
@@ -51,9 +49,6 @@ const CreateOrderPage = (state) => {
       alert(error.message);
     }
   };
-
-
-
 
   const getAllCart = useCallback(async () => {
     if (!user || !user.dataUser) return;
@@ -90,18 +85,18 @@ const CreateOrderPage = (state) => {
     fetchAddressOptions();
   }, []);
 
-
   const totalPrice = dataOrder
     ? dataOrder.products.reduce(
-      (acc, item) => acc + item.productId.promotionPrice * item.quantity,
-      0
-    )
+        (acc, item) => acc + item.productId.promotionPrice * item.quantity,
+        0
+      )
     : 0;
   const shippingCost = totalPrice && totalPrice > 500000 ? 0 : 50000;
-  const grandTotal = totalPrice + shippingCost - (totalPrice * discountPercentage) / 100;
+  const grandTotal =
+    totalPrice + shippingCost - (totalPrice * discountPercentage) / 100;
 
   const [paymentDetails, setPaymentDetails] = useState({
-    cardName: user?.dataUser?.name || "",
+    name: user?.dataUser?.name || "",
     phone: user?.dataUser?.phone || "",
     email: user?.dataUser?.email || "",
     shippingAddress: ""
@@ -135,7 +130,6 @@ const CreateOrderPage = (state) => {
     }
   };
 
-
   const fetchSuggestions = async (query) => {
     if (!query) {
       setSuggestions([]);
@@ -164,7 +158,7 @@ const CreateOrderPage = (state) => {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            name: paymentDetails.cardName,
+            name: paymentDetails.name,
             phone: paymentDetails.phone,
             email: paymentDetails.email,
             userId: user.dataUser.id,
@@ -254,9 +248,9 @@ const CreateOrderPage = (state) => {
 
             <input
               type="text"
-              name="cardName"
+              name="name"
               placeholder="Tên người nhận "
-              value={paymentDetails.cardName}
+              value={paymentDetails.name}
               onChange={handleInputChange}
             />
             <input
@@ -308,7 +302,7 @@ const CreateOrderPage = (state) => {
                 </option>
                 {addressOptions.map((address) => (
                   <option key={address._id} value={address._id}>
-                    {` ${address.cardName} | ${address.phone} | ${address.email} | ${address.address} `}
+                    {` ${address.name} | ${address.phone} | ${address.email} | ${address.address} `}
                   </option>
                 ))}
               </select>
@@ -318,8 +312,8 @@ const CreateOrderPage = (state) => {
           <div className="order-summary">
             <h2>Thông tin đơn hàng</h2>
             {dataOrder &&
-              dataOrder.products &&
-              dataOrder.products.length > 0 ? (
+            dataOrder.products &&
+            dataOrder.products.length > 0 ? (
               <div className="order-container">
                 <table className="order-table">
                   <thead>
@@ -339,7 +333,7 @@ const CreateOrderPage = (state) => {
                         <td>
                           {" "}
                           {parseInt(item?.productId?.prices) ==
-                            item?.productId?.promotionPrice ? (
+                          item?.productId?.promotionPrice ? (
                             <div className="grp-price">
                               <p className="prices">
                                 {`${parseInt(
@@ -411,7 +405,8 @@ const CreateOrderPage = (state) => {
                       </td>
                     </tr>
                     <tr>
-                      <td colSpan="3" style={{ textAlign: "right" }}>Voucher:
+                      <td colSpan="3" style={{ textAlign: "right" }}>
+                        Voucher:
                       </td>
                       <td colSpan="2" style={{ textAlign: "right" }}>
                         <div style={{ display: "flex", alignItems: "center" }}>
@@ -424,8 +419,18 @@ const CreateOrderPage = (state) => {
                             maxLength={8}
                             style={{ marginRight: "8px" }}
                           />
-                          <button className="accept-voucher" onClick={handleVoucherCheck}
-                            style={{ padding: "5px 10px", background: "rgb(0, 86, 179)", borderRadius: "5px", color: "white", border: "none", cursor: "pointer" }}>
+                          <button
+                            className="accept-voucher"
+                            onClick={handleVoucherCheck}
+                            style={{
+                              padding: "5px 10px",
+                              background: "rgb(0, 86, 179)",
+                              borderRadius: "5px",
+                              color: "white",
+                              border: "none",
+                              cursor: "pointer"
+                            }}
+                          >
                             Áp dụng
                           </button>
                         </div>
@@ -434,13 +439,20 @@ const CreateOrderPage = (state) => {
 
                     <tr>
                       <td colSpan="3" style={{ textAlign: "right" }}>
-                        Phần trăm giảm
+                        Voucher giảm
                       </td>
-                      <td colSpan="2" style={{ textAlign: "right" }}>
+                      <td
+                        colSpan="2"
+                        style={{
+                          textAlign: "right",
+                          color: "#d70018",
+                          fontSize: "14px"
+                        }}
+                      >
                         {discount > 0 ? (
-                          <span style={{ color: "#d70018", fontSize: "14px" }}>
-                            -{discount}%
-                          </span>
+                          <span>{`${parseInt(
+                            totalPrice * (discount / 100)
+                          )?.toLocaleString("vi-VN")} đ (-${discount}%)`}</span>
                         ) : (
                           "0%"
                         )}
@@ -460,7 +472,7 @@ const CreateOrderPage = (state) => {
                           fontSize: "18px"
                         }}
                       >
-                        {grandTotal?.toLocaleString("vi-VN")}₫
+                        {grandTotal?.toLocaleString("vi-VN")} ₫
                       </td>
                     </tr>
                   </tbody>
@@ -476,10 +488,8 @@ const CreateOrderPage = (state) => {
         </div>
       </div>
 
-
       {/* <LuckeyWhellVoucher/> */}
     </div>
-
   );
 };
 

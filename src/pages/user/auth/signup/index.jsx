@@ -4,6 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ROUTERS } from "../../../../router/path";
 import { useNavigate } from "react-router-dom";
 import { apiLink } from "../../../../config/api";
+import logo from "../../../../assets/images/Clean.svg";
 
 const SignUp = () => {
   const navigator = useNavigate();
@@ -63,11 +64,7 @@ const SignUp = () => {
         </div>
         <div className="col-lg-3">
           <div className="register-container">
-            <img
-              src="https://designercomvn.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2018/12/06090103/logo-shop-qu%E1%BA%A7n-%C3%A1o-8.png"
-              alt="Logo"
-              className="login-logo"
-            />
+            <img src={logo} alt="Logo" className="login-logo" />
             <h2>Register</h2>
             {error && <p className="error-message">{error}</p>}
             <form onSubmit={handleRegister}>

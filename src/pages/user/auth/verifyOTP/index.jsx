@@ -4,13 +4,16 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ROUTERS } from "../../../../router/path";
 import { useLocation, useNavigate } from "react-router-dom";
 import { apiLink } from "../../../../config/api";
+import SuccessAnimation from "../../../../component/general/Success/index";
+import logo from "../../../../assets/images/Clean.svg";
 
 const VerifyOtp = () => {
   const navigator = useNavigate();
   const [otpToken, setOtpToken] = useState("");
   const [error, setError] = useState("");
   const location = useLocation();
-
+  const [message, setMessage] = useState("");
+  const [trigger, setTrigger] = useState(false);
   const { email } = location.state || {};
 
   const handleRegister = async (e) => {
@@ -26,8 +29,12 @@ const VerifyOtp = () => {
         throw new Error("OTP failed");
       }
       const data = await response.json();
-      navigator(ROUTERS.USER.LOGIN);
-      alert("Verify successful");
+      setMessage("Xác thực thành công");
+      setTrigger(true);
+      setTimeout(() => {
+        setTrigger(false);
+        navigator(ROUTERS.LOGIN);
+      }, 1000);
       setOtpToken("");
     } catch (err) {
       setError(err.message);
@@ -47,11 +54,7 @@ const VerifyOtp = () => {
         </div>
         <div className="col-lg-3">
           <div className="verify-container">
-            <img
-              src="https://designercomvn.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2018/12/06090103/logo-shop-qu%E1%BA%A7n-%C3%A1o-8.png"
-              alt="Logo"
-              className="verify-logo"
-            />
+            <img src={logo} alt="Logo" className="verify-logo" />
             <h2>Verify OTP</h2>
             {error && <p className="error-message">{error}</p>}
             <form onSubmit={handleRegister}>
@@ -72,6 +75,7 @@ const VerifyOtp = () => {
           </div>
         </div>
       </div>
+      <SuccessAnimation message={message} trigger={trigger} />
     </div>
   );
 };

@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../../../middleware/UserContext";
 import { FaFacebook, FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 import { apiLink } from "../../../../config/api";
+import logo from "../../../../assets/images/Clean.svg";
+import SuccessAnimation from "../../../../component/general/Success";
 
 const Login = () => {
   const navigator = useNavigate();
@@ -13,7 +15,8 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const { updateUser } = useContext(UserContext);
-
+  const [message, setMessage] = useState("");
+  const [trigger, setTrigger] = useState(false);
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -33,12 +36,16 @@ const Login = () => {
         throw new Error("Login failed");
       }
       const data = await response.json();
-
+      setMessage("Đăng nhập thành công");
+      setTrigger(true);
       localStorage.setItem("access_token", data.access_token);
       localStorage.setItem("refresh_token", data.refresh_token);
       localStorage.setItem("user", JSON.stringify(data));
       updateUser(data);
-      navigator(ROUTERS.USER.HOME);
+      setTimeout(() => {
+        setTrigger(false);
+        navigator(ROUTERS.USER.HOME);
+      }, 1000);
     } catch (err) {
       setError(err.message);
     }
@@ -58,11 +65,7 @@ const Login = () => {
         </div>
         <div className="col-lg-3 login-wrap">
           <div className="login-container">
-            <img
-              src="https://designercomvn.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2018/12/06090103/logo-shop-qu%E1%BA%A7n-%C3%A1o-8.png"
-              alt="Logo"
-              className="login-logo"
-            />
+            <img src={logo} alt="Logo" className="login-logo" />
             <h2>Login</h2>
             {error && <p className="error-message">{error}</p>}
             <form onSubmit={handleLogin}>
@@ -107,6 +110,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <SuccessAnimation message={message} trigger={trigger} />
     </div>
   );
 };

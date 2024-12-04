@@ -9,7 +9,7 @@ const UpdateProduct = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { product = {}, id = "" } = location.state || {};
-
+  console.log(id);
   const [formData, setFormData] = useState({
     name: product.name || "",
     quantityInStock: product.quantityInStock || 0,
@@ -77,7 +77,7 @@ const UpdateProduct = () => {
       if (imageFile) formToSubmit.append("image", imageFile);
       if (bannerFile) formToSubmit.append("banner", bannerFile);
 
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       const response = await fetch(apiLink + `/api/product/update/${id}`, {
         method: "PUT",
         headers: {

@@ -153,7 +153,6 @@ const AddReview = () => {
       ) : (
         <p>Không có đơn hàng nào đang xử lý.</p>
       )}
-
       <div className="rating-stars">
         <h3>Đánh giá</h3>
         {[1, 2, 3, 4, 5].map((star) => (
@@ -166,13 +165,11 @@ const AddReview = () => {
           </span>
         ))}
       </div>
-
       <textarea
         value={comment}
         onChange={(e) => setComment(e.target.value)}
-        placeholder="Write your comment"
+        placeholder="Đánh giá vào đây"
       />
-
       <div className="suggested-comments">
         {suggestedComments.map((suggestion, index) => (
           <button
@@ -187,8 +184,7 @@ const AddReview = () => {
           </button>
         ))}
       </div>
-
-      <button onClick={submitReview}>Submit</button>
+      <button onClick={submitReview}>Đánh giá</button>
       {/* <SuccessAnimation message={message} trigger={trigger} /> */}
     </div>
   );

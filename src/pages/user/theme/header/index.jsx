@@ -11,7 +11,6 @@ const Header = () => {
 
   const [categories, setCategories] = useState([]);
 
-
   const handleNavigate = (path) => {
     navigate(path);
   };
@@ -32,8 +31,7 @@ const Header = () => {
 
       const id = user.dataUser.id;
       try {
-        const response = await fetch(apiLink + `/api/cart/get-cart/${id}`
-        );
+        const response = await fetch(apiLink + `/api/cart/get-cart/${id}`);
         if (!response.ok) throw new Error(response.statusText);
         const dataCart = await response.json();
         updateCartCount(dataCart?.products?.length || 0);
@@ -96,14 +94,15 @@ const Header = () => {
                     </button>
                   </li>
                   <li className="nav-item">
-                    <div >
-                      <button
-                        className="nav-link"
-                        onClick={() => handleNavigate(ROUTERS.USER.CART)}
+                    <div onClick={() => handleNavigate(ROUTERS.USER.CART)}>
+                      <button className="nav-link">🛒</button>
+                      <span
+                        className="count-cart"
+                        style={{ cursor: "pointer" }}
                       >
-                        🛒
-                      </button>
-                      <span className="count-cart"> Giỏ hàng {`(${countCart})`}</span>
+                        {" "}
+                        Giỏ hàng {`(${countCart})`}
+                      </span>
                     </div>
                   </li>
                   {user && (

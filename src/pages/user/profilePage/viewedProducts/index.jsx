@@ -5,7 +5,7 @@ import { ROUTERS } from "../../../../router/path";
 
 const ViewedHistoriesProducts = () => {
   const getViewedProducts = () => {
-    return JSON.parse(localStorage.getItem("viewedProducts")) || [];
+    return JSON.parse(localStorage.getItem("")) || [];
   };
 
   const viewedProducts = getViewedProducts();
