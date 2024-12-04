@@ -59,6 +59,7 @@ const DeliveredOrdersAdmin = () => {
               <p>Địa chỉ: {order?.shippingAddress}</p>
               <p>Số điện thoại: {order.phone}</p>
               <p>Trạng thái: {order.status}</p>
+              <p>Thanh toán:{(order?.isPaid) ? " Đã thanh toán" : " Chưa thanh toán "}</p>
               <p>Mã đơn hàng: {order._id} </p>
               <h3 className="text-order">
                 Chi tiết đơn hàng
@@ -105,7 +106,7 @@ const DeliveredOrdersAdmin = () => {
                           <td>
                             {" "}
                             {parseInt(item?.productId?.prices) ==
-                            item?.productId?.promotionPrice ? (
+                              item?.productId?.promotionPrice ? (
                               <div className="grp-price">
                                 <p className="prices">
                                   {`${parseInt(

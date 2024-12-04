@@ -3,11 +3,14 @@ import { UserContext } from "../../../../middleware/UserContext";
 import "../style.scss";
 import { AiOutlineDownCircle } from "react-icons/ai";
 import { apiLink } from "../../../../config/api";
+import SuccessAnimation from "../../../general/Success";
 
 const PendingOrdersAdmin = () => {
   const [orders, setOrders] = useState([]);
   const { user } = useContext(UserContext) || {};
   const [visibleOrders, setVisibleOrders] = useState({});
+  const [message, setMessage] = useState("");
+  const [trigger, setTrigger] = useState(false);
 
   const fetchPendingOrders = async () => {
     const userId = user?.dataUser?.id;
@@ -53,9 +56,12 @@ const PendingOrdersAdmin = () => {
       if (!response.ok) {
         throw new Error("Failed to submit order");
       }
-
+      setMessage("Duyệt sản phẩm thành công");
+      setTrigger(true);
       await response.json();
-
+      setTimeout(() => {
+        setTrigger(false);
+      }, 1000);
       // Refresh orders by calling fetchPendingOrders
       fetchPendingOrders();
     } catch (error) {
@@ -76,8 +82,14 @@ const PendingOrdersAdmin = () => {
         throw new Error("Failed to submit order");
       }
 
-      const data = await response.json();
 
+      setMessage("Duyệt sản phẩm thành công");
+      setTrigger(true);
+      const data = await response.json();
+      alert("Bạn có muốn hủy đơn hàng");
+      setTimeout(() => {
+        setTrigger(false);
+      }, 6000);
       // Refresh orders by calling fetchPendingOrders
       fetchPendingOrders();
     } catch (error) {
@@ -111,6 +123,7 @@ const PendingOrdersAdmin = () => {
                 <p>Tên người nhận: {order?.name}</p>
                 <p>Địa chỉ: {order?.shippingAddress}</p>
                 <p>Số điện thoại: {order?.phone}</p>
+                <p>Thanh toán:{(order?.isPaid) ? " Đã thanh toán" : " Chưa thanh toán "}</p>
                 <p>Trạng thái: {order?.status}</p>
                 <p>Mã đơn hàng: {order?._id} </p>
 
@@ -168,7 +181,7 @@ const PendingOrdersAdmin = () => {
                             <td>
                               {" "}
                               {parseInt(item?.productId?.prices) ==
-                              item?.productId?.promotionPrice ? (
+                                item?.productId?.promotionPrice ? (
                                 <div className="grp-price">
                                   <p className="prices">
                                     {`${parseInt(
@@ -260,7 +273,7 @@ const PendingOrdersAdmin = () => {
       ) : (
         <p>Không có đơn hàng nào đang xử lý.</p>
       )}
-      {/* <SuccessAnimation message={message} trigger={trigger} /> */}
+      <SuccessAnimation message={message} trigger={trigger} />
     </div>
   );
 };

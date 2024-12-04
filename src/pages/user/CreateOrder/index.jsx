@@ -15,13 +15,14 @@ const CreateOrderPage = (state) => {
   const navigator = useNavigate();
   const location = useLocation();
   const { selectedProducts } = location.state || {};
-
+  const [addressOptions, setAddressOptions] = useState([]);
   const { user } = useContext(UserContext) || {};
 
   const [dataOrder, setDataOrder] = useState(null);
   const [voucher, setVoucher] = useState("");
 
   const [cart, setCart] = useState(null);
+  const userId = user?.dataUser?.id;
 
   const [discountPercentage, setDiscountPercentage] = useState(0)
   const [discount, setDiscount] = useState(0)
@@ -75,6 +76,21 @@ const CreateOrderPage = (state) => {
     getAllCart();
   }, [getAllCart]);
 
+  const fetchAddressOptions = async () => {
+    try {
+      const response = await fetch(apiLink + `/api/address/list/${userId}`);
+      if (!response.ok) throw new Error("Failed to fetch addresses");
+      const data = await response.json();
+      setAddressOptions(data.data);
+    } catch (error) {
+      console.error("Error fetching addresses:", error);
+    }
+  };
+  useEffect(() => {
+    fetchAddressOptions();
+  }, []);
+
+
   const totalPrice = dataOrder
     ? dataOrder.products.reduce(
       (acc, item) => acc + item.productId.promotionPrice * item.quantity,
@@ -105,6 +121,21 @@ const CreateOrderPage = (state) => {
     });
     setSuggestions([]);
   };
+
+  const handleAddressSelect = (selectedAddress) => {
+    console.log(selectedAddress);
+    if (selectedAddress) {
+      setPaymentDetails((prevDetails) => ({
+        ...prevDetails,
+        name: selectedAddress.name || prevDetails.name,
+        phone: selectedAddress.phone || prevDetails.phone,
+        email: selectedAddress.email || prevDetails.email,
+        shippingAddress: selectedAddress.address || prevDetails.shippingAddress
+      }));
+    }
+  };
+
+
   const fetchSuggestions = async (query) => {
     if (!query) {
       setSuggestions([]);
@@ -120,11 +151,13 @@ const CreateOrderPage = (state) => {
       console.error("Error fetching address suggestions:", error);
     }
   };
+
   const [orderId, setOrderId] = useState();
   console.log(orderId);
   const handlePayment = async () => {
     if (window.confirm("Bạn có chắc chắn đặt hàng không?")) {
       try {
+        await handleSubmit();
         const response = await fetch(apiLink + "/api/order/create", {
           method: "POST",
           headers: {
@@ -154,6 +187,29 @@ const CreateOrderPage = (state) => {
     }
   };
 
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch(apiLink + "/api/address/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: paymentDetails.name,
+          phone: paymentDetails.phone,
+          email: paymentDetails.email,
+          address: paymentDetails.shippingAddress,
+          userId: user?.dataUser?.id
+        })
+      });
+      if (!response.ok) throw new Error("Failed to create address");
+      const data = await response.json();
+      console.log("Address created:", data);
+    } catch (error) {
+      console.error("Error creating address:", error);
+      throw error;
+    }
+  };
   useEffect(() => {
     console.log(orderId);
     if (!orderId) return;
@@ -237,6 +293,26 @@ const CreateOrderPage = (state) => {
                 ))}
               </ul>
             )}
+            <div class="select-container">
+              <select
+                onChange={(e) => {
+                  const selectedAddress = addressOptions.find(
+                    (addr) => addr._id === e.target.value
+                  );
+                  handleAddressSelect(selectedAddress);
+                }}
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Chọn địa chỉ đã lưu
+                </option>
+                {addressOptions.map((address) => (
+                  <option key={address._id} value={address._id}>
+                    {` ${address.cardName} | ${address.phone} | ${address.email} | ${address.address} `}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="order-summary">
