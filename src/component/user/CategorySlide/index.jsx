@@ -6,6 +6,7 @@ import { UserContext } from "../../../middleware/UserContext";
 import Notification, {
   NotificationContainer
 } from "../../../component/user/Notification";
+import { apiLink } from "../../../config/api";
 
 const CategorySlider = ({ categoryId, products, categoryName }) => {
   const { user } = useContext(UserContext) || {};
@@ -50,19 +51,16 @@ const CategorySlider = ({ categoryId, products, categoryName }) => {
       return;
     }
     try {
-      const response = await fetch(
-        "http://localhost:8001/api/cart/add-update",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: user?.dataUser?.id,
-            productId: product?._id,
-            quantity: 1,
-            prices: product?.prices?.toLocaleString("vi-VN")
-          })
-        }
-      );
+      const response = await fetch(apiLink + "/api/cart/add-update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: user?.dataUser?.id,
+          productId: product?._id,
+          quantity: 1,
+          prices: product?.prices?.toLocaleString("vi-VN")
+        })
+      });
 
       if (!response.ok) throw new Error(response.statusText);
 

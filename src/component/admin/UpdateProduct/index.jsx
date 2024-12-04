@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import "./style.scss";
 import { useLocation, useNavigate } from "react-router-dom";
 import { NotificationContext } from "../../../middleware/NotificationContext";
+import { apiLink } from "../../../config/api";
 
 const UpdateProduct = () => {
   const { addNotification } = useContext(NotificationContext);
@@ -30,9 +31,7 @@ const UpdateProduct = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8001/api/category/getAll"
-        );
+        const response = await fetch(apiLink + "/api/category/getAll");
         if (!response.ok) throw new Error("Error fetching categories");
         const dataCategory = await response.json();
         setCategory(Array.isArray(dataCategory.data) ? dataCategory.data : []);
@@ -79,16 +78,13 @@ const UpdateProduct = () => {
       if (bannerFile) formToSubmit.append("banner", bannerFile);
 
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        `http://localhost:8001/api/product/update/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            token: `Bearer ${token}`
-          },
-          body: formToSubmit
-        }
-      );
+      const response = await fetch(apiLink + `/api/product/update/${id}`, {
+        method: "PUT",
+        headers: {
+          token: `Bearer ${token}`
+        },
+        body: formToSubmit
+      });
 
       if (!response.ok) throw new Error("Failed to update product");
 

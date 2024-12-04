@@ -4,16 +4,13 @@ export const ROUTERS = {
   VERIFY_OTP: "/xac-thuc-tai-khoan",
   USER: {
     HOME: "/",
-    PROFILE: "/thong-tin-ca-nhan",
     PRODUCTS: "san-pham",
     DETAILS: "/chi-tiet-san-pham",
     CONTACTS: "/lien-he",
     ABOUT: "/khac",
     CART: "/gio-hang",
     ORDERLOOKUP: "/tra-cuu-don-hang",
-    PROFILE: "/thong-tin-ca-nhan",
-    LOGIN: "/dang-nhap",
-    SIGNUP: "/dang-ky",
+
     ORDERPAYMENT: "/thanh-toan",
     ORDER: "/tao-don-hang",
     PRODUCT_TYPE: "loai-san-pham",
@@ -21,6 +18,7 @@ export const ROUTERS = {
     ORDERLIST: "/danh-sach-don-hang",
     ORDERLOOKUP: "/tra-cuu-don-hang",
     PAYMENT: "/ket-qua-thanh-toan",
+    ADD_REVIEW: "/danh-gia-san-pham",
     PRODUCTS_BYCATEGORY: "/san-pham-theo-loai"
   },
   ADMIN: {
@@ -42,7 +40,7 @@ export const ROUTERS = {
     MANAGER_ORDER: "/admin/quan-ly-don-hang"
   },
   USERPROFILE: {
-    ACCOUNT_INFO: "/thong-tin",
+    ACCOUNT_INFO: "/thong-tin-ca-nhan",
     ORDER_MANAGERMENT: "/quan-ly-don-hang",
     VIEW_PRODUCTS: "/lich-su-san-pham",
     ADDRESS_BOOK: "/so-dia-chi"

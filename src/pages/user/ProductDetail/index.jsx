@@ -3,6 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import "./style.scss";
 import { ROUTERS } from "../../../router/path";
 import { UserContext } from "../../../middleware/UserContext";
+import ReviewSection from "../../../component/user/ReviewProduct";
+import { apiLink } from "../../../config/api";
 
 const ProductDetail = () => {
   const location = useLocation();
@@ -14,9 +16,7 @@ const ProductDetail = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:8001/api/product/getAllProduct"
-      );
+      const response = await fetch(apiLink + "/api/product/getAllProduct");
       if (!response.ok) throw new Error(response.statusText);
 
       const dataProducts = await response.json();
@@ -34,19 +34,16 @@ const ProductDetail = () => {
       return;
     }
     try {
-      const response = await fetch(
-        "http://localhost:8001/api/cart/add-update",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: user?.dataUser?.id,
-            productId: product?._id,
-            quantity: 1,
-            prices: product?.prices?.toLocaleString("vi-VN")
-          })
-        }
-      );
+      const response = await fetch(apiLink + "/api/cart/add-update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: user?.dataUser?.id,
+          productId: product?._id,
+          quantity: 1,
+          prices: product?.prices?.toLocaleString("vi-VN")
+        })
+      });
 
       if (!response.ok) throw new Error(response.statusText);
 
@@ -181,6 +178,7 @@ const ProductDetail = () => {
             </button>
           </div>
         </div>
+        <ReviewSection productId={product?._id} />
       </div>
     </>
   );

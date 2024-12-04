@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./style.scss";
+import { apiLink } from "../../../../config/api";
 
 const UpdateUser = ({ closeSignUpForm }) => {
   const navigate = useNavigate();
@@ -25,16 +26,13 @@ const UpdateUser = ({ closeSignUpForm }) => {
   const onHandlSignUp = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        `http://localhost:8001/api/user/update-user/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(formData)
-        }
-      );
+      const response = await fetch(apiLink + `/api/user/update-user/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
       if (!response.ok) {
         alert(
           "Chỉnh sửa tài khoản không thành công! Vui lòng kiểm tra lại thông tin."

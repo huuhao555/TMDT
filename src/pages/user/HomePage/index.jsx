@@ -4,6 +4,7 @@ import "./style.scss";
 import CategorySlider from "../../../component/user/CategorySlide";
 import CategoryComponent from "../../../component/user/category/category";
 import ProductsPromotionComponent from "../../../component/user/productPromotion";
+import { apiLink } from "../../../config/api";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -11,7 +12,7 @@ const HomePage = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:8001/api/category/getAll");
+      const response = await fetch(apiLink + "/api/category/getAll");
       const data = await response.json();
       setCategories(data.data);
     } catch (error) {
@@ -21,9 +22,7 @@ const HomePage = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:8001/api/product/getAllProduct"
-      );
+      const response = await fetch(apiLink + "/api/product/getAllProduct");
       if (!response.ok) throw new Error(response.statusText);
 
       const dataProducts = await response.json();

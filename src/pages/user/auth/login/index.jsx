@@ -4,6 +4,7 @@ import { ROUTERS } from "../../../../router/path";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../../../middleware/UserContext";
 import { FaFacebook, FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
+import { apiLink } from "../../../../config/api";
 
 const Login = () => {
   const navigator = useNavigate();
@@ -20,7 +21,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8001/api/user/sign-in", {
+      const response = await fetch(apiLink + "/api/user/sign-in", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -33,7 +34,8 @@ const Login = () => {
       }
       const data = await response.json();
 
-      localStorage.setItem("token", data.access_token);
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("refresh_token", data.refresh_token);
       localStorage.setItem("user", JSON.stringify(data));
       updateUser(data);
       navigator(ROUTERS.USER.HOME);

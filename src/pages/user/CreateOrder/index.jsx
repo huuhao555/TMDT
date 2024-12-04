@@ -11,6 +11,7 @@ import {
 import { UserContext } from "../../../middleware/UserContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTERS } from "../../../router/path";
+import { apiLink } from "../../../config/api";
 const CreateOrderPage = (state) => {
   const { pathname } = useLocation();
 
@@ -29,9 +30,7 @@ const CreateOrderPage = (state) => {
     if (!user || !user.dataUser) return;
     const id = user.dataUser.id;
     try {
-      const response = await fetch(
-        `http://localhost:8001/api/cart/get-cart/${id}`
-      );
+      const response = await fetch(apiLink + `/api/cart/get-cart/${id}`);
       if (!response.ok) throw new Error(response.statusText);
       const data = await response.json();
       const filteredData = data.products.filter((product) =>
@@ -97,7 +96,7 @@ const CreateOrderPage = (state) => {
   const handlePayment = async () => {
     if (window.confirm("Bạn có chắc chắn đặt hàng không?")) {
       try {
-        const response = await fetch("http://localhost:8001/api/order/create", {
+        const response = await fetch(apiLink + "/api/order/create", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -132,19 +131,16 @@ const CreateOrderPage = (state) => {
     const createPayment = async () => {
       try {
         const returnUrl = "http://localhost:8000/ket-qua-thanh-toan";
-        const response = await fetch(
-          "http://localhost:8001/api/payments/create_payment",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              orderId,
-              returnUrl
-            })
-          }
-        );
+        const response = await fetch(apiLink + "/api/payments/create_payment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            orderId,
+            returnUrl
+          })
+        });
 
         if (!response.ok) throw new Error(response.statusText);
         const data = await response.json();

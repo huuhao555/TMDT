@@ -7,6 +7,7 @@ import { UserContext } from "../../../middleware/UserContext";
 import Notification, {
   NotificationContainer
 } from "../../../component/user/Notification";
+import { apiLink } from "../../../config/api";
 
 const ProductByCategoryComponent = () => {
   const { notifications, addNotification } = NotificationContainer();
@@ -27,9 +28,7 @@ const ProductByCategoryComponent = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8001/api/product/getAllProduct"
-        );
+        const response = await fetch(apiLink + "/api/product/getAllProduct");
         if (!response.ok) throw new Error(response.statusText);
 
         const dataProducts = await response.json();
@@ -50,21 +49,18 @@ const ProductByCategoryComponent = () => {
 
   const handleAddToCart = async (product) => {
     try {
-      const response = await fetch(
-        "http://localhost:8001/api/cart/add-update",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            userId: user?.dataUser?.id,
-            productId: product?._id,
-            quantity: 1,
-            prices: product?.promotionPrice
-          })
-        }
-      );
+      const response = await fetch(apiLink + "/api/cart/add-update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          userId: user?.dataUser?.id,
+          productId: product?._id,
+          quantity: 1,
+          prices: product?.promotionPrice
+        })
+      });
       if (!response.ok) throw new Error("Failed to add product to cart");
 
       addNotification("Thêm giỏ hàng thành công!");

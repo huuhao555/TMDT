@@ -3,6 +3,7 @@ import "./style.scss";
 import { useLocation, useNavigate } from "react-router-dom";
 import { NotificationContext } from "../../../middleware/NotificationContext";
 import { ROUTERS } from "../../../router/path";
+import { apiLink } from "../../../config/api";
 
 const UpdateCategory = () => {
   const { addNotification } = useContext(NotificationContext);
@@ -43,16 +44,13 @@ const UpdateCategory = () => {
       if (iconUrl) formToSubmit.append("image", iconUrl);
 
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        `http://localhost:8001/api/category/update/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            token: `Bearer ${token}`
-          },
-          body: formToSubmit
-        }
-      );
+      const response = await fetch(apiLink + `/api/category/update/${id}`, {
+        method: "PUT",
+        headers: {
+          token: `Bearer ${token}`
+        },
+        body: formToSubmit
+      });
 
       if (!response.ok) throw new Error("Failed to update product");
 

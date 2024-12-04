@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ROUTERS } from "../../../../router/path";
 import { UserContext } from "../../../../middleware/UserContext";
 import logo from "../../../../assets/images/Clean.svg";
+import { apiLink } from "../../../../config/api";
 
 const Header = () => {
   const { user, logout } = useContext(UserContext);
@@ -16,7 +17,7 @@ const Header = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:8001/api/category/getAll");
+      const response = await fetch(apiLink + "/api/category/getAll");
       const data = await response.json();
       setCategories(data.data);
     } catch (error) {
@@ -47,7 +48,12 @@ const Header = () => {
               <nav className="nav">
                 <ul className="nav-list">
                   <li className="nav-item dropdown">
-                    <span className="nav-link">Danh mục sản phẩm</span>
+                    <span
+                      className="nav-link"
+                      onClick={() => handleNavigate(ROUTERS.USER.HOME)}
+                    >
+                      Danh mục sản phẩm
+                    </span>
                     <ul className="dropdown-menu">
                       {categories.map((category) => (
                         <li key={category._id} className="dropdown-item">

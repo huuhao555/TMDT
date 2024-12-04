@@ -29,6 +29,7 @@ const PurchaseHistory = () => {
 
   return (
     <div className="purchase-history">
+      <h2>Lịch sử Quản lý thao tác</h2>
       <table className="notification-table">
         <thead>
           <tr>
@@ -54,7 +55,9 @@ const PurchaseHistory = () => {
           <button
             key={index}
             onClick={() => setCurrentPage(index + 1)}
-            className={`page-number ${currentPage === index + 1 ? "active" : ""}`}
+            className={`page-number ${
+              currentPage === index + 1 ? "active" : ""
+            }`}
           >
             {index + 1}
           </button>

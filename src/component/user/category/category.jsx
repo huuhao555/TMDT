@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import "./style.scss";
 import { Link } from "react-router-dom";
 import { ROUTERS } from "../../../router/path";
+import { apiLink } from "../../../config/api";
 
 const CategoryComponent = () => {
   const [categories, setCategories] = useState([]);
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:8001/api/category/getAll");
+      const response = await fetch(apiLink + "/api/category/getAll");
       const data = await response.json();
       setCategories(data.data);
     } catch (error) {

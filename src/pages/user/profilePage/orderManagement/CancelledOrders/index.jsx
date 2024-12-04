@@ -8,6 +8,7 @@ import {
   AiOutlineEye,
   AiOutlineEyeInvisible
 } from "react-icons/ai";
+import { apiLink } from "../../../../../config/api";
 const CancelledOrders = () => {
   const [orders, setOrders] = useState([]);
   const { user } = useContext(UserContext) || {};
@@ -22,9 +23,7 @@ const CancelledOrders = () => {
       }
 
       try {
-        const response = await fetch(
-          `http://localhost:8001/api/order/getAll/${userId}`
-        );
+        const response = await fetch(apiLink + `/api/order/getAll/${userId}`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch orders");

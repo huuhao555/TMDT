@@ -8,6 +8,7 @@ import {
   AiOutlineEye,
   AiOutlineEyeInvisible
 } from "react-icons/ai";
+import { apiLink } from "../../../../../config/api";
 const ShippingOrders = () => {
   const [orders, setOrders] = useState([]);
   const { user } = useContext(UserContext) || {};
@@ -22,9 +23,7 @@ const ShippingOrders = () => {
       }
 
       try {
-        const response = await fetch(
-          `http://localhost:8001/api/order/getAll/${userId}`
-        );
+        const response = await fetch(apiLink + `/api/order/getAll/${userId}`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch orders");
@@ -42,7 +41,7 @@ const ShippingOrders = () => {
   }, [user]);
   const handleSubmidOrder = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8001/api/order/deliver`, {
+      const response = await fetch(apiLink + `/api/order/deliver`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
@@ -59,7 +58,7 @@ const ShippingOrders = () => {
       // Fetch the updated list of shipped orders
       const userId = user?.dataUser?.id;
       const updatedOrdersResponse = await fetch(
-        `http://localhost:8001/api/order/getAll/${userId}`
+        apiLink + `/api/order/getAll/${userId}`
       );
 
       if (!updatedOrdersResponse.ok) {

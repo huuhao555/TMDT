@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../../middleware/UserContext";
 import "../style.scss";
 import { AiOutlineDownCircle } from "react-icons/ai";
+import { apiLink } from "../../../../config/api";
 
 const PendingOrdersAdmin = () => {
   const [orders, setOrders] = useState([]);
@@ -16,7 +17,7 @@ const PendingOrdersAdmin = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8001/api/order/getAll`);
+      const response = await fetch(apiLink + `/api/order/getAll`);
       if (!response.ok) {
         throw new Error("Failed to fetch orders");
       }
@@ -41,7 +42,7 @@ const PendingOrdersAdmin = () => {
 
   const handleSubmidOrder = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8001/api/order/ship`, {
+      const response = await fetch(apiLink + `/api/order/ship`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
@@ -63,7 +64,7 @@ const PendingOrdersAdmin = () => {
   };
   const handleCancelOrder = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8001/api/order/cancel`, {
+      const response = await fetch(apiLink + `/api/order/cancel`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"

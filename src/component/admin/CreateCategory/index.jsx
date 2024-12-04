@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import "./style.scss";
 import { useNavigate } from "react-router-dom";
 import { NotificationContext } from "../../../middleware/NotificationContext";
+import { apiLink } from "../../../config/api";
 
 const CreateCategory = () => {
   const { addNotification } = useContext(NotificationContext);
@@ -30,13 +31,10 @@ const CreateCategory = () => {
         data.append("icon", iconUrl);
       }
 
-      const response = await fetch(
-        "http://localhost:8001/api/category/create",
-        {
-          method: "POST",
-          body: data
-        }
-      );
+      const response = await fetch(apiLink + "/api/category/create", {
+        method: "POST",
+        body: data
+      });
 
       if (!response.ok) {
         alert(

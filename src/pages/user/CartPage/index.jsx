@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState, useCallback } from "react";
 import { UserContext } from "../../../middleware/UserContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTERS } from "../../../router/path";
+import { apiLink } from "../../../config/api";
 
 const CartPage = () => {
   const [cart, setCart] = useState(null);
@@ -30,9 +31,7 @@ const CartPage = () => {
     if (!user || !user.dataUser) return;
     const id = user.dataUser.id;
     try {
-      const response = await fetch(
-        `http://localhost:8001/api/cart/get-cart/${id}`
-      );
+      const response = await fetch(apiLink + `/api/cart/get-cart/${id}`);
       if (!response.ok) throw new Error(response.statusText);
       const dataCart = await response.json();
 
@@ -56,7 +55,8 @@ const CartPage = () => {
   const removeFromCart = async (productId, userID) => {
     try {
       const response = await fetch(
-        `http://localhost:8001/api/cart/delete-product-cart/${userID}/product/${productId}`,
+        apiLink +
+          `/api/cart/delete-product-cart/${userID}/product/${productId}`,
         {
           method: "DELETE",
           headers: {
@@ -82,7 +82,7 @@ const CartPage = () => {
     }
     try {
       const response = await fetch(
-        `http://localhost:8001/api/cart/delete-cart/${userID}`,
+        apiLink + `/api/cart/delete-cart/${userID}`,
         {
           method: "DELETE",
           headers: {
@@ -109,20 +109,17 @@ const CartPage = () => {
     }
 
     try {
-      const response = await fetch(
-        "http://localhost:8001/api/cart/add-update",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            userId: user.dataUser.id,
-            productId: id,
-            quantity: 1
-          })
-        }
-      );
+      const response = await fetch(apiLink + "/api/cart/add-update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          userId: user.dataUser.id,
+          productId: id,
+          quantity: 1
+        })
+      });
 
       if (!response.ok) {
         throw new Error(response.statusText);
@@ -140,7 +137,7 @@ const CartPage = () => {
 
   const handleDecrease = async (id) => {
     try {
-      const response = await fetch("http://localhost:8001/api/cart/update", {
+      const response = await fetch(apiLink + "/api/cart/update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

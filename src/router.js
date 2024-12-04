@@ -28,6 +28,7 @@ import ProductByCategoryComponent from "./component/user/ProductByCategory";
 import ProductDetail from "./pages/user/ProductDetail";
 import UpdateCategory from "./component/admin/UpdateCategory";
 import OrderLookup from "./pages/user/orderLoockup";
+import AddReview from "./pages/user/AddReview";
 const RouterCustom = () => {
   return (
     <Routes>
@@ -37,6 +38,7 @@ const RouterCustom = () => {
         <Route path={ROUTERS.SIGNUP} element={<Signup />} />
         <Route path={ROUTERS.VERIFY_OTP} element={<VerifyOtp />} />
         <Route path={ROUTERS.USER.CART} element={<CartPage />} />
+        <Route path={ROUTERS.USER.ADD_REVIEW} element={<AddReview />} />
         <Route path={ROUTERS.USER.PAYMENT} element={<PaymentPage />} />
         <Route path={ROUTERS.USER.ORDER} element={<CreateOrderPage />} />
         <Route path={ROUTERS.USER.ORDERLOOKUP} element={<OrderLookup />} />

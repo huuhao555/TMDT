@@ -5,6 +5,7 @@ import { NotificationContext } from "../../../middleware/NotificationContext";
 import "./style.scss";
 
 import { ROUTERS } from "../../../router/path";
+import { apiLink } from "../../../config/api";
 
 const ProductTypeManagement = () => {
   const { addNotification } = useContext(NotificationContext);
@@ -16,9 +17,7 @@ const ProductTypeManagement = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8001/api/category/getAll"
-        );
+        const response = await fetch(apiLink + "/api/category/getAll");
         if (!response.ok) throw new Error(response.statusText);
         const data = await response.json();
         setCategories(Array.isArray(data.data) ? data.data : []);
@@ -33,13 +32,10 @@ const ProductTypeManagement = () => {
   const handleDeleteProduct = async (id) => {
     if (window.confirm("Bạn có chắc chắn muốn xoá sản phẩm này?")) {
       try {
-        const response = await fetch(
-          `http://localhost:8001/api/category/delete/${id}`,
-          {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" }
-          }
-        );
+        const response = await fetch(apiLink + `/api/category/delete/${id}`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" }
+        });
         if (!response.ok) throw new Error(await response.text());
 
         const deletedProduct = categories.find(

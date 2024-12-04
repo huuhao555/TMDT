@@ -3,6 +3,7 @@ import "./style.scss";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ROUTERS } from "../../../../router/path";
 import { useLocation, useNavigate } from "react-router-dom";
+import { apiLink } from "../../../../config/api";
 
 const VerifyOtp = () => {
   const navigator = useNavigate();
@@ -15,7 +16,7 @@ const VerifyOtp = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8001/api/otp/verify-otp", {
+      const response = await fetch(apiLink + "/api/otp/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otpToken })

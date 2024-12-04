@@ -2,15 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import "./style.scss";
 import { useNavigate } from "react-router-dom";
 import { NotificationContext } from "../../../middleware/NotificationContext";
+import { apiLink } from "../../../config/api";
 
 const CreateProduct = () => {
   const [category, setCategory] = useState([]);
   useEffect(() => {
     const renderCategory = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8001/api/category/getAll"
-        );
+        const response = await fetch(apiLink + "/api/category/getAll");
         if (!response.ok) {
           console.log("Error fetching categories");
           return;
@@ -67,7 +66,7 @@ const CreateProduct = () => {
       if (imageFile) data.append("image", imageFile);
       if (bannerFile) data.append("banner", bannerFile);
 
-      const response = await fetch("http://localhost:8001/api/product/create", {
+      const response = await fetch(apiLink + "/api/product/create", {
         method: "POST",
         body: data
       });

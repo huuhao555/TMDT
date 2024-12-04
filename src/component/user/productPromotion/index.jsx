@@ -6,6 +6,7 @@ import { UserContext } from "../../../middleware/UserContext";
 import Notification, {
   NotificationContainer
 } from "../../../component/user/Notification";
+import { apiLink } from "../../../config/api";
 const ProductsPromotionComponent = () => {
   const { user } = useContext(UserContext) || {};
   const { notifications, addNotification } = NotificationContainer();
@@ -18,19 +19,16 @@ const ProductsPromotionComponent = () => {
       return;
     }
     try {
-      const response = await fetch(
-        "http://localhost:8001/api/cart/add-update",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: user?.dataUser?.id,
-            productId: product?._id,
-            quantity: 1,
-            prices: product?.prices?.toLocaleString("vi-VN")
-          })
-        }
-      );
+      const response = await fetch(apiLink + "/api/cart/add-update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: user?.dataUser?.id,
+          productId: product?._id,
+          quantity: 1,
+          prices: product?.prices?.toLocaleString("vi-VN")
+        })
+      });
 
       if (!response.ok) throw new Error(response.statusText);
 
@@ -43,9 +41,7 @@ const ProductsPromotionComponent = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8001/api/product/getAllProduct"
-        );
+        const response = await fetch(apiLink + "/api/product/getAllProduct");
         if (!response.ok) throw new Error(response.statusText);
 
         const data = await response.json();
