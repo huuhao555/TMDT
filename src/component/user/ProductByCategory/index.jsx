@@ -33,9 +33,17 @@ const ProductByCategoryComponent = () => {
 
         const dataProducts = await response.json();
 
-        const filteredProducts = dataProducts.data.filter(
-          (product) => product.category === dataId.id
-        );
+        let filteredProducts;
+
+        if (dataId?.id === "discount") {
+          filteredProducts = dataProducts.data.filter(
+            (product) => product.discount > 0
+          );
+        } else {
+          filteredProducts = dataProducts.data.filter(
+            (product) => product.category === dataId.id
+          );
+        }
 
         setProducts(filteredProducts);
         setProductsAll(filteredProducts);
@@ -109,7 +117,6 @@ const ProductByCategoryComponent = () => {
     if (min === 0 && max === 0) {
       setDataChange(productsAll);
       setProducts(productsAll);
-      // setNoResults(false);
     } else {
       const dataNewSearchPrice = productsAll.filter((item) => {
         const price = parseFloat(item.prices);
@@ -125,11 +132,9 @@ const ProductByCategoryComponent = () => {
       });
 
       if (dataNewSearchPrice.length === 0) {
-        // setNoResults(true);
         setDataChange([]);
         setProducts([]);
       } else {
-        // setNoResults(false);
         setDataChange(dataNewSearchPrice);
         setProducts(dataNewSearchPrice);
       }
@@ -138,7 +143,7 @@ const ProductByCategoryComponent = () => {
     }
   };
   const Sort = (key) => {
-    const dataNewSort = [...(dataChange.length > 0 ? dataChange : productsAll)];
+    let dataNewSort = [...(dataChange.length > 0 ? dataChange : productsAll)];
     switch (key) {
       case 0:
         dataNewSort.sort(
@@ -152,7 +157,9 @@ const ProductByCategoryComponent = () => {
         dataNewSort.sort((a, b) => b.prices - a.prices);
         break;
       case 3:
-        dataNewSort.sort((a, b) => b.discount - a.discount);
+        dataNewSort = dataNewSort
+          .filter((item) => item.discount > 0)
+          .sort((a, b) => b.discount - a.discount);
         break;
       default:
         break;
@@ -163,7 +170,7 @@ const ProductByCategoryComponent = () => {
   };
   const clearSidebar = () => {
     setProducts(productsAll);
-    // setNoResults(false);
+
     setPriceMin("");
     setPriceMax("");
     setDataChange([]);

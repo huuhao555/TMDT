@@ -81,6 +81,30 @@ const SideBarProfile = () => {
             <span className="text">Quản lý đơn hàng</span>
           </Link>
         </li>
+        <li
+          className={`tab ${
+            currentPath === ROUTERS.USERPROFILE.ADDRESS_BOOK ? "active" : ""
+          }`}
+        >
+          <Link to={ROUTERS.USERPROFILE.ADDRESS_BOOK}>
+            <span className="icon">
+              <FaMapMarkerAlt />
+            </span>
+            <span className="text">Địa chỉ cá nhân</span>
+          </Link>
+        </li>
+        <li
+          className={`tab ${
+            currentPath === ROUTERS.USERPROFILE.VIEW_PRODUCTS ? "active" : ""
+          }`}
+        >
+          <Link to={ROUTERS.USERPROFILE.VIEW_PRODUCTS}>
+            <span className="icon">
+              <FaEye />
+            </span>
+            <span className="text">Lịch sử xem sản phẩm</span>
+          </Link>
+        </li>
 
         {user && user.dataUser.isAdmin && (
           <li

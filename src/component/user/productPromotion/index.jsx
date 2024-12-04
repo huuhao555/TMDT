@@ -1,6 +1,6 @@
 import "./styleSlide.scss";
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ROUTERS } from "../../../router/path";
 import { UserContext } from "../../../middleware/UserContext";
 import Notification, {
@@ -10,7 +10,7 @@ import { apiLink } from "../../../config/api";
 const ProductsPromotionComponent = () => {
   const { user } = useContext(UserContext) || {};
   const { notifications, addNotification } = NotificationContainer();
-
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [products, setProducts] = useState([]);
   const handleBuyProduct = async (product) => {
@@ -66,10 +66,16 @@ const ProductsPromotionComponent = () => {
       setCurrentIndex(currentIndex - 1);
     }
   };
-
+  const handleTitle = () => {
+    navigate(`${ROUTERS.USER.PRODUCTS_BYCATEGORY}/san-pham-giam-gia`, {
+      state: { id: "discount" }
+    });
+  };
   return (
     <div className="productPromotion-wrapper">
-      <h2 className="productPromotion-title">Sản phẩm giảm giá</h2>
+      <h2 onClick={handleTitle} className="productPromotion-title">
+        Sản phẩm giảm giá
+      </h2>
       <button className="slider-control prev" onClick={handlePrev}>
         {"<"}
       </button>

@@ -29,6 +29,8 @@ import ProductDetail from "./pages/user/ProductDetail";
 import UpdateCategory from "./component/admin/UpdateCategory";
 import OrderLookup from "./pages/user/orderLoockup";
 import AddReview from "./pages/user/AddReview";
+import AddressBook from "./pages/user/profilePage/addressUser/index";
+import ViewedHistoriesProducts from "./pages/user/profilePage/viewedProducts";
 const RouterCustom = () => {
   return (
     <Routes>
@@ -60,15 +62,14 @@ const RouterCustom = () => {
           path={ROUTERS.USERPROFILE.ORDER_MANAGERMENT}
           element={<OrderManagement />}
         />
-
-        {/* <Route
+        <Route
           path={ROUTERS.USERPROFILE.VIEW_PRODUCTS}
-          element={<ViewedProducts />}
+          element={<ViewedHistoriesProducts />}
         />
         <Route
           path={ROUTERS.USERPROFILE.ADDRESS_BOOK}
           element={<AddressBook />}
-        /> */}
+        />
       </Route>
       <Route element={<AdminLayout />}>
         <Route path={ROUTERS.ADMIN.DASHBOARD} element={<Dashboard />} />

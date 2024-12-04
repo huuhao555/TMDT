@@ -23,6 +23,10 @@ $control-btn-size: 40px;
     padding: 10px;
     &:hover {
       cursor: pointer;
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+      text-decoration-color: white;
     }
   }
 

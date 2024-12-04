@@ -42,7 +42,7 @@ export const ROUTERS = {
   USERPROFILE: {
     ACCOUNT_INFO: "/thong-tin-ca-nhan",
     ORDER_MANAGERMENT: "/quan-ly-don-hang",
-    VIEW_PRODUCTS: "/lich-su-san-pham",
+    VIEW_PRODUCTS: "/lich-su-xem-san-pham",
     ADDRESS_BOOK: "/so-dia-chi"
   }
 };
