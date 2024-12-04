@@ -68,6 +68,7 @@
   &:hover {
     background-color: #ff69b4;
   }
+
   color: white;
   background-color: white;
 }
@@ -75,6 +76,7 @@
 .edit-btn {
   color: white;
   background-color: white;
+
   &:hover {
     background-color: #28a745;
   }
@@ -83,6 +85,7 @@
 .delete-btn {
   color: white;
   background-color: white;
+
   &:hover {
     background-color: map.get($theme-color, "main-color");
   }
@@ -110,5 +113,47 @@
 
   &:hover {
     background-color: #ddd;
+  }
+}
+
+.grp-price {
+  .price {
+    margin-top: 20px;
+    font-size: 16px;
+
+    color: map.get($theme-color, "main-color");
+    font-weight: bold;
+  }
+
+  .price-old {
+    font-size: 12px;
+    color: map.get($theme-color, "text");
+    margin: auto;
+    text-decoration: line-through;
+  }
+
+  .price-new {
+    display: flex;
+    gap: 10px;
+    justify-content: start;
+    align-items: center;
+
+    .price-discount {
+      font-size: 18px;
+
+      color: map.get($theme-color, "main-color");
+      font-weight: bold;
+    }
+
+    .discount {
+      padding: 0 4px;
+      width: fit-content;
+      font-size: 14px;
+
+      color: map.get($theme-color, "main-color");
+      border: 1px solid map.get($theme-color, "main-color");
+      background-color: rgba(131, 210, 255, 0.384);
+      border-radius: 10%;
+    }
   }
 }

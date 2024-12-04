@@ -31,6 +31,8 @@ import OrderLookup from "./pages/user/orderLoockup";
 import AddReview from "./pages/user/AddReview";
 import AddressBook from "./pages/user/profilePage/addressUser/index";
 import ViewedHistoriesProducts from "./pages/user/profilePage/viewedProducts";
+import CreateVoucher from "./component/admin/CreateVoucher";
+import ProductDetails from "./component/admin/ProductDetails";
 const RouterCustom = () => {
   return (
     <Routes>
@@ -95,6 +97,10 @@ const RouterCustom = () => {
           element={<CreateCategory />}
         />
         <Route
+          path={ROUTERS.ADMIN.VOUCHER}
+          element={<CreateVoucher />}
+        />
+        <Route
           path={ROUTERS.ADMIN.REVENUE_STATS}
           element={<RevenueStatistics />}
         />
@@ -118,6 +124,11 @@ const RouterCustom = () => {
         <Route
           path={`${ROUTERS.ADMIN.UPDATE_CATEGORY}/:id`}
           element={<UpdateCategory />}
+        />
+
+        <Route
+          path={`${ROUTERS.ADMIN.PRODUCTS_DETAIL}/:id`}
+          element={<ProductDetails />}
         />
       </Route>
     </Routes>

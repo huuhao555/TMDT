@@ -5,6 +5,7 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [countCart, setCountCart] = useState(0);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -17,6 +18,10 @@ export const UserProvider = ({ children }) => {
       }
     }
   }, []);
+
+  const updateCartCount = (newCount) => {
+    setCountCart(newCount);
+  };
 
   const updateUser = (dataUser) => {
     setUser(dataUser);
@@ -31,7 +36,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, updateUser, logout }}>
+    <UserContext.Provider value={{ user, countCart, updateUser, logout, updateCartCount }}>
       {children}
     </UserContext.Provider>
   );

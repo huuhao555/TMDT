@@ -98,10 +98,46 @@ const ProductManagement = () => {
                 </td>
                 <td>{product.brand}</td>
                 <td>{product.quantityInStock}</td>
-                <td>{product.prices.toLocaleString("vi-VN")}</td>
+                <td>
+                  <div className="grp-price">
+                    {product?.prices == parseInt(product?.promotionPrice) ? (
+                      <p className="price">
+                        {parseInt(
+                          parseInt(product?.promotionPrice)
+                        )?.toLocaleString("vi-VN")}
+                        ₫
+                      </p>
+                    ) : (
+                      <>
+                        <p className="price-old">
+                          {parseInt(product?.prices)?.toLocaleString("vi-VN")}
+                          ₫
+                        </p>
+                        <div className="price-new">
+                          <p className="price-discount">
+                            {parseInt(
+                              parseInt(product?.promotionPrice)
+                            )?.toLocaleString("vi-VN")}
+                            ₫
+                          </p>
+                          <p className="discount">{`-${product?.discount}%`}</p>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </td>
 
                 <td>
-                  <button className="view-btn">👁️</button>
+
+                  <Link
+                    to={`${ROUTERS.ADMIN.PRODUCTS_DETAIL}/${product._id}`}
+                    className="view-btn"
+                    state={{ product, id: product._id }}
+                  >
+                    👁️
+                  </Link>
+
+
                   <Link
                     to={`${ROUTERS.ADMIN.UPDATE_PRODUCT}/${product._id}`}
                     className="edit-btn"

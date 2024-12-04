@@ -5,11 +5,15 @@ import { UserContext } from "../../../middleware/UserContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTERS } from "../../../router/path";
 import { apiLink } from "../../../config/api";
+import SuccessAnimation from "../../../component/general/Success";
 
 const CartPage = () => {
   const [cart, setCart] = useState(null);
 
   const { user, updateCartCount } = useContext(UserContext);
+
+  const [message, setMessage] = useState("")
+  const [trigger, setTrigger] = useState(false)
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const navigator = useNavigate();
@@ -56,7 +60,7 @@ const CartPage = () => {
     try {
       const response = await fetch(
         apiLink +
-          `/api/cart/delete-product-cart/${userID}/product/${productId}`,
+        `/api/cart/delete-product-cart/${userID}/product/${productId}`,
         {
           method: "DELETE",
           headers: {
@@ -68,8 +72,14 @@ const CartPage = () => {
         throw new Error(response.statusText);
       }
       await getAllCart();
-      const dataProduct = await response.json();
+      setTrigger(true)
+      setMessage("Xóa sản phẩm thành công");
+      setTimeout(() => {
+        setTrigger(false)
+      }, 1000)
 
+      const dataProduct = await response.json();
+      
       updateCartCount(dataProduct.data.products.length);
     } catch (error) {
       console.error("Failed to delete product from cart:", error);
@@ -95,7 +105,10 @@ const CartPage = () => {
         throw new Error(response.statusText);
       }
       await response.json();
+      setMessage("Xóa giỏ hàng thành công");
+      setTrigger(true);
       setCart("");
+
       updateCartCount(0);
     } catch (error) {
       console.error("Failed to delete product from cart:", error);
@@ -222,7 +235,7 @@ const CartPage = () => {
                           <td>
                             {" "}
                             {parseInt(item?.productId?.prices) ==
-                            item?.productId?.promotionPrice ? (
+                              item?.productId?.promotionPrice ? (
                               <div className="grp-price">
                                 <p className="prices">
                                   {`${parseInt(
@@ -366,6 +379,7 @@ const CartPage = () => {
             )}
           </div>
         </div>
+        <SuccessAnimation message={message} trigger={trigger} />
       </div>
     </div>
   );

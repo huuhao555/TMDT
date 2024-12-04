@@ -49,7 +49,32 @@ const ProductList = () => {
           <div className="product-item-bottom-admin">
             <div className="item-product-bottom-admin">
               <h3>{product.name}</h3>
-              <p>{product.prices.toLocaleString("vi-VN")}đ</p>
+              <div className="grp-price">
+                {product?.prices == parseInt(product?.promotionPrice) ? (
+                  <p className="price">
+                    {parseInt(
+                      parseInt(product?.promotionPrice)
+                    )?.toLocaleString("vi-VN")}
+                    ₫
+                  </p>
+                ) : (
+                  <>
+                    <p className="price-old">
+                      {parseInt(product?.prices)?.toLocaleString("vi-VN")}
+                      ₫
+                    </p>
+                    <div className="price-new">
+                      <p className="price-discount">
+                        {parseInt(
+                          parseInt(product?.promotionPrice)
+                        )?.toLocaleString("vi-VN")}
+                        ₫
+                      </p>
+                      <p className="discount">{`-${product?.discount}%`}</p>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -59,9 +84,8 @@ const ProductList = () => {
           <button
             key={number + 1}
             onClick={() => handlePageChange(number + 1)}
-            className={`page-number ${
-              currentPage === number + 1 ? "active" : ""
-            }`}
+            className={`page-number ${currentPage === number + 1 ? "active" : ""
+              }`}
           >
             {number + 1}
           </button>

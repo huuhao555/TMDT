@@ -5,6 +5,8 @@ import { ROUTERS } from "../../../router/path";
 import { UserContext } from "../../../middleware/UserContext";
 import ReviewSection from "../../../component/user/ReviewProduct";
 import { apiLink } from "../../../config/api";
+import Notification, { NotificationContainer } from "../../../component/user/Notification"
+
 
 const ProductDetail = () => {
   const location = useLocation();
@@ -13,6 +15,9 @@ const ProductDetail = () => {
   const [products, setProducts] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { user } = useContext(UserContext) || {};
+  const { notifications, addNotification } = NotificationContainer();
+
+
 
   const fetchProducts = async () => {
     try {
@@ -48,7 +53,7 @@ const ProductDetail = () => {
       if (!response.ok) throw new Error(response.statusText);
 
       await response.json();
-      // addNotification("Thêm giỏ hàng thành công!");
+      addNotification("Thêm giỏ hàng thành công!");
     } catch (error) {
       console.error("Failed to add product to cart:", error);
     }
@@ -176,6 +181,11 @@ const ProductDetail = () => {
             <button className="slider-control next" onClick={handleNext}>
               {">"}
             </button>
+          </div>
+          <div className="notifications-wrapper">
+            {notifications.map((notification) => (
+              <Notification key={notification.id} message={notification.message} />
+            ))}
           </div>
         </div>
         <ReviewSection productId={product?._id} />

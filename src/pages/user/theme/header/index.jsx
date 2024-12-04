@@ -7,9 +7,10 @@ import logo from "../../../../assets/images/Clean.svg";
 import { apiLink } from "../../../../config/api";
 
 const Header = () => {
-  const { user, logout } = useContext(UserContext);
+  const { user, logout, countCart, updateCartCount } = useContext(UserContext);
 
   const [categories, setCategories] = useState([]);
+
 
   const handleNavigate = (path) => {
     navigate(path);
@@ -24,6 +25,24 @@ const Header = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    const getAllCart = async () => {
+      if (!user || !user.dataUser) return;
+
+      const id = user.dataUser.id;
+      try {
+        const response = await fetch(apiLink + `/api/cart/get-cart/${id}`
+        );
+        if (!response.ok) throw new Error(response.statusText);
+        const dataCart = await response.json();
+        updateCartCount(dataCart?.products?.length || 0);
+      } catch (error) {
+        console.error("Failed to fetch cart count:", error);
+      }
+    };
+    getAllCart();
+  }, [user, updateCartCount]);
 
   useEffect(() => {
     fetchCategories();
@@ -71,18 +90,21 @@ const Header = () => {
                   <li className="nav-item">
                     <button
                       className="nav-link"
-                      onClick={() => handleNavigate(ROUTERS.USER.CART)}
-                    >
-                      Giỏ hàng
-                    </button>
-                  </li>
-                  <li className="nav-item">
-                    <button
-                      className="nav-link"
                       onClick={() => handleNavigate(ROUTERS.USER.ORDERLOOKUP)}
                     >
                       Tra cứu
                     </button>
+                  </li>
+                  <li className="nav-item">
+                    <div >
+                      <button
+                        className="nav-link"
+                        onClick={() => handleNavigate(ROUTERS.USER.CART)}
+                      >
+                        🛒
+                      </button>
+                      <span className="count-cart"> Giỏ hàng {`(${countCart})`}</span>
+                    </div>
                   </li>
                   {user && (
                     <li className="nav-item">

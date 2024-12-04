@@ -33,6 +33,10 @@ function Sidebar() {
                   Thêm loại sản phẩm
                 </Link>
               </li>
+              <li>
+                <Link to={ROUTERS.ADMIN.VOUCHER}>
+                  Thêm mã giảm giá </Link>
+              </li>
             </ul>
           )}
         </li>

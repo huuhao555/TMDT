@@ -1,12 +1,14 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "../../../../component/admin/Sidebar/Sidebar.jsx";
 import HeaderAdmin from "../header/header.jsx";
-import { UserProvider } from "../../../../middleware/UserContext.js";
+
 import { NotificationProvider } from "../../../../middleware/NotificationContext.js";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "../../../../component/general/LoadingSpinner/index.jsx";
 import NotFoundPage from "../../../../component/general/NotFoundPage/index.jsx";
 import { apiLink } from "../../../../config/api.js";
+import { UserProvider } from "../../../../middleware/UserContext.jsx";
+
 const AdminLayout = (props) => {
   const [isAuthorized, setIsAuthorized] = useState(null);
   const [loading, setLoading] = useState(true);

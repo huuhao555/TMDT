@@ -1,17 +1,11 @@
 import "./style.scss";
 import { useState, useEffect, useCallback, useContext } from "react";
 import { CartContext } from "../../../middleware/CartContext";
-import {
-  FaCcVisa,
-  FaCcMastercard,
-  FaPaypal,
-  FaApplePay,
-  FaGooglePay
-} from "react-icons/fa";
 import { UserContext } from "../../../middleware/UserContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ROUTERS } from "../../../router/path";
 import { apiLink } from "../../../config/api";
+import LuckeyWhellVoucher from "../../../component/general/LuckyWheelVoucher";
 const CreateOrderPage = (state) => {
   const { pathname } = useLocation();
 
@@ -25,7 +19,41 @@ const CreateOrderPage = (state) => {
   const { user } = useContext(UserContext) || {};
 
   const [dataOrder, setDataOrder] = useState(null);
+  const [voucher, setVoucher] = useState("");
+
   const [cart, setCart] = useState(null);
+
+  const [discountPercentage, setDiscountPercentage] = useState(0)
+  const [discount, setDiscount] = useState(0)
+
+
+
+  const handleVoucherCheck = async () => {
+    try {
+      const response = await fetch(apiLink + "/api/voucher/check", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ code: voucher })
+      });
+
+      if (!response.ok) {
+        throw new Error("Mã giảm giá không hợp lệ");
+      }
+
+      const data = await response.json();
+      alert(`Áp dụng mã giảm giá thành công! Giảm ${data.discount}%`);
+      setDiscountPercentage(data.discount);
+      setDiscount(data.discount);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+
+
+
   const getAllCart = useCallback(async () => {
     if (!user || !user.dataUser) return;
     const id = user.dataUser.id;
@@ -49,12 +77,13 @@ const CreateOrderPage = (state) => {
 
   const totalPrice = dataOrder
     ? dataOrder.products.reduce(
-        (acc, item) => acc + item.productId.promotionPrice * item.quantity,
-        0
-      )
+      (acc, item) => acc + item.productId.promotionPrice * item.quantity,
+      0
+    )
     : 0;
   const shippingCost = totalPrice && totalPrice > 500000 ? 0 : 50000;
-  const grandTotal = totalPrice + shippingCost;
+  const grandTotal = totalPrice + shippingCost - (totalPrice * discountPercentage) / 100;
+
   const [paymentDetails, setPaymentDetails] = useState({
     cardName: user?.dataUser?.name || "",
     phone: user?.dataUser?.phone || "",
@@ -108,7 +137,8 @@ const CreateOrderPage = (state) => {
             userId: user.dataUser.id,
             cartId: dataOrder._id,
             shippingAddress: paymentDetails.shippingAddress,
-            productIds: selectedProducts
+            productIds: selectedProducts,
+            voucherCode: voucher?.code || 0
           })
         });
 
@@ -130,7 +160,7 @@ const CreateOrderPage = (state) => {
 
     const createPayment = async () => {
       try {
-        const returnUrl = "http://localhost:8000/ket-qua-thanh-toan";
+        const returnUrl = "http://localhost:3000/ket-qua-thanh-toan";
         const response = await fetch(apiLink + "/api/payments/create_payment", {
           method: "POST",
           headers: {
@@ -212,8 +242,8 @@ const CreateOrderPage = (state) => {
           <div className="order-summary">
             <h2>Thông tin đơn hàng</h2>
             {dataOrder &&
-            dataOrder.products &&
-            dataOrder.products.length > 0 ? (
+              dataOrder.products &&
+              dataOrder.products.length > 0 ? (
               <div className="order-container">
                 <table className="order-table">
                   <thead>
@@ -233,7 +263,7 @@ const CreateOrderPage = (state) => {
                         <td>
                           {" "}
                           {parseInt(item?.productId?.prices) ==
-                          item?.productId?.promotionPrice ? (
+                            item?.productId?.promotionPrice ? (
                             <div className="grp-price">
                               <p className="prices">
                                 {`${parseInt(
@@ -304,6 +334,42 @@ const CreateOrderPage = (state) => {
                         {shippingCost.toLocaleString("vi-VN")} ₫
                       </td>
                     </tr>
+                    <tr>
+                      <td colSpan="3" style={{ textAlign: "right" }}>Voucher:
+                      </td>
+                      <td colSpan="2" style={{ textAlign: "right" }}>
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <input
+                            type="text"
+                            className="voucher-code"
+                            value={voucher}
+                            onChange={(event) => setVoucher(event.target.value)}
+                            name="voucher"
+                            maxLength={8}
+                            style={{ marginRight: "8px" }}
+                          />
+                          <button className="accept-voucher" onClick={handleVoucherCheck}
+                            style={{ padding: "5px 10px", background: "rgb(0, 86, 179)", borderRadius: "5px", color: "white", border: "none", cursor: "pointer" }}>
+                            Áp dụng
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td colSpan="3" style={{ textAlign: "right" }}>
+                        Phần trăm giảm
+                      </td>
+                      <td colSpan="2" style={{ textAlign: "right" }}>
+                        {discount > 0 ? (
+                          <span style={{ color: "#d70018", fontSize: "14px" }}>
+                            -{discount}%
+                          </span>
+                        ) : (
+                          "0%"
+                        )}
+                      </td>
+                    </tr>
 
                     <tr>
                       <td colSpan="3" style={{ textAlign: "right" }}>
@@ -318,7 +384,7 @@ const CreateOrderPage = (state) => {
                           fontSize: "18px"
                         }}
                       >
-                        {grandTotal.toLocaleString("vi-VN")} ₫
+                        {grandTotal?.toLocaleString("vi-VN")}₫
                       </td>
                     </tr>
                   </tbody>
@@ -333,7 +399,11 @@ const CreateOrderPage = (state) => {
           </div>
         </div>
       </div>
+
+
+      {/* <LuckeyWhellVoucher/> */}
     </div>
+
   );
 };
 
