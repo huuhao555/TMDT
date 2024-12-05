@@ -12,7 +12,7 @@ import { apiLink } from "../../../config/api";
 const ProductByCategory = () => {
   const { notifications, addNotification } = NotificationContainer();
 
-  const { user } = useContext(UserContext) || {};
+  const { user, updateCartCount } = useContext(UserContext);
 
   const location = useLocation();
   const dataId = location.state || {};
@@ -70,8 +70,11 @@ const ProductByCategory = () => {
         })
       });
       if (!response.ok) throw new Error("Failed to add product to cart");
+      const dataCart = await response.json();
 
       addNotification("Thêm giỏ hàng thành công!");
+      const updatedCount = dataCart.data.products.length;
+      updateCartCount(updatedCount);
     } catch (error) {
       console.error(error);
     }

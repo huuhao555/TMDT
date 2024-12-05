@@ -20,7 +20,7 @@ const CreateOrderPage = (state) => {
 
   const [dataOrder, setDataOrder] = useState(null);
   const [voucher, setVoucher] = useState("");
-
+  console.log(voucher);
   const [cart, setCart] = useState(null);
   const userId = user?.dataUser?.id;
 
@@ -93,7 +93,9 @@ const CreateOrderPage = (state) => {
     : 0;
   const shippingCost = totalPrice && totalPrice > 500000 ? 0 : 50000;
   const grandTotal =
-    totalPrice + shippingCost - (totalPrice * discountPercentage) / 100;
+    totalPrice +
+    shippingCost -
+    ((totalPrice + shippingCost) * discountPercentage) / 100;
 
   const [paymentDetails, setPaymentDetails] = useState({
     name: user?.dataUser?.name || "",
@@ -165,7 +167,7 @@ const CreateOrderPage = (state) => {
             cartId: dataOrder._id,
             shippingAddress: paymentDetails.shippingAddress,
             productIds: selectedProducts,
-            voucherCode: voucher?.code || 0
+            voucherCode: voucher || 0
           })
         });
 
@@ -451,7 +453,7 @@ const CreateOrderPage = (state) => {
                       >
                         {discount > 0 ? (
                           <span>{`${parseInt(
-                            totalPrice * (discount / 100)
+                            (totalPrice + shippingCost) * (discount / 100)
                           )?.toLocaleString("vi-VN")} đ (-${discount}%)`}</span>
                         ) : (
                           "0%"
