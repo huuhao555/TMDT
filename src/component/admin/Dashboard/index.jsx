@@ -7,24 +7,6 @@ import PurchaseHistory from "../PurchaseHistory/PurchaseHistory.jsx";
 import { apiLink } from "../../../config/api.js";
 
 const Dashboard = () => {
-  const [totalRevenue, setTotalRevenue] = useState(0);
-
-  useEffect(() => {
-    const fetchTotalRevenue = async () => {
-      try {
-        const response = await fetch(apiLink + "/api/order/total-revenue");
-        if (!response.ok) throw new Error("Lỗi khi fetch dữ liệu");
-
-        const data = await response.json();
-        setTotalRevenue(data.totalRevenue);
-      } catch (error) {
-        console.error("Lỗi khi lấy tổng doanh thu:", error);
-      }
-    };
-
-    fetchTotalRevenue();
-  }, []);
-
   const DashboardCard = ({ to, color, title, count, icon }) => (
     <Link to={to}>
       <div className={`card ${color}`}>
@@ -63,9 +45,6 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <h1 className="total-revenue">{`Tổng Doanh Thu: ${parseInt(
-        totalRevenue
-      )?.toLocaleString("vi-VN")}  VNĐ`}</h1>
       <div className="dashboard-cards">
         <DashboardCard
           to={ROUTERS.ADMIN.MANAGE_STAFF}

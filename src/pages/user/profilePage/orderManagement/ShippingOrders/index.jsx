@@ -9,11 +9,13 @@ import {
   AiOutlineEyeInvisible
 } from "react-icons/ai";
 import { apiLink } from "../../../../../config/api";
+import SuccessAnimation from "../../../../../component/general/Success";
 const ShippingOrders = () => {
   const [orders, setOrders] = useState([]);
   const { user } = useContext(UserContext) || {};
   const [visibleOrders, setVisibleOrders] = useState({});
-
+  const [message, setMessage] = useState("");
+  const [trigger, setTrigger] = useState(false);
   useEffect(() => {
     const fetchPendingOrders = async () => {
       const userId = user?.dataUser?.id;
@@ -53,9 +55,10 @@ const ShippingOrders = () => {
         throw new Error("Failed to deliver order");
       }
 
-      const data = await response.json();
+      await response.json();
 
-      // Fetch the updated list of shipped orders
+      setMessage("Nhận hàng thành công");
+
       const userId = user?.dataUser?.id;
       const updatedOrdersResponse = await fetch(
         apiLink + `/api/order/getAll/${userId}`
@@ -71,8 +74,13 @@ const ShippingOrders = () => {
       );
     } catch (error) {
       console.error("Error delivering order:", error);
+    } finally {
+      setTimeout(() => {
+        setTrigger(false);
+      }, 3000);
     }
   };
+
   const toggleOrderVisibility = (orderId) => {
     setVisibleOrders((prev) => ({
       ...prev,
@@ -98,7 +106,10 @@ const ShippingOrders = () => {
               <p>Địa chỉ: {order?.shippingAddress}</p>
               <p>Số điện thoại: {order.phone}</p>
               <p>Trạng thái: {order.status}</p>
-              <p>Thanh toán:{(order?.isPaid) ? " Đã thanh toán" : " Chưa thanh toán "}</p>
+              <p>
+                Thanh toán:
+                {order?.isPaid ? " Đã thanh toán" : " Chưa thanh toán "}
+              </p>
               <p>Mã đơn hàng: {order._id} </p>
               <h3 className="text-order">
                 Chi tiết đơn hàng{" "}
@@ -153,7 +164,7 @@ const ShippingOrders = () => {
                           <td>
                             {" "}
                             {parseInt(item?.productId?.prices) ==
-                              item?.productId?.promotionPrice ? (
+                            item?.productId?.promotionPrice ? (
                               <div className="grp-price">
                                 <p className="prices">
                                   {`${parseInt(
@@ -238,6 +249,7 @@ const ShippingOrders = () => {
                   </p>
                 </div>
               </div>
+              <SuccessAnimation message={message} trigger={trigger} />
             </div>
           ))}
         </div>

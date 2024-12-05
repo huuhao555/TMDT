@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTERS } from "../../../router/path";
 import { apiLink } from "../../../config/api";
 
-// import SuccessAnimation from "../../../component/general/Success";
+import SuccessAnimation from "../../../component/general/Success";
 
 const AddReview = () => {
   const { user } = useContext(UserContext) || {};
@@ -185,7 +185,7 @@ const AddReview = () => {
         ))}
       </div>
       <button onClick={submitReview}>Đánh giá</button>
-      {/* <SuccessAnimation message={message} trigger={trigger} /> */}
+      <SuccessAnimation message={message} trigger={trigger} />
     </div>
   );
 };

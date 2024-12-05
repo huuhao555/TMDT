@@ -30,7 +30,7 @@ const ProductManagement = () => {
   }, []);
 
   const handleDeleteProduct = async (id) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("access_token");
 
     if (window.confirm("Bạn có chắc chắn muốn xoá sản phẩm này?")) {
       try {
@@ -110,8 +110,7 @@ const ProductManagement = () => {
                     ) : (
                       <>
                         <p className="price-old">
-                          {parseInt(product?.prices)?.toLocaleString("vi-VN")}
-                          ₫
+                          {parseInt(product?.prices)?.toLocaleString("vi-VN")}₫
                         </p>
                         <div className="price-new">
                           <p className="price-discount">
@@ -128,7 +127,6 @@ const ProductManagement = () => {
                 </td>
 
                 <td>
-
                   <Link
                     to={`${ROUTERS.ADMIN.PRODUCTS_DETAIL}/${product._id}`}
                     className="view-btn"
@@ -136,7 +134,6 @@ const ProductManagement = () => {
                   >
                     👁️
                   </Link>
-
 
                   <Link
                     to={`${ROUTERS.ADMIN.UPDATE_PRODUCT}/${product._id}`}

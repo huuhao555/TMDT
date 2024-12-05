@@ -24,7 +24,7 @@ import AccountInfo from "./pages/user/profilePage/accountInfo";
 import OrderManagement from "./pages/user/profilePage/orderManagement";
 import OrderManagementAdmin from "./component/admin/OrderManagement";
 import PaymentPage from "./pages/user/paymentPage";
-import ProductByCategoryComponent from "./component/user/ProductByCategory";
+
 import ProductDetail from "./pages/user/ProductDetail";
 import UpdateCategory from "./component/admin/UpdateCategory";
 import OrderLookup from "./pages/user/orderLoockup";
@@ -33,6 +33,7 @@ import AddressBook from "./pages/user/profilePage/addressUser/index";
 import ViewedHistoriesProducts from "./pages/user/profilePage/viewedProducts";
 import CreateVoucher from "./component/admin/CreateVoucher";
 import ProductDetails from "./component/admin/ProductDetails";
+import ProductByCategory from "./pages/user/ProductByCategory";
 const RouterCustom = () => {
   return (
     <Routes>
@@ -52,7 +53,7 @@ const RouterCustom = () => {
         />
         <Route
           path={`${ROUTERS.USER.PRODUCTS_BYCATEGORY}/:id`}
-          element={<ProductByCategoryComponent />}
+          element={<ProductByCategory />}
         />
       </Route>
       <Route element={<ProfilePageLayout />}>
@@ -96,10 +97,7 @@ const RouterCustom = () => {
           path={ROUTERS.ADMIN.CREATE_CATEGORY}
           element={<CreateCategory />}
         />
-        <Route
-          path={ROUTERS.ADMIN.VOUCHER}
-          element={<CreateVoucher />}
-        />
+        <Route path={ROUTERS.ADMIN.VOUCHER} element={<CreateVoucher />} />
         <Route
           path={ROUTERS.ADMIN.REVENUE_STATS}
           element={<RevenueStatistics />}

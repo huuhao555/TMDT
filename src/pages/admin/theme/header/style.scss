@@ -2,7 +2,6 @@
 @import "../../../../styles/pages/theme.scss";
 
 .header-main-admin {
-  height: 100px;
   width: 100%;
   padding-left: 15vw;
   border-bottom: #ccc solid 2px;
@@ -20,11 +19,18 @@
     }
   }
   .log-out {
-    margin-top: 25px;
+    padding: 20px;
+
     display: flex;
     justify-content: center;
-    a:last-child {
-      color: #fff;
+    align-items: center;
+    color: white;
+    svg {
+      font-size: 30px;
+      fill: white;
+    }
+    &:hover {
+      cursor: pointer;
     }
   }
 }

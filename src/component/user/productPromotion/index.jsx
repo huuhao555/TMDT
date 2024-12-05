@@ -8,7 +8,8 @@ import Notification, {
 } from "../../../component/user/Notification";
 import { apiLink } from "../../../config/api";
 const ProductsPromotionComponent = () => {
-  const { user } = useContext(UserContext) || {};
+  const { user, updateCartCount } = useContext(UserContext);
+
   const { notifications, addNotification } = NotificationContainer();
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -33,7 +34,10 @@ const ProductsPromotionComponent = () => {
       if (!response.ok) throw new Error(response.statusText);
 
       const dataCart = await response.json();
+
       addNotification("Thêm giỏ hàng thành công!");
+      const updatedCount = dataCart.data.products.length;
+      updateCartCount(updatedCount);
     } catch (error) {
       console.error("Failed to add product to cart:", error);
     }

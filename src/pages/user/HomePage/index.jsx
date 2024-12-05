@@ -3,8 +3,9 @@ import React, { useEffect, useState, memo } from "react";
 import "./style.scss";
 import CategorySlider from "../../../component/user/CategorySlide";
 import CategoryComponent from "../../../component/user/category/category";
-import ProductsPromotionComponent from "../../../component/user/productPromotion";
+
 import { apiLink } from "../../../config/api";
+import ProductsPromotionComponent from "../../../component/user/productPromotion/index";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);

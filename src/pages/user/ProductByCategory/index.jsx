@@ -9,7 +9,7 @@ import Notification, {
 } from "../../../component/user/Notification";
 import { apiLink } from "../../../config/api";
 
-const ProductByCategoryComponent = () => {
+const ProductByCategory = () => {
   const { notifications, addNotification } = NotificationContainer();
 
   const { user } = useContext(UserContext) || {};
@@ -119,7 +119,7 @@ const ProductByCategoryComponent = () => {
       setProducts(productsAll);
     } else {
       const dataNewSearchPrice = productsAll.filter((item) => {
-        const price = parseFloat(item.prices);
+        const price = parseFloat(item.promotionPrice);
 
         if (min > 0 && max > 0) {
           return price >= min && price <= max;
@@ -151,10 +151,10 @@ const ProductByCategoryComponent = () => {
         );
         break;
       case 1:
-        dataNewSort.sort((a, b) => a.prices - b.prices);
+        dataNewSort.sort((a, b) => a.promotionPrice - b.promotionPrice);
         break;
       case 2:
-        dataNewSort.sort((a, b) => b.prices - a.prices);
+        dataNewSort.sort((a, b) => b.promotionPrice - a.promotionPrice);
         break;
       case 3:
         dataNewSort = dataNewSort
@@ -190,13 +190,19 @@ const ProductByCategoryComponent = () => {
               </div>
               <input type="text" onChange={Search} />
               <div className="suggestions">
-                {suggestions.map((item, key) => (
-                  <Link style={{ width: "100%" }}>
-                    <div key={key} className="suggestion-item">
-                      {item.name}
-                    </div>
-                  </Link>
-                ))}
+                {suggestions.map((item, key) => {
+                  return (
+                    <Link
+                      to={`${ROUTERS.USER.DETAILS}/${item?._id}`}
+                      state={item}
+                      style={{ width: "100%" }}
+                    >
+                      <div key={key} className="suggestion-item">
+                        {item.name}
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
 
@@ -353,4 +359,4 @@ const ProductByCategoryComponent = () => {
   );
 };
 
-export default memo(ProductByCategoryComponent);
+export default memo(ProductByCategory);

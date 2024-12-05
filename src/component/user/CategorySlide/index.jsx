@@ -9,7 +9,8 @@ import Notification, {
 import { apiLink } from "../../../config/api";
 
 const CategorySlider = ({ categoryId, products, categoryName }) => {
-  const { user } = useContext(UserContext) || {};
+  const { user, updateCartCount } = useContext(UserContext);
+
   const { notifications, addNotification } = NotificationContainer();
   const navigate = useNavigate();
   const filteredProducts = products.filter(
@@ -66,6 +67,8 @@ const CategorySlider = ({ categoryId, products, categoryName }) => {
 
       const dataCart = await response.json();
       addNotification("Thêm giỏ hàng thành công!");
+      const updatedCount = dataCart.data.products.length;
+      updateCartCount(updatedCount);
     } catch (error) {
       console.error("Failed to add product to cart:", error);
     }

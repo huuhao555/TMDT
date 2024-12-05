@@ -33,10 +33,6 @@ function Sidebar() {
                   Thêm loại sản phẩm
                 </Link>
               </li>
-              <li>
-                <Link to={ROUTERS.ADMIN.VOUCHER}>
-                  Thêm mã giảm giá </Link>
-              </li>
             </ul>
           )}
         </li>
@@ -44,7 +40,6 @@ function Sidebar() {
           <Link to={ROUTERS.ADMIN.PRODUCT_LIST}>Danh sách sản phẩm</Link>
         </li>
 
-        {/* Quản lý sản phẩm */}
         <li>
           <button className="toggle-button" onClick={toggleProductManagement}>
             Quản lý
@@ -59,11 +54,11 @@ function Sidebar() {
                   Quản lý loại sản phẩm
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to={ROUTERS.ADMIN.MANAGE_PRODUCT_DETAILS}>
                   Quản lý chi tiết sản phẩm
                 </Link>
-              </li>
+              </li> */}
             </ul>
           )}
         </li>
@@ -73,6 +68,9 @@ function Sidebar() {
         </li>
         <li>
           <Link to={ROUTERS.ADMIN.MANAGER_ORDER}>Quản lý đơn hàng</Link>
+        </li>
+        <li>
+          <Link to={ROUTERS.ADMIN.VOUCHER}>Quản lý mã giảm giá </Link>
         </li>
         <li>
           <Link to={ROUTERS.ADMIN.REVENUE_STATS}>Thống kê doanh thu</Link>

@@ -43,7 +43,7 @@ const UpdateCategory = () => {
 
       if (iconUrl) formToSubmit.append("image", iconUrl);
 
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("access_token");
       const response = await fetch(apiLink + `/api/category/update/${id}`, {
         method: "PUT",
         headers: {

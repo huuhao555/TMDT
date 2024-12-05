@@ -145,10 +145,29 @@ const RevenueStatistics = () => {
   useEffect(() => {
     fetchChartData();
   }, [timePeriod, selectedDate]);
+  const [totalRevenue, setTotalRevenue] = useState(0);
 
+  useEffect(() => {
+    const fetchTotalRevenue = async () => {
+      try {
+        const response = await fetch(apiLink + "/api/order/total-revenue");
+        if (!response.ok) throw new Error("Lỗi khi fetch dữ liệu");
+
+        const data = await response.json();
+        setTotalRevenue(data.totalRevenue);
+      } catch (error) {
+        console.error("Lỗi khi lấy tổng doanh thu:", error);
+      }
+    };
+
+    fetchTotalRevenue();
+  }, []);
   return (
     <div>
       <div className="chart-container">
+        <h1 className="total-revenue">{`Tổng Doanh Thu: ${parseInt(
+          totalRevenue
+        )?.toLocaleString("vi-VN")}  VNĐ`}</h1>
         <div className="chart-header">
           <h2>Thống kê doanh thu</h2>
           <div className="filters">

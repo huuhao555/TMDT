@@ -210,7 +210,7 @@ const CreateOrderPage = (state) => {
 
     const createPayment = async () => {
       try {
-        const returnUrl = "http://localhost:3000/ket-qua-thanh-toan";
+        const returnUrl = "http://localhost:8000/ket-qua-thanh-toan";
         const response = await fetch(apiLink + "/api/payments/create_payment", {
           method: "POST",
           headers: {

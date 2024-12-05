@@ -1,9 +1,7 @@
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style.scss";
-
-import { Link } from "react-router-dom";
-import { ROUTERS } from "../../../../router/path";
+import { BiDoorOpen } from "react-icons/bi";
 
 const HeaderAdmin = () => {
   const navigate = useNavigate();
@@ -16,16 +14,13 @@ const HeaderAdmin = () => {
         <div className="container-fixed-admin ">
           <div className="row">
             <div className="col-xl-3">
-              <div className="header-logo">
-                {/* <Link to={ROUTERS.ADMIN.DASHBOARD}>
-                  <img src={require("../../../../assets/users/header/1.png")} />
-                </Link> */}
-              </div>
+              <div className="header-logo"></div>
             </div>
             <div className="col-xl-6"></div>
             <div className="col-xl-3">
-              <div className="log-out">
-                <button onClick={handleLogout}>Quay lại </button>
+              <div onClick={handleLogout} className="log-out">
+                <BiDoorOpen />
+                Thoát
               </div>
             </div>
           </div>

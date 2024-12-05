@@ -1,17 +1,6 @@
 .dashboard-container {
   width: 100%;
-  .total-revenue {
-    color: #0056d7;
-    background: linear-gradient(to right, #2f9aff, #246edd);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-size: 2rem;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    padding: 10px;
-    border-radius: 8px;
-    text-align: center;
-  }
+
   .dashboard-cards {
     display: flex;
     gap: 20px;
